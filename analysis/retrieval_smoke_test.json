@@ -1,0 +1,319 @@
+{
+  "purpose": "Known-example BM25 smoke test; queries authored after reading these findings. Not an independent relevance benchmark, not corpus-wide Recall@5.",
+  "index": "title + content, no summary, raw content; camel/snake split; Unicode terms; small English stop list",
+  "parameters": {
+    "k1": 1.2,
+    "b": 0.75
+  },
+  "corpus_size": 3000,
+  "summary": {
+    "en": {
+      "known_target_in_top5": 5,
+      "queries": 6
+    },
+    "vi": {
+      "known_target_in_top5": 0,
+      "queries": 6
+    }
+  },
+  "results": [
+    {
+      "target": 61058,
+      "en": {
+        "query": "withdraw underlying assets rounding down fAmount shares small amount",
+        "target_rank": 67,
+        "positive_score_results": 1394,
+        "top5": [
+          {
+            "id": 61462,
+            "title": "[M-04] Protocol fee rounding can be weaponized for minimal earnings",
+            "score": 27.00278
+          },
+          {
+            "id": 61497,
+            "title": "[L-03] `maxRedeemable` uses incorrect rounding method",
+            "score": 25.4536
+          },
+          {
+            "id": 61464,
+            "title": "[L-02] `maxwithdraw()` ignores pending redemptions",
+            "score": 25.14575
+          },
+          {
+            "id": 61069,
+            "title": "Incorrect rounding down in `HubPoolLogic#updateWithWithdraw` when users withdraw using underlying amount",
+            "score": 24.21399
+          },
+          {
+            "id": 62373,
+            "title": "[ASTRO-23] Code style problems",
+            "score": 24.0326
+          }
+        ]
+      },
+      "vi": {
+        "query": "làm tròn xuống khi rút tài sản nhưng cổ phần không giảm",
+        "target_rank": null,
+        "positive_score_results": 0,
+        "top5": []
+      }
+    },
+    {
+      "target": 62814,
+      "en": {
+        "query": "reward rate zero pool last updated timestamp incentive schedule rewards excess",
+        "target_rank": 1,
+        "positive_score_results": 1582,
+        "top5": [
+          {
+            "id": 62814,
+            "title": "H-7: In the `IncentiveGauge._upsertIncentive()` function, `_updatePoolByPid()` should be called outside the `if` statement",
+            "score": 36.78597
+          },
+          {
+            "id": 61569,
+            "title": "Deposited rewards get stuck in incentive logic contracts when there is no pool liquidity",
+            "score": 30.85729
+          },
+          {
+            "id": 61557,
+            "title": "Reward distribution can be blocked by an initial distribution of long duration",
+            "score": 27.54194
+          },
+          {
+            "id": 62818,
+            "title": "M-3: Integer Truncation in Incentive Rate Permanently Locks Unstreamed Rewards",
+            "score": 26.22365
+          },
+          {
+            "id": 61364,
+            "title": "Application Monitoring Can Be Improved by Emitting More Events",
+            "score": 26.16055
+          }
+        ]
+      },
+      "vi": {
+        "query": "phần thưởng bị tính thừa do không cập nhật mốc thời gian của nhóm",
+        "target_rank": null,
+        "positive_score_results": 461,
+        "top5": [
+          {
+            "id": 60899,
+            "title": "Functions in `OrderHook` Do Nothing",
+            "score": 3.63076
+          },
+          {
+            "id": 62565,
+            "title": "[L-07] DoS risk with zero-amount transfers",
+            "score": 3.54842
+          },
+          {
+            "id": 60811,
+            "title": "DoS Price Feed Vulnerability Due to Incorrect `RoundId`",
+            "score": 3.53292
+          },
+          {
+            "id": 62102,
+            "title": "M-4: Most KeyRegistry, VotingPowerProvider functions can be DoSed",
+            "score": 3.50446
+          },
+          {
+            "id": 59826,
+            "title": "USDs Minting Could Be DoS",
+            "score": 3.47985
+          }
+        ]
+      }
+    },
+    {
+      "target": 61599,
+      "en": {
+        "query": "oracle stale price publish time confidence interval automation fees",
+        "target_rank": 1,
+        "positive_score_results": 1195,
+        "top5": [
+          {
+            "id": 61599,
+            "title": "Missing staleness check in `PriceOracle::getTokenPrice`",
+            "score": 32.41007
+          },
+          {
+            "id": 61060,
+            "title": "pythnode oracle unexpected revert",
+            "score": 30.63385
+          },
+          {
+            "id": 59819,
+            "title": "DoS of SPA Oracle Contract",
+            "score": 20.24908
+          },
+          {
+            "id": 60675,
+            "title": "Attacker May Drain `Boba_GasPriceOracle` of Value Given Arbitrage Opportunities",
+            "score": 18.33943
+          },
+          {
+            "id": 59820,
+            "title": "Chainlink Oracle Could Process Stale and Incorrect Data",
+            "score": 17.74211
+          }
+        ]
+      },
+      "vi": {
+        "query": "giá từ bộ cung cấp dữ liệu bị cũ do không kiểm tra thời gian công bố",
+        "target_rank": null,
+        "positive_score_results": 461,
+        "top5": [
+          {
+            "id": 60899,
+            "title": "Functions in `OrderHook` Do Nothing",
+            "score": 3.63076
+          },
+          {
+            "id": 62565,
+            "title": "[L-07] DoS risk with zero-amount transfers",
+            "score": 3.54842
+          },
+          {
+            "id": 60811,
+            "title": "DoS Price Feed Vulnerability Due to Incorrect `RoundId`",
+            "score": 3.53292
+          },
+          {
+            "id": 62102,
+            "title": "M-4: Most KeyRegistry, VotingPowerProvider functions can be DoSed",
+            "score": 3.50446
+          },
+          {
+            "id": 59826,
+            "title": "USDs Minting Could Be DoS",
+            "score": 3.47985
+          }
+        ]
+      }
+    },
+    {
+      "target": 62355,
+      "en": {
+        "query": "NFT listing approval ownership creator ERC721 other user",
+        "target_rank": 1,
+        "positive_score_results": 1416,
+        "top5": [
+          {
+            "id": 62355,
+            "title": "[BAB-2] Anyone can create a listing for another user's approved/listed ERC721",
+            "score": 40.68489
+          },
+          {
+            "id": 62354,
+            "title": "[BAB-3] Stealing ETH using reentrancy in minting pass",
+            "score": 20.61602
+          },
+          {
+            "id": 61152,
+            "title": "Create ERC-20 Offers in an Orderbook Designed for ERC-1155 and ERC-721",
+            "score": 20.11434
+          },
+          {
+            "id": 60474,
+            "title": "Broad Approval",
+            "score": 18.53031
+          },
+          {
+            "id": 62356,
+            "title": "[BAB-6] Users can relist their tokens",
+            "score": 17.7152
+          }
+        ]
+      },
+      "vi": {
+        "query": "người dùng tạo niêm yết tài sản của người khác vì chỉ kiểm tra quyền phê duyệt",
+        "target_rank": null,
+        "positive_score_results": 0,
+        "top5": []
+      }
+    },
+    {
+      "target": 61551,
+      "en": {
+        "query": "bad debt insurance socialization last withdrawer insolvency",
+        "target_rank": 1,
+        "positive_score_results": 464,
+        "top5": [
+          {
+            "id": 61551,
+            "title": "Protocol lacks bad debt management mechanisms, risking permanent insolvency",
+            "score": 43.19892
+          },
+          {
+            "id": 62074,
+            "title": "[M-11] Fee-vault can be made insolvent in case of defaults",
+            "score": 17.02148
+          },
+          {
+            "id": 59966,
+            "title": "Inconsistent Naming Hinders Code Comprehension & Collaboration",
+            "score": 15.58711
+          },
+          {
+            "id": 61052,
+            "title": "Incorrect calculation of effective borrow value in ```getLoanLiquidity``` leads to protocol insolvency through wrong withdrawals and liquidations.",
+            "score": 15.57177
+          },
+          {
+            "id": 62066,
+            "title": "[M-03] If a withdrawal executes after a bad debt auction gets created, it could cause the auction to be stuck and further bad debt auctions can’t be created",
+            "score": 15.0644
+          }
+        ]
+      },
+      "vi": {
+        "query": "nợ xấu không được phân bổ khiến người rút tiền cuối cùng chịu lỗ",
+        "target_rank": null,
+        "positive_score_results": 0,
+        "top5": []
+      }
+    },
+    {
+      "target": 61415,
+      "en": {
+        "query": "session key unbounded array removal gas block limit denial service",
+        "target_rank": 1,
+        "positive_score_results": 1191,
+        "top5": [
+          {
+            "id": 61415,
+            "title": "[M-01] The `_removeSessionKey()` Will Never Remove the Unbounded Session Key Array Due to Gas-Based DoS",
+            "score": 31.12394
+          },
+          {
+            "id": 61423,
+            "title": "[L-07] Unbounded Tokens Addition When Enabling SessionKeys",
+            "score": 26.33853
+          },
+          {
+            "id": 62869,
+            "title": "Unbounded group array growth causes gas limit exceeded",
+            "score": 25.97391
+          },
+          {
+            "id": 61421,
+            "title": "[L-05] Miner Delay of Accepting the Tx Can Revert Due To `>=` Comparison",
+            "score": 24.99516
+          },
+          {
+            "id": 62204,
+            "title": "Unbounded `depositAddresses` can cause `CompliantDepositRegistry::challengeLatestBatch` to revert due to out of gas",
+            "score": 24.00067
+          }
+        ]
+      },
+      "vi": {
+        "query": "mảng khóa phiên không giới hạn làm thao tác xóa vượt giới hạn phí thực thi",
+        "target_rank": null,
+        "positive_score_results": 0,
+        "top5": []
+      }
+    }
+  ]
+}

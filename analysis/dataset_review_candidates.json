@@ -1,0 +1,520 @@
+[
+  {
+    "id": 60557,
+    "title": "Implementation Contract Can Be Initialized",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1105,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_60557.json",
+    "markdown_file": "md_rag_output_last_3000/finding_60557.md"
+  },
+  {
+    "id": 62571,
+    "title": "[L-13] Inconsistent role ID in `cardAllocationPool` initialization",
+    "firm": "Pashov Audit Group",
+    "impact": "LOW",
+    "chars": 1279,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_62571.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62571.md"
+  },
+  {
+    "id": 61263,
+    "title": "Incorrect vault status determination in `MiddlewareVaultManager`",
+    "firm": "Cyfrin",
+    "impact": "LOW",
+    "chars": 1763,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61263.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61263.md"
+  },
+  {
+    "id": 62901,
+    "title": "num_txs is incorrectly incremented on transaction replacement in pending pool",
+    "firm": "Spearbit",
+    "impact": "MEDIUM",
+    "chars": 1814,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_62901.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62901.md"
+  },
+  {
+    "id": 61058,
+    "title": "Function HubPoolLogicupdateWithWithdraw doesnt round up in favour of protocol if isFAmount false",
+    "firm": "Immunefi",
+    "impact": "LOW",
+    "chars": 7034,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61058.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61058.md"
+  },
+  {
+    "id": 61309,
+    "title": "Hard-coded Values Reduce Readability",
+    "firm": "MixBytes",
+    "impact": "LOW",
+    "chars": 896,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61309.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61309.md"
+  },
+  {
+    "id": 62814,
+    "title": "H-7: In the `IncentiveGauge._upsertIncentive()` function, `_updatePoolByPid()` should be called outside the `if` statement",
+    "firm": "Sherlock",
+    "impact": "HIGH",
+    "chars": 4447,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_62814.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62814.md"
+  },
+  {
+    "id": 62355,
+    "title": "[BAB-2] Anyone can create a listing for another user's approved/listed ERC721",
+    "firm": "Hexens",
+    "impact": "HIGH",
+    "chars": 1983,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_62355.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62355.md"
+  },
+  {
+    "id": 61415,
+    "title": "[M-01] The `_removeSessionKey()` Will Never Remove the Unbounded Session Key Array Due to Gas-Based DoS",
+    "firm": "Shieldify",
+    "impact": "MEDIUM",
+    "chars": 1926,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61415.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61415.md"
+  },
+  {
+    "id": 61842,
+    "title": "[M-15] If `FFactory::buyTax` and / or `FFactory::sellTax` is set to 0, buy / sell would revert",
+    "firm": "Code4rena",
+    "impact": "MEDIUM",
+    "chars": 4628,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61842.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61842.md"
+  },
+  {
+    "id": 61794,
+    "title": "Stale Value of totalStableToken Used in Stability Pool",
+    "firm": "OpenZeppelin",
+    "impact": "MEDIUM",
+    "chars": 1626,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61794.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61794.md"
+  },
+  {
+    "id": 61551,
+    "title": "Protocol lacks bad debt management mechanisms, risking permanent insolvency",
+    "firm": "TrailOfBits",
+    "impact": "MEDIUM",
+    "chars": 2060,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61551.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61551.md"
+  },
+  {
+    "id": 61783,
+    "title": "[M-02] Incorrect ETH Transfer to State Manager — Full msg.value Sent Instead of Used Amount",
+    "firm": "Kann",
+    "impact": "MEDIUM",
+    "chars": 535,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_61783.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61783.md"
+  },
+  {
+    "id": 62054,
+    "title": "Version Mismatch for evm-m-extensions in mUSD  Acknowledged",
+    "firm": "ConsenSys",
+    "impact": "LOW",
+    "chars": 2376,
+    "reasons": [
+      "firm_median_length"
+    ],
+    "json_file": "rag_output_last_3000/finding_62054.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62054.md"
+  },
+  {
+    "id": 62633,
+    "title": "[L-12] `withdrawNative` and `depositNative` cannot be used for WHYPE/HYPE",
+    "firm": "Pashov Audit Group",
+    "impact": "LOW",
+    "chars": 148,
+    "reasons": [
+      "shortest"
+    ],
+    "json_file": "rag_output_last_3000/finding_62633.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62633.md"
+  },
+  {
+    "id": 62231,
+    "title": "Small functions only used once should be inlined into their parent functions",
+    "firm": "Cyfrin",
+    "impact": "GAS",
+    "chars": 175,
+    "reasons": [
+      "shortest"
+    ],
+    "json_file": "rag_output_last_3000/finding_62231.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62231.md"
+  },
+  {
+    "id": 61724,
+    "title": "Missing json tag in BlobHeader structure",
+    "firm": "Spearbit",
+    "impact": "LOW",
+    "chars": 192,
+    "reasons": [
+      "shortest"
+    ],
+    "json_file": "rag_output_last_3000/finding_61724.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61724.md"
+  },
+  {
+    "id": 61725,
+    "title": "Incorrect bounds check in Read*Point functions",
+    "firm": "Spearbit",
+    "impact": "LOW",
+    "chars": 199,
+    "reasons": [
+      "shortest"
+    ],
+    "json_file": "rag_output_last_3000/finding_61725.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61725.md"
+  },
+  {
+    "id": 61947,
+    "title": "Unused variables",
+    "firm": "MixBytes",
+    "impact": "LOW",
+    "chars": 208,
+    "reasons": [
+      "shortest"
+    ],
+    "json_file": "rag_output_last_3000/finding_61947.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61947.md"
+  },
+  {
+    "id": 62080,
+    "title": "[M-17] Bad debt can be permanently blocked from being moved to backstop",
+    "firm": "Code4rena",
+    "impact": "MEDIUM",
+    "chars": 38112,
+    "reasons": [
+      "longest"
+    ],
+    "json_file": "rag_output_last_3000/finding_62080.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62080.md"
+  },
+  {
+    "id": 61136,
+    "title": "Malicious HTTP responses allow systemic applica...",
+    "firm": "Immunefi",
+    "impact": "HIGH",
+    "chars": 37624,
+    "reasons": [
+      "longest"
+    ],
+    "json_file": "rag_output_last_3000/finding_61136.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61136.md"
+  },
+  {
+    "id": 61080,
+    "title": "Smart contract cannot be accessed during the normal liquidation process that involves fully acquiring the borrowers balance",
+    "firm": "Immunefi",
+    "impact": "LOW",
+    "chars": 30778,
+    "reasons": [
+      "longest"
+    ],
+    "json_file": "rag_output_last_3000/finding_61080.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61080.md"
+  },
+  {
+    "id": 61039,
+    "title": "Griefing an user from creating an account.",
+    "firm": "Immunefi",
+    "impact": "MEDIUM",
+    "chars": 5969,
+    "reasons": [
+      "unclosed_fence"
+    ],
+    "json_file": "rag_output_last_3000/finding_61039.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61039.md"
+  },
+  {
+    "id": 61045,
+    "title": "Attacker can borrow more than the collateral deposit.",
+    "firm": "Immunefi",
+    "impact": "HIGH",
+    "chars": 11731,
+    "reasons": [
+      "unclosed_fence"
+    ],
+    "json_file": "rag_output_last_3000/finding_61045.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61045.md"
+  },
+  {
+    "id": 61095,
+    "title": "Reflected XSS in validator node endpoints leads to node shutdown via validator-gui",
+    "firm": "Immunefi",
+    "impact": "LOW",
+    "chars": 9528,
+    "reasons": [
+      "html_tags"
+    ],
+    "json_file": "rag_output_last_3000/finding_61095.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61095.md"
+  },
+  {
+    "id": 61287,
+    "title": "Rebaseable Tokens Cause Unfair Vesting and Claim Failures",
+    "firm": "MixBytes",
+    "impact": "HIGH",
+    "chars": 4278,
+    "reasons": [
+      "html_tags"
+    ],
+    "json_file": "rag_output_last_3000/finding_61287.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61287.md"
+  },
+  {
+    "id": 59890,
+    "title": "Using Vulnerable Solidity Version",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1065,
+    "reasons": [
+      "pinned_github_blob"
+    ],
+    "json_file": "rag_output_last_3000/finding_59890.json",
+    "markdown_file": "md_rag_output_last_3000/finding_59890.md"
+  },
+  {
+    "id": 59922,
+    "title": "Allowance Double-Spend Exploit",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1893,
+    "reasons": [
+      "pinned_github_blob",
+      "same_title_near_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_59922.json",
+    "markdown_file": "md_rag_output_last_3000/finding_59922.md"
+  },
+  {
+    "id": 61521,
+    "title": "[M-01] Wrong collateral refund in liquidation when `liqPrice == priceAfterImpact`",
+    "firm": "Pashov Audit Group",
+    "impact": "MEDIUM",
+    "chars": 1960,
+    "reasons": [
+      "tag_count"
+    ],
+    "json_file": "rag_output_last_3000/finding_61521.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61521.md"
+  },
+  {
+    "id": 61599,
+    "title": "Missing staleness check in `PriceOracle::getTokenPrice`",
+    "firm": "Cyfrin",
+    "impact": "MEDIUM",
+    "chars": 2316,
+    "reasons": [
+      "tag_count"
+    ],
+    "json_file": "rag_output_last_3000/finding_61599.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61599.md"
+  },
+  {
+    "id": 61744,
+    "title": "Missing Access Control Allows Users to Bypass Fees",
+    "firm": "Quantstamp",
+    "impact": "MEDIUM",
+    "chars": 2250,
+    "reasons": [
+      "tag_count"
+    ],
+    "json_file": "rag_output_last_3000/finding_61744.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61744.md"
+  },
+  {
+    "id": 60674,
+    "title": "Inability to Retry Disbursements",
+    "firm": "Quantstamp",
+    "impact": "MEDIUM",
+    "chars": 2575,
+    "reasons": [
+      "relative_images"
+    ],
+    "json_file": "rag_output_last_3000/finding_60674.json",
+    "markdown_file": "md_rag_output_last_3000/finding_60674.md"
+  },
+  {
+    "id": 60700,
+    "title": "Native Tokens From the L1 Liquidity Pools Could Be Drained Depending on the Compiler Version Used",
+    "firm": "Quantstamp",
+    "impact": "HIGH",
+    "chars": 2678,
+    "reasons": [
+      "relative_images"
+    ],
+    "json_file": "rag_output_last_3000/finding_60700.json",
+    "markdown_file": "md_rag_output_last_3000/finding_60700.md"
+  },
+  {
+    "id": 59819,
+    "title": "DoS of SPA Oracle Contract",
+    "firm": "Quantstamp",
+    "impact": "HIGH",
+    "chars": 1616,
+    "reasons": [
+      "impact_HIGH"
+    ],
+    "json_file": "rag_output_last_3000/finding_59819.json",
+    "markdown_file": "md_rag_output_last_3000/finding_59819.md"
+  },
+  {
+    "id": 59823,
+    "title": "User’s Collateral Could Be Arbitrary Allocated to Undesired Strategies",
+    "firm": "Quantstamp",
+    "impact": "MEDIUM",
+    "chars": 1782,
+    "reasons": [
+      "impact_MEDIUM"
+    ],
+    "json_file": "rag_output_last_3000/finding_59823.json",
+    "markdown_file": "md_rag_output_last_3000/finding_59823.md"
+  },
+  {
+    "id": 59806,
+    "title": "External Functions Should Not Be Specified Within `TransparentUpgradeableProxy`",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 832,
+    "reasons": [
+      "impact_LOW"
+    ],
+    "json_file": "rag_output_last_3000/finding_59806.json",
+    "markdown_file": "md_rag_output_last_3000/finding_59806.md"
+  },
+  {
+    "id": 61217,
+    "title": "Fail fast without performing unnecessary storage reads",
+    "firm": "Cyfrin",
+    "impact": "GAS",
+    "chars": 1476,
+    "reasons": [
+      "impact_GAS"
+    ],
+    "json_file": "rag_output_last_3000/finding_61217.json",
+    "markdown_file": "md_rag_output_last_3000/finding_61217.md"
+  },
+  {
+    "id": 62635,
+    "title": "`VTokenstorage` Does Not Keep Extra Slots",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1050,
+    "reasons": [
+      "normalized_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_62635.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62635.md"
+  },
+  {
+    "id": 62805,
+    "title": "`VTokenstorage` Does Not Keep Extra Slots",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1050,
+    "reasons": [
+      "normalized_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_62805.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62805.md"
+  },
+  {
+    "id": 62636,
+    "title": "`IPrimeV5` Still Relies on Old Solidity Version",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 610,
+    "reasons": [
+      "normalized_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_62636.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62636.md"
+  },
+  {
+    "id": 62806,
+    "title": "`IPrimeV5` Still Relies on Old Solidity Version",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 610,
+    "reasons": [
+      "normalized_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_62806.json",
+    "markdown_file": "md_rag_output_last_3000/finding_62806.md"
+  },
+  {
+    "id": 60858,
+    "title": "Allowance Double-Spend Exploit",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1805,
+    "reasons": [
+      "same_title_near_duplicate",
+      "same_title_near_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_60858.json",
+    "markdown_file": "md_rag_output_last_3000/finding_60858.md"
+  },
+  {
+    "id": 60778,
+    "title": "Allowance Double-Spend Exploit",
+    "firm": "Quantstamp",
+    "impact": "LOW",
+    "chars": 1952,
+    "reasons": [
+      "same_title_near_duplicate"
+    ],
+    "json_file": "rag_output_last_3000/finding_60778.json",
+    "markdown_file": "md_rag_output_last_3000/finding_60778.md"
+  }
+]

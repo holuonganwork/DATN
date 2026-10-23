@@ -1,0 +1,1575 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-23",
+  "json_directory": "rag_output_last_3000",
+  "markdown_directory": "md_rag_output_last_3000",
+  "fingerprint_method": "sha256 of naturally sorted filename:sha256(raw bytes) lines",
+  "json_fingerprint": "4466b879f625d07b3e61a35bc9805d7ceb65d23d71b11eefb28d474b766dec2b",
+  "markdown_fingerprint": "ece678bf15fd7039292949bd825809ef980e2633407576064d61ab7752bb4220",
+  "input_files": {
+    "json": 3000,
+    "markdown": 3000,
+    "json_bytes": 12946494,
+    "markdown_paired_bytes": 9474715
+  },
+  "parsed_records": 3000,
+  "errors": [],
+  "unique_ids": 3000,
+  "duplicate_ids": 0,
+  "id_min": 59806,
+  "id_max": 62955,
+  "orphan_markdown_files": [],
+  "impacts": {
+    "LOW": 1816,
+    "HIGH": 460,
+    "MEDIUM": 688,
+    "GAS": 36
+  },
+  "kinds": {
+    "MARKDOWN": 2391,
+    "GIT": 339,
+    "PDF": 270
+  },
+  "firm_count": 14,
+  "protocol_name_count": 216,
+  "protocol_id_count": 216,
+  "fields": {
+    "id": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "kind": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "auditfirm_id": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "impact": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "finders_count": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 30,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "protocol_id": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "title": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "content": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "summary": {
+      "present": 3000,
+      "nonempty": 1138,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "report_date": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "contest_prize_txt": {
+      "present": 3000,
+      "nonempty": 193,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "contest_link": {
+      "present": 3000,
+      "nonempty": 1981,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "sponsor_name": {
+      "present": 3000,
+      "nonempty": 89,
+      "null": 1289,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 1711,
+        "null": 1289
+      }
+    },
+    "sponsor_link": {
+      "present": 3000,
+      "nonempty": 146,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "quality_score": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 2958,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "general_score": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 2966,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "source_link": {
+      "present": 3000,
+      "nonempty": 2896,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "github_link": {
+      "present": 3000,
+      "nonempty": 309,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "pdf_link": {
+      "present": 3000,
+      "nonempty": 270,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "pdf_page_from": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 2730,
+      "false": 0,
+      "types": {
+        "number": 3000
+      }
+    },
+    "contest_id": {
+      "present": 3000,
+      "nonempty": 193,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "slug": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "firm_name": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "firm_logo_square": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "protocol_name": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "string": 3000
+      }
+    },
+    "bookmarked": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 3000,
+      "types": {
+        "boolean": 3000
+      }
+    },
+    "read": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 3000,
+      "types": {
+        "boolean": 3000
+      }
+    },
+    "issues_issue_finders": {
+      "present": 2968,
+      "nonempty": 2968,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "array": 2968
+      }
+    },
+    "auditfirms_auditfirm": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "object": 3000
+      }
+    },
+    "protocols_protocol": {
+      "present": 3000,
+      "nonempty": 3000,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "object": 3000
+      }
+    },
+    "issues_issuetagscore": {
+      "present": 3000,
+      "nonempty": 6,
+      "null": 0,
+      "zero": 0,
+      "false": 0,
+      "types": {
+        "array": 3000
+      }
+    }
+  },
+  "flags": {
+    "filename_id_matches": 3000,
+    "source_valid": 2896,
+    "github_field_present": 309,
+    "github_field_valid": 309,
+    "pdf_field_present": 270,
+    "pdf_field_valid": 270,
+    "any_github_link": 868,
+    "github_blob_link": 580,
+    "pinned_github_blob": 414,
+    "github_commit_link": 201,
+    "hash40_mention": 1286,
+    "sol_file_reference": 1900,
+    "solidity_fence_marker": 775,
+    "unclosed_fence": 8,
+    "poc_marker": 442,
+    "recommendation_marker": 2580,
+    "root_cause_marker": 111,
+    "impact_marker": 779,
+    "update_marker": 1376,
+    "fixed_client_marker": 468,
+    "acknowledged_marker": 607,
+    "defivault_keywords": 970,
+    "html_image": 6,
+    "html_tags": 61,
+    "replacement_char": 1,
+    "nul": 0,
+    "unexpected_control_char": 1,
+    "ui_export_boilerplate": 9,
+    "clearpage_macro": 49,
+    "possible_mojibake": 0,
+    "summary_nonempty": 1138,
+    "nested_firm_matches": 3000,
+    "nested_protocol_matches": 3000,
+    "md_exists": 3000,
+    "md_content_exact": 2995,
+    "md_content_canonical_eol_exact": 3000,
+    "md_frontmatter": 3000,
+    "md_source_marker": 2896,
+    "md_title_exact": 2995,
+    "md_title_quote_parse_error": 5,
+    "md_double_crlf": 5,
+    "md_plain_scalar_colon_space": 74,
+    "md_title_backslash_escape": 11
+  },
+  "per_firm": [
+    {
+      "firm": "Quantstamp",
+      "count": 1372,
+      "impacts": {
+        "LOW": 1004,
+        "HIGH": 142,
+        "MEDIUM": 226
+      }
+    },
+    {
+      "firm": "Pashov Audit Group",
+      "count": 323,
+      "impacts": {
+        "MEDIUM": 61,
+        "LOW": 221,
+        "HIGH": 41
+      }
+    },
+    {
+      "firm": "Cyfrin",
+      "count": 285,
+      "impacts": {
+        "HIGH": 41,
+        "MEDIUM": 54,
+        "LOW": 154,
+        "GAS": 36
+      }
+    },
+    {
+      "firm": "Spearbit",
+      "count": 213,
+      "impacts": {
+        "HIGH": 42,
+        "MEDIUM": 65,
+        "LOW": 106
+      }
+    },
+    {
+      "firm": "Immunefi",
+      "count": 146,
+      "impacts": {
+        "MEDIUM": 43,
+        "HIGH": 61,
+        "LOW": 42
+      }
+    },
+    {
+      "firm": "MixBytes",
+      "count": 127,
+      "impacts": {
+        "HIGH": 14,
+        "MEDIUM": 21,
+        "LOW": 92
+      }
+    },
+    {
+      "firm": "Sherlock",
+      "count": 104,
+      "impacts": {
+        "MEDIUM": 78,
+        "HIGH": 26
+      }
+    },
+    {
+      "firm": "Hexens",
+      "count": 93,
+      "impacts": {
+        "HIGH": 23,
+        "MEDIUM": 29,
+        "LOW": 41
+      }
+    },
+    {
+      "firm": "Shieldify",
+      "count": 93,
+      "impacts": {
+        "HIGH": 25,
+        "MEDIUM": 26,
+        "LOW": 42
+      }
+    },
+    {
+      "firm": "Code4rena",
+      "count": 89,
+      "impacts": {
+        "HIGH": 11,
+        "MEDIUM": 48,
+        "LOW": 30
+      }
+    },
+    {
+      "firm": "OpenZeppelin",
+      "count": 74,
+      "impacts": {
+        "HIGH": 16,
+        "MEDIUM": 17,
+        "LOW": 41
+      }
+    },
+    {
+      "firm": "TrailOfBits",
+      "count": 57,
+      "impacts": {
+        "MEDIUM": 13,
+        "HIGH": 15,
+        "LOW": 29
+      }
+    },
+    {
+      "firm": "Kann",
+      "count": 15,
+      "impacts": {
+        "HIGH": 3,
+        "MEDIUM": 6,
+        "LOW": 6
+      }
+    },
+    {
+      "firm": "ConsenSys",
+      "count": 9,
+      "impacts": {
+        "LOW": 8,
+        "MEDIUM": 1
+      }
+    }
+  ],
+  "top_protocols": [
+    {
+      "value": "Folks Finance",
+      "count": 76
+    },
+    {
+      "value": "Remora Pledge",
+      "count": 57
+    },
+    {
+      "value": "RipIt_2025-04-25",
+      "count": 54
+    },
+    {
+      "value": "NUTS Finance",
+      "count": 51
+    },
+    {
+      "value": "Suzaku Core",
+      "count": 51
+    },
+    {
+      "value": "Shardeum: Core",
+      "count": 46
+    },
+    {
+      "value": "Archi Finance",
+      "count": 45
+    },
+    {
+      "value": "Virtuals Protocol",
+      "count": 43
+    },
+    {
+      "value": "Secured Finance",
+      "count": 41
+    },
+    {
+      "value": "Astera",
+      "count": 39
+    },
+    {
+      "value": "Pheasant Network",
+      "count": 39
+    },
+    {
+      "value": "blex.io",
+      "count": 38
+    },
+    {
+      "value": "Notional Exponent",
+      "count": 37
+    },
+    {
+      "value": "CryptoLegacy",
+      "count": 34
+    },
+    {
+      "value": "EigenDA vCISO",
+      "count": 34
+    }
+  ],
+  "top_source_hosts": [
+    {
+      "value": "certificate.quantstamp.com",
+      "count": 1372
+    },
+    {
+      "value": "github.com",
+      "count": 1352
+    },
+    {
+      "value": "code4rena.com",
+      "count": 89
+    },
+    {
+      "value": "blog.openzeppelin.com",
+      "count": 74
+    },
+    {
+      "value": "diligence.consensys.io",
+      "count": 9
+    }
+  ],
+  "top_body_link_hosts": [
+    {
+      "value": "github.com",
+      "count": 2249
+    },
+    {
+      "value": "certificate.quantstamp.com",
+      "count": 167
+    },
+    {
+      "value": "code4rena.com",
+      "count": 117
+    },
+    {
+      "value": "testnet.snowtrace.io",
+      "count": 73
+    },
+    {
+      "value": "gist.github.com",
+      "count": 67
+    },
+    {
+      "value": "localhost",
+      "count": 51
+    },
+    {
+      "value": "eips.ethereum.org",
+      "count": 34
+    },
+    {
+      "value": "docs.openzeppelin.com",
+      "count": 29
+    },
+    {
+      "value": "etherscan.io",
+      "count": 24
+    },
+    {
+      "value": "asdf-vm.com",
+      "count": 18
+    },
+    {
+      "value": "docs.chain.link",
+      "count": 17
+    },
+    {
+      "value": "server_ip",
+      "count": 16
+    },
+    {
+      "value": "docs.soliditylang.org",
+      "count": 14
+    },
+    {
+      "value": "eth-mainnet.public.blastapi.io",
+      "count": 14
+    },
+    {
+      "value": "solidity.readthedocs.io",
+      "count": 14
+    }
+  ],
+  "unique_source_urls": 352,
+  "source_largest_groups": [
+    {
+      "url": "https://github.com/solodit/solodit_content/blob/main/reports/Cyfrin/2025-07-04-cyfrin-remora-pledge-v2.0.md",
+      "count": 57,
+      "protocols": [
+        "Remora Pledge"
+      ]
+    },
+    {
+      "url": "https://github.com/pashov/audits/blob/master/team/md/RipIt-security-review_2025-04-25.md",
+      "count": 54,
+      "protocols": [
+        "RipIt_2025-04-25"
+      ]
+    },
+    {
+      "url": "https://github.com/solodit/solodit_content/blob/main/reports/Cyfrin/2025-07-07-cyfrin-suzaku-core-v2.0.md",
+      "count": 51,
+      "protocols": [
+        "Suzaku Core"
+      ]
+    },
+    {
+      "url": "https://certificate.quantstamp.com/full/archi-finance/abb48b19-672a-4390-bf11-59c485978d61/index.html",
+      "count": 45,
+      "protocols": [
+        "Archi Finance"
+      ]
+    },
+    {
+      "url": "https://code4rena.com/reports/2025-04-virtuals-protocol",
+      "count": 43,
+      "protocols": [
+        "Virtuals Protocol"
+      ]
+    },
+    {
+      "url": "https://certificate.quantstamp.com/full/secured-finance/20cad24f-5901-4107-9509-e3d5ad3acc7c/index.html",
+      "count": 41,
+      "protocols": [
+        "Secured Finance"
+      ]
+    },
+    {
+      "url": "https://certificate.quantstamp.com/full/pheasant-network/0b120935-78d1-45a1-88c4-f770c8e5fa52/index.html",
+      "count": 39,
+      "protocols": [
+        "Pheasant Network"
+      ]
+    },
+    {
+      "url": "https://github.com/spearbit/portfolio/blob/master/pdfs/Astera-Spearbit-Security-Review-December-2024.pdf",
+      "count": 39,
+      "protocols": [
+        "Astera"
+      ]
+    },
+    {
+      "url": "https://certificate.quantstamp.com/full/blex-io/215a1fca-04f3-49f0-aa2a-9f3be6f89fdd/index.html",
+      "count": 38,
+      "protocols": [
+        "blex.io"
+      ]
+    },
+    {
+      "url": "https://github.com/mixbytes/audits_public/blob/master/CryptoLegacy/CryptoLegacy/README.md",
+      "count": 34,
+      "protocols": [
+        "CryptoLegacy"
+      ]
+    }
+  ],
+  "lengths": {
+    "content_chars": {
+      "n": 3000,
+      "min": 148,
+      "p10": 615,
+      "p25": 872,
+      "median": 1408,
+      "p75": 2459,
+      "p90": 4927,
+      "p95": 7779,
+      "p99": 16816,
+      "max": 38112,
+      "mean": 2370.07,
+      "total": 7110196
+    },
+    "content_words": {
+      "n": 3000,
+      "min": 18,
+      "p10": 81,
+      "p25": 117,
+      "median": 187,
+      "p75": 322,
+      "p90": 593,
+      "p95": 889,
+      "p99": 1793,
+      "max": 5064,
+      "mean": 295.09,
+      "total": 885276
+    },
+    "code_lines": {
+      "n": 3000,
+      "min": 0,
+      "p10": 0,
+      "p25": 0,
+      "median": 0,
+      "p75": 16,
+      "p90": 57,
+      "p95": 105,
+      "p99": 273,
+      "max": 946,
+      "mean": 20.6,
+      "total": 61807
+    }
+  },
+  "length_buckets": {
+    "under_200": 4,
+    "under_500": 152,
+    "over_8000": 140,
+    "over_16000": 35,
+    "over_32000": 2
+  },
+  "dates": {
+    "min": "2022-10-04T00:00:00.000Z",
+    "max": "2025-10-13T00:00:00.000Z",
+    "invalid_or_missing": 0,
+    "future_as_of": 0,
+    "per_year": {
+      "2022": 4,
+      "2023": 1086,
+      "2024": 303,
+      "2025": 1607
+    }
+  },
+  "code": {
+    "with_blocks": 1363,
+    "total_blocks": 3300,
+    "languages": [
+      {
+        "value": "solidity",
+        "count": 1511
+      },
+      {
+        "value": "(unlabelled)",
+        "count": 1161
+      },
+      {
+        "value": "diff",
+        "count": 201
+      },
+      {
+        "value": "javascript",
+        "count": 58
+      },
+      {
+        "value": "rust",
+        "count": 55
+      },
+      {
+        "value": "bash",
+        "count": 43
+      },
+      {
+        "value": "cpp",
+        "count": 42
+      },
+      {
+        "value": "python",
+        "count": 36
+      },
+      {
+        "value": "js",
+        "count": 31
+      },
+      {
+        "value": "c",
+        "count": 27
+      },
+      {
+        "value": "go",
+        "count": 24
+      },
+      {
+        "value": "typescript",
+        "count": 15
+      },
+      {
+        "value": "plaintext",
+        "count": 11
+      },
+      {
+        "value": "solidity!",
+        "count": 11
+      },
+      {
+        "value": "shell",
+        "count": 10
+      },
+      {
+        "value": "json",
+        "count": 9
+      },
+      {
+        "value": "move",
+        "count": 9
+      },
+      {
+        "value": "jsx",
+        "count": 8
+      },
+      {
+        "value": "cairo",
+        "count": 6
+      },
+      {
+        "value": "log",
+        "count": 6
+      },
+      {
+        "value": "text",
+        "count": 6
+      },
+      {
+        "value": "diff solidity",
+        "count": 4
+      },
+      {
+        "value": "html",
+        "count": 2
+      },
+      {
+        "value": "sh",
+        "count": 2
+      },
+      {
+        "value": "solidity=",
+        "count": 2
+      },
+      {
+        "value": "ts",
+        "count": 2
+      },
+      {
+        "value": "(curvetokens / 3) * graduationpricekas",
+        "count": 1
+      },
+      {
+        "value": "code",
+        "count": 1
+      },
+      {
+        "value": "css",
+        "count": 1
+      },
+      {
+        "value": "function _withdraw(",
+        "count": 1
+      }
+    ],
+    "language_record_counts": [
+      {
+        "value": "solidity",
+        "count": 765
+      },
+      {
+        "value": "(unlabelled)",
+        "count": 479
+      },
+      {
+        "value": "diff",
+        "count": 177
+      },
+      {
+        "value": "javascript",
+        "count": 34
+      },
+      {
+        "value": "rust",
+        "count": 32
+      },
+      {
+        "value": "bash",
+        "count": 28
+      },
+      {
+        "value": "python",
+        "count": 23
+      },
+      {
+        "value": "cpp",
+        "count": 19
+      },
+      {
+        "value": "js",
+        "count": 18
+      },
+      {
+        "value": "c",
+        "count": 10
+      },
+      {
+        "value": "go",
+        "count": 9
+      },
+      {
+        "value": "plaintext",
+        "count": 8
+      },
+      {
+        "value": "json",
+        "count": 7
+      },
+      {
+        "value": "shell",
+        "count": 7
+      },
+      {
+        "value": "log",
+        "count": 6
+      },
+      {
+        "value": "move",
+        "count": 6
+      },
+      {
+        "value": "text",
+        "count": 6
+      },
+      {
+        "value": "solidity!",
+        "count": 5
+      },
+      {
+        "value": "typescript",
+        "count": 5
+      },
+      {
+        "value": "diff solidity",
+        "count": 4
+      },
+      {
+        "value": "jsx",
+        "count": 4
+      },
+      {
+        "value": "cairo",
+        "count": 2
+      },
+      {
+        "value": "html",
+        "count": 2
+      },
+      {
+        "value": "sh",
+        "count": 2
+      },
+      {
+        "value": "solidity=",
+        "count": 2
+      },
+      {
+        "value": "ts",
+        "count": 2
+      },
+      {
+        "value": "(curvetokens / 3) * graduationpricekas",
+        "count": 1
+      },
+      {
+        "value": "code",
+        "count": 1
+      },
+      {
+        "value": "css",
+        "count": 1
+      },
+      {
+        "value": "function _withdraw(",
+        "count": 1
+      }
+    ],
+    "unclosed_ids": [
+      61039,
+      61045,
+      61106,
+      61442,
+      62093,
+      62353,
+      62813,
+      62921
+    ]
+  },
+  "images": {
+    "records": 112,
+    "total": 140,
+    "relative_image_records": 14,
+    "total_relative": 14
+  },
+  "tags": {
+    "records_with_tags": 6,
+    "records_with_protocol_categories": 104,
+    "md_empty_categories": 2994,
+    "examples": [
+      {
+        "id": 61521,
+        "raw": [
+          {
+            "tags_tag": {
+              "title": "ABI Encoding"
+            }
+          }
+        ]
+      },
+      {
+        "id": 61599,
+        "raw": [
+          {
+            "tags_tag": {
+              "title": "Oracle"
+            }
+          }
+        ]
+      },
+      {
+        "id": 61744,
+        "raw": [
+          {
+            "tags_tag": {
+              "title": "Access Control"
+            }
+          }
+        ]
+      },
+      {
+        "id": 61887,
+        "raw": [
+          {
+            "tags_tag": {
+              "title": "Access Control"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Account Abstraction"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Auditing and Logging"
+            }
+          }
+        ]
+      },
+      {
+        "id": 61888,
+        "raw": [
+          {
+            "tags_tag": {
+              "title": "AutoRoll"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Block Period"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Bond"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Authentication"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Arbitrum"
+            }
+          }
+        ]
+      },
+      {
+        "id": 62469,
+        "raw": [
+          {
+            "tags_tag": {
+              "title": "0x"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "1/64 Rule"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "51% Attack"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "API Inconsistency"
+            }
+          },
+          {
+            "tags_tag": {
+              "title": "Access Control"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "score_values": {
+    "quality": {
+      "0": 2958,
+      "2": 3,
+      "3": 2,
+      "4": 4,
+      "5": 32,
+      "3.666666666666667": 1
+    },
+    "general": {
+      "0": 2966,
+      "1": 1,
+      "2": 3,
+      "3": 5,
+      "4": 10,
+      "5": 14,
+      "3.6": 1
+    }
+  },
+  "duplicates": {
+    "exact_content": {
+      "groups": 2,
+      "records": 4,
+      "extra_records": 2,
+      "examples": [
+        [
+          62635,
+          62805
+        ],
+        [
+          62636,
+          62806
+        ]
+      ]
+    },
+    "whitespace_case_normalized_content": {
+      "groups": 2,
+      "records": 4,
+      "extra_records": 2,
+      "examples": [
+        [
+          62635,
+          62805
+        ],
+        [
+          62636,
+          62806
+        ]
+      ]
+    },
+    "normalized_titles": {
+      "groups": 53,
+      "records": 322,
+      "extra_records": 269,
+      "examples": [
+        [
+          59842,
+          59868,
+          59879,
+          59889,
+          59908,
+          59920,
+          59942,
+          59960,
+          59984,
+          60019,
+          60039,
+          60070,
+          60112,
+          60134,
+          60164,
+          60204,
+          60221,
+          60238,
+          60251,
+          60269,
+          60296,
+          60306,
+          60350,
+          60367,
+          60395,
+          60431,
+          60452,
+          60468,
+          60504,
+          60528,
+          60538,
+          60550,
+          60556,
+          60560,
+          60569,
+          60609,
+          60631,
+          60662,
+          60688,
+          60738,
+          60754,
+          60771,
+          60805,
+          60817,
+          60835,
+          60959,
+          60971,
+          60992,
+          61158,
+          61355,
+          61647,
+          61658,
+          61753
+        ],
+        [
+          59828,
+          59866,
+          59907,
+          59914,
+          59956,
+          59991,
+          60020,
+          60031,
+          60067,
+          60113,
+          60126,
+          60205,
+          60220,
+          60237,
+          60248,
+          60265,
+          60278,
+          60341,
+          60388,
+          60429,
+          60451,
+          60477,
+          60501,
+          60514,
+          60526,
+          60532,
+          60559,
+          60568,
+          60619,
+          60677,
+          60741,
+          60752,
+          60818,
+          60839,
+          60866,
+          60904,
+          60961,
+          60991,
+          61323,
+          61636,
+          61648
+        ],
+        [
+          59812,
+          59873,
+          59902,
+          59945,
+          59963,
+          60003,
+          60044,
+          60077,
+          60107,
+          60168,
+          60212,
+          60231,
+          60260,
+          60277,
+          60297,
+          60357,
+          60398,
+          60441,
+          60470,
+          60519,
+          60558,
+          60622,
+          60694,
+          60726,
+          60761,
+          60792,
+          60800,
+          60842,
+          60868,
+          60934,
+          60978,
+          61167,
+          61637,
+          61652,
+          61661
+        ],
+        [
+          59844,
+          59894,
+          59909,
+          59947,
+          59993,
+          60105,
+          60142,
+          60165,
+          60219,
+          60254,
+          60271,
+          60284,
+          60394,
+          60433,
+          60469,
+          60531,
+          60552,
+          60804,
+          60815,
+          60838,
+          60879,
+          60924,
+          60958
+        ],
+        [
+          59850,
+          59872,
+          59910,
+          60091,
+          60110,
+          60171,
+          60259,
+          60320,
+          60348,
+          60475,
+          60502,
+          60717,
+          60786,
+          60807,
+          61364,
+          61660
+        ],
+        [
+          59843,
+          59858,
+          59911,
+          60040,
+          60106,
+          60166,
+          60203,
+          60255,
+          60270,
+          60294,
+          60440
+        ],
+        [
+          59813,
+          59990,
+          60078,
+          60366,
+          60443,
+          60534,
+          60760,
+          61161,
+          61363
+        ],
+        [
+          60079,
+          60361,
+          60399,
+          60422,
+          60458,
+          60603,
+          60976
+        ],
+        [
+          60351,
+          60537,
+          60615,
+          60657,
+          60923,
+          60994,
+          61633
+        ],
+        [
+          59899,
+          59965,
+          60236,
+          60533,
+          60536,
+          60926
+        ],
+        [
+          60140,
+          60447,
+          60505,
+          60650,
+          60872,
+          60889
+        ],
+        [
+          61505,
+          61506,
+          61667,
+          61809,
+          61869,
+          62526
+        ],
+        [
+          59883,
+          59941,
+          60310,
+          60629,
+          60659
+        ],
+        [
+          59922,
+          60778,
+          60793,
+          60845,
+          60858
+        ],
+        [
+          60378,
+          60535,
+          60784,
+          60806,
+          60981
+        ],
+        [
+          59938,
+          60151,
+          60555,
+          60905
+        ],
+        [
+          59964,
+          60000,
+          60933,
+          61170
+        ],
+        [
+          60132,
+          60740,
+          60756,
+          60816
+        ],
+        [
+          61390,
+          61507,
+          61810,
+          62447
+        ],
+        [
+          60272,
+          60540,
+          61659
+        ]
+      ]
+    },
+    "same_title_pairs_checked": 3438,
+    "near_pairs_same_title": [
+      {
+        "a": 59922,
+        "b": 60858,
+        "jaccard": 0.8356,
+        "title": "Allowance Double-Spend Exploit"
+      },
+      {
+        "a": 60778,
+        "b": 60858,
+        "jaccard": 0.8194,
+        "title": "Allowance Double-Spend Exploit"
+      }
+    ]
+  },
+  "conversion": {
+    "metadata_disagreements": [],
+    "body_mismatch_ids": [
+      62187,
+      62188,
+      62189,
+      62190,
+      62191
+    ],
+    "title_mismatch_ids": [
+      61021,
+      61130,
+      61133,
+      61134,
+      61143
+    ]
+  },
+  "review_candidate_count": 43,
+  "notes": [
+    "Flags based on regex are retrieval/inspection signals, not semantic verification or confirmed labels.",
+    "Near duplicates only checked among identical normalized titles with five-word shingle Jaccard >= 0.8; cross-title duplicates not exhaustively searched.",
+    "URLs were parsed, not requested; valid URL syntax does not imply reachability, authenticity, licensing, or correct vulnerable commit.",
+    "Character/word counts are not model token counts. No LLM, embedding, compiler, or exploit was executed."
+  ]
+}
