@@ -10,6 +10,8 @@
 
 Đọc [bản so sánh](so_sanh.md) để quyết định; xem [đề tài 2](De_tai_phu.md) để hiểu phần việc tăng thêm khi đưa Agent và Foundry vào vòng phản hồi.
 
+**Demo giao diện:** mở [LLM Audit](demos/de_tai_1.html) bằng trình duyệt; xem [hướng dẫn hai demo](demos/README.md). Đây là prototype tương tác với dữ liệu mô phỏng, chưa gọi LLM hoặc thực thi công cụ audit.
+
 ## 1. Tên đề tài nên đăng ký
 
 **Xây dựng và đánh giá hệ thống hỗ trợ rà soát smart contract Solidity bằng mô hình ngôn ngữ lớn với quy trình phân tích có cấu trúc.**

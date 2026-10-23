@@ -8,6 +8,8 @@ Hướng này có chiều sâu kỹ thuật, nhưng phần khó nằm ở việc
 
 Xem [đề tài 1](README.md) và [so sánh để lựa chọn](so_sanh.md).
 
+**Demo giao diện:** mở [Agent Lab](demos/de_tai_2.html) bằng trình duyệt; xem [hướng dẫn hai demo](demos/README.md). Log, PoC và verifier là kịch bản mô phỏng, chưa thực thi LLM/Slither/Foundry.
+
 ## 1. Tên đề tài nên thu hẹp
 
 Nếu vẫn chọn, đề xuất:

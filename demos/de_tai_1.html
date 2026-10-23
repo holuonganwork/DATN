@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Demo tương tác đề tài 1: rà soát smart contract bằng LLM, xem finding, bằng chứng và báo cáo. Dữ liệu mô phỏng, chạy offline.">
+  <title>SCOPE — Demo 01 · Audit Workbench</title>
+  <link rel="stylesheet" href="assets/demo.css">
+  <script src="assets/demo-data.js" defer></script>
+  <script src="assets/demo-common.js" defer></script>
+  <script src="assets/demo-audit.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#workspace">Đến vùng làm việc</a>
+<div class="app">
+  <aside class="sidebar" aria-label="Điều hướng">
+    <div><a class="brand" href="de_tai_1.html" aria-label="SCOPE demo audit"><span class="brand-mark" data-icon="scan"></span>SCOPE</a><div class="brand-sub">SMART CONTRACT RESEARCH</div></div>
+    <div><div class="nav-label">WORKSPACE</div><nav class="nav">
+      <a class="active" aria-current="page" href="de_tai_1.html"><span data-icon="scan"></span>LLM Audit<span class="index">01</span></a>
+      <a href="de_tai_2.html"><span data-icon="terminal"></span>Agent Lab<span class="index">02</span></a>
+      <a href="#report-panel"><span data-icon="file"></span>Báo cáo mẫu<span class="index">↘</span></a>
+    </nav></div>
+    <div class="sidebar-note"><strong>Đọc code. Kiểm tra lập luận.</strong>Một không gian để xem cách LLM có thể hỗ trợ người rà soát hợp đồng thông minh.</div>
+    <div class="sidebar-bottom"><span><i class="status-dot"></i>LOCAL DEMO</span><span>v0.1</span></div>
+  </aside>
+  <main class="main" id="workspace">
+    <header class="topbar"><div class="breadcrumb"><span>Nghiên cứu</span><span>/</span><strong>Audit Workbench</strong></div><div class="top-actions"><span class="prototype">PROTOTYPE / 01</span><button class="icon-button" data-help aria-label="Giới thiệu demo"><span data-icon="info"></span></button><span class="avatar" aria-label="Không gian đồ án">ĐA</span></div></header>
+    <div class="content">
+      <div class="page-heading"><div><div class="eyebrow">ĐỀ TÀI 01 · LLM ASSISTED AUDIT</div><h1>Từ mã nguồn đến finding.</h1><p>Đọc hợp đồng, xem nguyên nhân và kiểm tra bằng chứng trước khi đưa ra kết luận.</p></div><button class="button" id="export-report"><span data-icon="download"></span>Tải báo cáo .md</button></div>
+      <div class="notice"><span data-icon="info"></span><span><strong>Demo tương tác.</strong> Kịch bản và báo cáo được soạn sẵn; không gửi mã nguồn ra ngoài, không gọi LLM hay chạy Solidity.</span><a href="#" data-help>Demo hoạt động thế nào?</a></div>
+      <div class="workspace">
+        <section class="panel" aria-labelledby="input-heading">
+          <div class="panel-heading"><h2 id="input-heading"><span class="number">01</span>Phạm vi rà soát</h2><span class="badge neutral">SOLIDITY</span></div>
+          <div class="panel-body">
+            <div class="fields"><div><label class="field-label" for="audit-case">HỢP ĐỒNG MẪU<span class="mono tiny">2 snapshots</span></label><select id="audit-case"><option value="buggy">Vault · phiên bản có lỗi</option><option value="fixed">Vault · đã sửa lỗi mục tiêu</option></select></div>
+              <div><div class="field-label" id="configuration-label">PHƯƠNG PHÁP PHÂN TÍCH</div><div class="segmented" role="group" aria-labelledby="configuration-label"><button type="button" data-mode="A0" aria-pressed="false">A0 · Trực tiếp</button><button type="button" data-mode="A1" aria-pressed="true">A1 · Có cấu trúc</button><button type="button" data-mode="A2" aria-pressed="false">A2 · Thêm tri thức</button></div><p class="configuration-note" id="mode-description">Xem vai trò, dòng tài sản, tình huống biên và bằng chứng theo checklist.</p></div></div>
+            <div class="editor"><div class="editor-top"><span><i class="file-dot"></i><span id="code-filename">SampleVault.sol</span></span><button class="button small quiet" id="restore-code" type="button" aria-label="Khôi phục mã mẫu" style="color:#bdcfbf;border-color:#405746">Khôi phục</button></div><div class="editor-body"><pre class="line-numbers" id="line-numbers" aria-hidden="true"></pre><textarea class="code-input" id="audit-code" aria-label="Mã Solidity để tham khảo, có thể chỉnh sửa" spellcheck="false" wrap="off"></textarea></div><div class="editor-foot"><span id="code-lines">22 dòng</span><span>UTF-8 · mã rút gọn</span></div></div>
+            <div class="spec"><strong>MÔ TẢ NGHIỆP VỤ</strong><span id="business-spec"></span></div>
+            <div class="action-row"><button class="button primary" id="run-audit"><span data-icon="play"></span>Chạy phân tích mẫu</button><label class="button file-upload" title="Đọc file .sol trên máy; không tải lên server"><span data-icon="upload"></span>Mở .sol<input type="file" id="upload-code" accept=".sol,text/plain" aria-label="Mở file Solidity trên máy"></label></div>
+            <p class="tiny muted" id="input-note" style="font-size:10px;margin-top:10px">Bạn có thể chỉnh code để tham khảo. Mã khác kịch bản mẫu cần backend LLM để phân tích thật.</p>
+          </div>
+        </section>
+        <div class="stack">
+          <div class="metrics" aria-label="Tóm tắt báo cáo mẫu"><div class="metric"><div class="metric-label">FINDING MẪU</div><div class="metric-value" id="finding-count">01</div><div class="metric-sub">trong phạm vi đã chọn</div></div><div class="metric"><div class="metric-label">PHẠM VI</div><div class="metric-value">01<span style="font:11px var(--sans);margin-left:5px">file</span></div><div class="metric-sub">trích đoạn vault</div></div><div class="metric"><div class="metric-label">KIỂM CHỨNG</div><div class="metric-value small-value" id="verification-label">Chưa thực thi</div><div class="metric-sub">phân tích minh họa</div></div></div>
+          <section class="panel" id="report-panel" aria-labelledby="report-title">
+            <div class="panel-heading"><h2><span class="number">02</span>Kết quả rà soát</h2><span class="badge neutral" id="report-mode">MẪU A1</span></div>
+            <div class="pipeline" aria-label="Tiến trình mô phỏng" id="audit-pipeline"><div class="pipeline-step done" data-audit-step="0"><span class="step-dot">1</span>Đọc ngữ cảnh</div><span class="pipeline-connector"></span><div class="pipeline-step done" data-audit-step="1"><span class="step-dot">2</span>Phân tích</div><span class="pipeline-connector"></span><div class="pipeline-step done" data-audit-step="2"><span class="step-dot">3</span>Lập báo cáo</div></div>
+            <div id="audit-loading" class="loading-state" hidden role="status"><div><span class="spinner" aria-hidden="true"></span><h3 id="loading-label">Đang đọc ngữ cảnh mẫu…</h3><p>Đây là diễn tiến giao diện, không phải suy luận từ model.</p></div></div>
+            <div id="audit-result"><div class="result-head"><div class="finding-id"><span id="finding-key">M-01</span><span class="badge amber" id="finding-severity">MEDIUM · GIẢ ĐỊNH</span></div><h2 id="report-title">Rút tài sản nhưng không đốt cổ phần</h2><div class="finding-location"><span data-icon="pin"></span><span id="finding-location">SampleVault.sol:14–19</span></div></div>
+              <div class="tabs" role="tablist" aria-label="Chi tiết finding"><button role="tab" id="tab-finding" aria-controls="finding-content" aria-selected="true" data-audit-tab="finding">Finding</button><button role="tab" id="tab-evidence" aria-controls="finding-content" aria-selected="false" tabindex="-1" data-audit-tab="evidence">Bằng chứng</button><button role="tab" id="tab-fix" aria-controls="finding-content" aria-selected="false" tabindex="-1" data-audit-tab="fix">Khuyến nghị</button><button role="tab" id="tab-sources" aria-controls="finding-content" aria-selected="false" tabindex="-1" data-audit-tab="sources">Tri thức tham khảo</button></div>
+              <div class="tab-content" id="finding-content" role="tabpanel" aria-labelledby="tab-finding" tabindex="0"></div>
+              <div class="result-footer"><span class="tiny muted" id="review-label">Nhận xét của người rà soát</span><div class="review-buttons"><button class="button small" data-review="Hợp lý" aria-pressed="false"><span data-icon="check"></span>Hợp lý</button><button class="button small" data-review="Cần xem lại" aria-pressed="false">Cần xem lại</button><button class="button small" id="copy-report" aria-label="Sao chép báo cáo"><span data-icon="copy"></span></button></div></div>
+            </div>
+          </section>
+          <div class="callout" style="margin-top:0"><strong>Finding là một giả thuyết cần kiểm tra.</strong><br>Vị trí, điều kiện và tác động quan trọng hơn một nhãn mức độ nghiêm trọng.</div>
+        </div>
+      </div>
+      <footer class="page-footer"><span>SCOPE / Đồ án tốt nghiệp · Giao diện tham khảo, dữ liệu giả lập</span><a href="de_tai_2.html">Khám phá vòng phản hồi của Agent <span aria-hidden="true">↗</span></a></footer>
+    </div>
+  </main>
+</div>
+<dialog id="help-dialog" aria-labelledby="help-title"><h2 id="help-title">Bạn đang xem điều gì?</h2><p>Đây là prototype cho đề tài 1. Bạn có thể đổi phiên bản code, chọn phương pháp, xem bằng chứng, nhận xét và tải báo cáo Markdown.</p><ul class="help-list"><li>A0/A1/A2 hiển thị cách trình bày mẫu khác nhau; không phải kết quả so sánh hiệu năng model.</li><li>A2 dùng ba thẻ kiến thức viết riêng cho demo, chưa truy xuất 3.000 finding trong workspace.</li><li>File .sol chỉ được đọc trong trình duyệt. Mã tự nhập không được phân tích tự động.</li><li>Prototype không chạy LLM, Slither, Foundry hoặc đo độ chính xác.</li></ul><button class="button primary" data-close-help>Đã hiểu</button></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>
