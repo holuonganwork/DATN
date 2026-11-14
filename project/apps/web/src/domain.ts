@@ -176,7 +176,6 @@ export interface Credential {
   registryAddress: string;
   txHash?: string;
   status: CredentialStatus;
-  tampered: boolean;
   revokedAt?: string;
   revokedReason?: string;
   revocationTxHash?: string;
@@ -243,22 +242,7 @@ export interface AppState {
   batches: Batch[];
   credentials: Credential[];
   events: AuditEvent[];
-  issuer: {
-    id: string;
-    name: string;
-    wallet: string;
-    status: OrganizationStatus;
-  };
-  batch: {
-    id: string;
-    course: string;
-    status: BatchStatus;
-    merkleRoot: string;
-    txHash?: string;
-  };
 }
-
-export type DemoState = AppState;
 
 export const TRUSTED_CHAINS: TrustedChain[] = [
   {
@@ -435,39 +419,6 @@ export const formatTimestamp = (date = new Date()): string =>
 const makeCorrelationId = (prefix: string, seq: number): string =>
   `${prefix}-${String(seq).padStart(4, "0")}`;
 
-export const syncLegacyMirrors = (state: AppState): AppState => {
-  const activeOrg =
-    state.organizations.find((org) => org.id === state.activeOrganizationId) ??
-    state.organizations[0];
-  const activeWallet = state.wallets.find(
-    (wallet) =>
-      wallet.organizationId === activeOrg?.id && wallet.status === "AUTHORIZED",
-  );
-  const primaryBatch =
-    state.batches.find((batch) => batch.organizationId === activeOrg?.id) ??
-    state.batches[0];
-  const primaryCourse = state.courses.find(
-    (course) => course.id === primaryBatch?.courseId,
-  );
-
-  return {
-    ...state,
-    issuer: {
-      id: activeOrg?.id ?? "org_001",
-      name: activeOrg?.displayName ?? "Đơn vị phát hành",
-      wallet: activeWallet?.address ?? "Chưa ủy quyền ví",
-      status: activeOrg?.status ?? "PENDING",
-    },
-    batch: {
-      id: primaryBatch?.id ?? "batch_001",
-      course: primaryCourse?.name ?? primaryBatch?.title ?? "Khóa đào tạo",
-      status: primaryBatch?.status ?? "DRAFT",
-      merkleRoot: primaryBatch?.merkleRoot ?? "0x0",
-      txHash: primaryBatch?.txHash,
-    },
-  };
-};
-
 const createBuiltCredentialEntry = (params: {
   entryId: string;
   batchId: string;
@@ -532,20 +483,19 @@ export const buildCredentialPackage = (
   credentialIdOrCode: string,
 ): CredentialPackage | null => {
   const target = credentialIdOrCode.trim();
+  if (!target) return null;
   const credential = state.credentials.find(
-    (item) => item.id === target || item.code === target,
+    (item) =>
+      item.id.toLowerCase() === target.toLowerCase() ||
+      item.code.toLowerCase() === target.toLowerCase(),
   );
   if (!credential) return null;
-
-  const tamperedHolder = credential.tampered
-    ? `${credential.holder} (Đã chỉnh sửa trái phép)`
-    : credential.holder;
 
   return {
     payload: {
       credentialId: credential.batchEntryId,
       issuerId: credential.organizationId,
-      holder: tamperedHolder,
+      holder: credential.holder,
       courseId: credential.courseId,
       courseName: credential.course,
       result: credential.score,
@@ -570,380 +520,19 @@ export const buildCredentialPackage = (
 
 export const createInitialState = (): AppState => {
   const defaultChain = TRUSTED_CHAINS[0];
-  const org1Id = "org_bkhn_01";
-  const org2Id = "org_fpt_02";
-  const org3Id = "org_cmc_03";
-
-  const organizations: Organization[] = [
-    {
-      id: org1Id,
-      code: "BKHN-ACADEMY",
-      legalName: "Trung tâm Đào tạo Công nghệ Số — ĐH Bách Khoa",
-      displayName: "Viện Công nghệ Số Bách Khoa",
-      verificationRef: "QD-BGD-2026-0192",
-      status: "ACTIVE",
-      createdAt: "2026-10-01T08:00:00Z",
-      updatedAt: "2026-10-02T09:30:00Z",
-    },
-    {
-      id: org2Id,
-      code: "FPT-JETKING",
-      legalName: "Viện Đào tạo Quốc tế FPT Software Academy",
-      displayName: "FPT Software Academy",
-      verificationRef: "QD-LDTBXH-2026-0841",
-      status: "ACTIVE",
-      createdAt: "2026-10-05T08:00:00Z",
-      updatedAt: "2026-10-06T10:15:00Z",
-    },
-    {
-      id: org3Id,
-      code: "VNSEC-LAB",
-      legalName: "Trung tâm Huấn luyện An toàn Thông tin Việt Nam",
-      displayName: "VNSec Training Center",
-      verificationRef: "HS-DANGKY-2026-1104",
-      status: "PENDING",
-      createdAt: "2026-11-10T14:00:00Z",
-      updatedAt: "2026-11-10T14:00:00Z",
-    },
-  ];
-
-  const wallets: IssuerWallet[] = [
-    {
-      id: "wal_001",
-      organizationId: org1Id,
-      chainId: defaultChain.chainId,
-      address: "0x71c7656ec7ab88b098defb751b7401b5f6d8976f",
-      status: "AUTHORIZED",
-      authorizedAt: "2026-10-02T09:35:00Z",
-      revokedAt: null,
-    },
-    {
-      id: "wal_002",
-      organizationId: org2Id,
-      chainId: defaultChain.chainId,
-      address: "0x3c44cdddb6a900fa2b585dd299e03d12fa4293bc",
-      status: "AUTHORIZED",
-      authorizedAt: "2026-10-06T10:20:00Z",
-      revokedAt: null,
-    },
-  ];
-
-  const courses: Course[] = [
-    {
-      id: "crs_evm_101",
-      organizationId: org1Id,
-      code: "EVM-SEC-2026",
-      name: "Kỹ thuật Smart Contract & Bảo mật EVM",
-      version: "v2.1",
-      durationHours: 120,
-      gradingRule: "Điểm tổng kết >= 70/100 và hoàn thành đồ án",
-      status: "ACTIVE",
-      createdAt: "2026-10-10T08:00:00Z",
-    },
-    {
-      id: "crs_dist_202",
-      organizationId: org1Id,
-      code: "DIST-SYS-2026",
-      name: "Kiến trúc Hệ thống Phân tán & Mật mã học ứng dụng",
-      version: "v1.4",
-      durationHours: 90,
-      gradingRule: "Đạt kỳ thi sát hạch thực hành >= 75/100",
-      status: "ACTIVE",
-      createdAt: "2026-10-12T08:00:00Z",
-    },
-    {
-      id: "crs_cloud_301",
-      organizationId: org2Id,
-      code: "CLOUD-DEVOPS-01",
-      name: "Kỹ sư Vận hành Hạ tầng Cloud & DevSecOps",
-      version: "v3.0",
-      durationHours: 150,
-      gradingRule: "Điểm lab >= 80/100",
-      status: "ACTIVE",
-      createdAt: "2026-10-15T08:00:00Z",
-    },
-  ];
-
-  const learners: Learner[] = [
-    {
-      id: "lrn_001",
-      organizationId: org1Id,
-      subjectRef: "SV-2026-0101",
-      displayName: "Nguyễn Minh An",
-      cohort: "K68-CNTT",
-      createdAt: "2026-10-15T09:00:00Z",
-    },
-    {
-      id: "lrn_002",
-      organizationId: org1Id,
-      subjectRef: "SV-2026-0102",
-      displayName: "Trần Gia Linh",
-      cohort: "K68-CNTT",
-      createdAt: "2026-10-15T09:05:00Z",
-    },
-    {
-      id: "lrn_003",
-      organizationId: org1Id,
-      subjectRef: "SV-2026-0103",
-      displayName: "Lê Hoàng Nam",
-      cohort: "K68-ATTT",
-      createdAt: "2026-10-15T09:10:00Z",
-    },
-    {
-      id: "lrn_004",
-      organizationId: org1Id,
-      subjectRef: "SV-2026-0104",
-      displayName: "Phạm Thu Hà",
-      cohort: "K68-ATTT",
-      createdAt: "2026-10-15T09:15:00Z",
-    },
-    {
-      id: "lrn_005",
-      organizationId: org1Id,
-      subjectRef: "SV-2026-0105",
-      displayName: "Vũ Đức Thịnh",
-      cohort: "K68-KHMT",
-      createdAt: "2026-10-15T09:20:00Z",
-    },
-  ];
-
-  // Batch 1: CONFIRMED on-chain (3 credentials already issued so Public Verifier has immediate real packages to inspect)
-  const batch1Id = "batch_2026_q4_01";
-  const course1 = courses[0];
-  const rawEntriesBatch1 = [
-    {
-      entryId: "entry_101",
-      learner: learners[0],
-      result: "94/100 (Xuất sắc)",
-      issuedAt: "2026-11-01T00:00:00Z",
-      expiresAt: "2029-11-01T00:00:00Z",
-      nonce: "n_20261101_001",
-      pdfFileName: "CERT-BKHN-2026-001.pdf",
-    },
-    {
-      entryId: "entry_102",
-      learner: learners[1],
-      result: "89/100 (Giỏi)",
-      issuedAt: "2026-11-01T00:00:00Z",
-      expiresAt: "2029-11-01T00:00:00Z",
-      nonce: "n_20261101_002",
-      pdfFileName: "CERT-BKHN-2026-002.pdf",
-    },
-    {
-      entryId: "entry_103",
-      learner: learners[2],
-      result: "82/100 (Giỏi)",
-      issuedAt: "2026-11-01T00:00:00Z",
-      expiresAt: "2028-11-01T00:00:00Z",
-      nonce: "n_20261101_003",
-      pdfFileName: "CERT-BKHN-2026-003.pdf",
-    },
-  ];
-
-  const builtEntries1 = rawEntriesBatch1.map((item) =>
-    createBuiltCredentialEntry({
-      entryId: item.entryId,
-      batchId: batch1Id,
-      issuerId: org1Id,
-      chainId: defaultChain.chainId,
-      registryAddress: defaultChain.registryAddress,
-      learnerId: item.learner.id,
-      subjectRef: item.learner.subjectRef,
-      holderName: item.learner.displayName,
-      courseId: course1.id,
-      courseName: course1.name,
-      result: item.result,
-      issuedAt: item.issuedAt,
-      expiresAt: item.expiresAt,
-      nonce: item.nonce,
-      pdfFileName: item.pdfFileName,
-      pdfSha256: computeDigestHex(`PDF:${item.pdfFileName}:${item.learner.subjectRef}`, 64),
-    }),
-  );
-
-  const tree1 = buildMerkleTree(builtEntries1.map((entry) => entry.leaf));
-  const finalizedEntries1 = builtEntries1.map((entry) => ({
-    ...entry,
-    proofPath: tree1.proofs[entry.leaf] ?? [],
-  }));
-  const batch1TxHash = computeDigestHex(`TX:${batch1Id}:${tree1.root}`, 64);
-
-  // Batch 2: DRAFT batch in progress so Issuer Operator can test validate -> approve -> freeze -> sign -> confirm
-  const batch2Id = "batch_2026_q4_02";
-  const course2 = courses[1];
-  const builtEntries2 = [learners[3], learners[4]].map((learner, idx) =>
-    createBuiltCredentialEntry({
-      entryId: `entry_20${idx + 1}`,
-      batchId: batch2Id,
-      issuerId: org1Id,
-      chainId: defaultChain.chainId,
-      registryAddress: defaultChain.registryAddress,
-      learnerId: learner.id,
-      subjectRef: learner.subjectRef,
-      holderName: learner.displayName,
-      courseId: course2.id,
-      courseName: course2.name,
-      result: idx === 0 ? "91/100 (Xuất sắc)" : "85/100 (Giỏi)",
-      issuedAt: "2026-11-14T00:00:00Z",
-      expiresAt: "2029-11-14T00:00:00Z",
-      nonce: `n_20261114_20${idx + 1}`,
-      pdfFileName: `CERT-BKHN-2026-10${idx + 1}.pdf`,
-      pdfSha256: computeDigestHex(`PDF:CERT-BKHN-2026-10${idx + 1}.pdf:${learner.subjectRef}`, 64),
-    }),
-  );
-  const tree2 = buildMerkleTree(builtEntries2.map((entry) => entry.leaf));
-
-  const batches: Batch[] = [
-    {
-      id: batch1Id,
-      code: "BATCH-2026-Q4-01",
-      organizationId: org1Id,
-      courseId: course1.id,
-      title: "Lô tốt nghiệp Khóa EVM Security K68 — Đợt 1",
-      status: "CONFIRMED",
-      chainId: defaultChain.chainId,
-      registryAddress: defaultChain.registryAddress,
-      merkleRoot: tree1.root,
-      inputDigest: computeDigestHex(finalizedEntries1.map((e) => e.payloadDigest).join("|"), 64),
-      idempotencyKey: "idem_publish_batch_2026_q4_01",
-      txHash: batch1TxHash,
-      blockNumber: 14820,
-      createdBy: "Nguyễn Văn Hùng (Operator)",
-      approvedBy: "PGS.TS Trần Minh Quân (Approver)",
-      frozenAt: "2026-11-01T09:30:00Z",
-      confirmedAt: "2026-11-01T09:32:15Z",
-      createdAt: "2026-10-28T08:00:00Z",
-      entries: finalizedEntries1,
-    },
-    {
-      id: batch2Id,
-      code: "BATCH-2026-Q4-02",
-      organizationId: org1Id,
-      courseId: course2.id,
-      title: "Lô cấp chứng chỉ Hệ thống Phân tán K68 — Đợt 2",
-      status: "DRAFT",
-      chainId: defaultChain.chainId,
-      registryAddress: defaultChain.registryAddress,
-      merkleRoot: tree2.root,
-      inputDigest: computeDigestHex(builtEntries2.map((e) => e.payloadDigest).join("|"), 64),
-      idempotencyKey: "idem_publish_batch_2026_q4_02",
-      createdBy: "Nguyễn Văn Hùng (Operator)",
-      createdAt: "2026-11-12T10:00:00Z",
-      entries: builtEntries2.map((entry) => ({
-        ...entry,
-        validationStatus: "PENDING",
-      })),
-    },
-  ];
-
-  const credentials: Credential[] = finalizedEntries1.map((entry, idx) => ({
-    id: `cred_${idx + 1}`,
-    code: `CERT-7K4P-00${idx + 1}`,
-    organizationId: org1Id,
-    batchId: batch1Id,
-    batchEntryId: entry.id,
-    learnerId: entry.learnerId,
-    subjectRef: entry.subjectRef,
-    holder: entry.holderName,
-    courseId: course1.id,
-    courseCode: course1.code,
-    course: course1.name,
-    score: entry.result,
-    issuedAt: entry.issuedAt,
-    expiresAt: entry.expiresAt,
-    nonce: entry.nonce,
-    pdfFileName: entry.pdfFileName,
-    pdfSha256: entry.pdfSha256,
-    payloadDigest: entry.payloadDigest,
-    leaf: entry.leaf,
-    proofPath: entry.proofPath,
-    merkleRoot: tree1.root,
-    chainId: defaultChain.chainId,
-    registryAddress: defaultChain.registryAddress,
-    txHash: batch1TxHash,
-    status: "ISSUED",
-    tampered: false,
-  }));
-
-  const events: AuditEvent[] = [
-    {
-      id: 1,
-      action: "ORG_REGISTERED",
-      actorRole: "SYSTEM_ADMIN",
-      actorName: "Quản trị viên Hệ thống",
-      organizationId: org1Id,
-      aggregateType: "ORGANIZATION",
-      aggregateId: org1Id,
-      correlationId: makeCorrelationId("corr", 1),
-      detail: "Đã xác minh pháp lý và kích hoạt Viện Công nghệ Số Bách Khoa (ACTIVE)",
-      time: "02/10/2026, 09:30:00",
-    },
-    {
-      id: 2,
-      action: "WALLET_AUTHORIZED",
-      actorRole: "SYSTEM_ADMIN",
-      actorName: "Quản trị viên Hệ thống",
-      organizationId: org1Id,
-      aggregateType: "WALLET",
-      aggregateId: "wal_001",
-      correlationId: makeCorrelationId("corr", 2),
-      detail: "Đã ủy quyền ví 0x71c7656ec7ab88b098defb751b7401b5f6d8976f trên mạng Chain 31337",
-      time: "02/10/2026, 09:35:00",
-    },
-    {
-      id: 3,
-      action: "BATCH_FROZEN",
-      actorRole: "ISSUER_APPROVER",
-      actorName: "PGS.TS Trần Minh Quân",
-      organizationId: org1Id,
-      aggregateType: "BATCH",
-      aggregateId: batch1Id,
-      correlationId: makeCorrelationId("corr", 3),
-      detail: `Đã đóng băng BATCH-2026-Q4-01 (3 chứng chỉ) · Merkle root ${tree1.root.slice(0, 18)}...`,
-      time: "01/11/2026, 09:30:00",
-    },
-    {
-      id: 4,
-      action: "BATCH_CONFIRMED",
-      actorRole: "ISSUER_OPERATOR",
-      actorName: "Worker / Indexer",
-      organizationId: org1Id,
-      aggregateType: "BATCH",
-      aggregateId: batch1Id,
-      correlationId: makeCorrelationId("corr", 4),
-      detail: `Receipt ${batch1TxHash.slice(0, 18)}... và BatchPublished event đã khớp tại block #14820`,
-      time: "01/11/2026, 09:32:15",
-    },
-  ];
-
-  const baseState: AppState = {
-    activeOrganizationId: org1Id,
+  return {
+    activeOrganizationId: "",
     activeRole: "ISSUER_OPERATOR",
     selectedChainId: defaultChain.chainId,
     rpcOnline: true,
-    organizations,
-    wallets,
-    courses,
-    learners,
-    batches,
-    credentials,
-    events,
-    issuer: {
-      id: org1Id,
-      name: organizations[0].displayName,
-      wallet: wallets[0].address,
-      status: organizations[0].status,
-    },
-    batch: {
-      id: batch1Id,
-      course: course1.name,
-      status: "CONFIRMED",
-      merkleRoot: tree1.root,
-      txHash: batch1TxHash,
-    },
+    organizations: [],
+    wallets: [],
+    courses: [],
+    learners: [],
+    batches: [],
+    credentials: [],
+    events: [],
   };
-
-  return syncLegacyMirrors(baseState);
 };
 
 const appendAuditEvent = (
@@ -966,14 +555,17 @@ const appendAuditEvent = (
 export const registerOrganization = (
   state: AppState,
   input: { code: string; legalName: string; displayName: string; verificationRef: string },
-): { state: AppState; error?: string } => {
+): { state: AppState; organization?: Organization; error?: string } => {
   const code = normalizeText(input.code).toUpperCase();
   const legalName = normalizeText(input.legalName);
   const displayName = normalizeText(input.displayName);
   const verificationRef = normalizeText(input.verificationRef);
 
   if (!code || !legalName || !displayName || !verificationRef) {
-    return { state, error: "Vui lòng nhập đầy đủ mã tổ chức, tên pháp lý, tên hiển thị và mã hồ sơ xác minh." };
+    return {
+      state,
+      error: "Vui lòng nhập đầy đủ mã tổ chức, tên pháp lý, tên hiển thị và mã hồ sơ xác minh.",
+    };
   }
   if (state.organizations.some((org) => org.code.toUpperCase() === code)) {
     return { state, error: `Mã tổ chức ${code} đã tồn tại trong hệ thống.` };
@@ -991,20 +583,23 @@ export const registerOrganization = (
     updatedAt: nowIso,
   };
 
-  const next = syncLegacyMirrors({
-    ...state,
-    organizations: [...state.organizations, newOrg],
-    events: appendAuditEvent(state, {
-      action: "ORG_REGISTERED",
-      actorRole: "SYSTEM_ADMIN",
-      actorName: "Quản trị viên Hệ thống",
-      organizationId: newOrg.id,
-      aggregateType: "ORGANIZATION",
-      aggregateId: newOrg.id,
-      detail: `Đăng ký mới tổ chức ${displayName} (${code}) ở trạng thái PENDING`,
-    }),
-  });
-  return { state: next };
+  return {
+    organization: newOrg,
+    state: {
+      ...state,
+      activeOrganizationId: state.activeOrganizationId || newOrg.id,
+      organizations: [...state.organizations, newOrg],
+      events: appendAuditEvent(state, {
+        action: "ORG_REGISTERED",
+        actorRole: "SYSTEM_ADMIN",
+        actorName: "SYSTEM_ADMIN",
+        organizationId: newOrg.id,
+        aggregateType: "ORGANIZATION",
+        aggregateId: newOrg.id,
+        detail: `Đăng ký tổ chức ${displayName} (${code}) ở trạng thái PENDING`,
+      }),
+    },
+  };
 };
 
 export const updateOrganizationStatus = (
@@ -1015,24 +610,25 @@ export const updateOrganizationStatus = (
   if (!org) return { state, error: "Không tìm thấy tổ chức." };
 
   const nowIso = new Date().toISOString();
-  const next = syncLegacyMirrors({
-    ...state,
-    organizations: state.organizations.map((item) =>
-      item.id === org.id
-        ? { ...item, status: input.nextStatus, updatedAt: nowIso }
-        : item,
-    ),
-    events: appendAuditEvent(state, {
-      action: `ORG_STATUS_${input.nextStatus}`,
-      actorRole: "SYSTEM_ADMIN",
-      actorName: "Quản trị viên Hệ thống",
-      organizationId: org.id,
-      aggregateType: "ORGANIZATION",
-      aggregateId: org.id,
-      detail: `Chuyển trạng thái ${org.displayName}: ${org.status} → ${input.nextStatus}${input.reason ? ` (${normalizeText(input.reason)})` : ""}`,
-    }),
-  });
-  return { state: next };
+  return {
+    state: {
+      ...state,
+      organizations: state.organizations.map((item) =>
+        item.id === org.id
+          ? { ...item, status: input.nextStatus, updatedAt: nowIso }
+          : item,
+      ),
+      events: appendAuditEvent(state, {
+        action: `ORG_STATUS_${input.nextStatus}`,
+        actorRole: "SYSTEM_ADMIN",
+        actorName: "SYSTEM_ADMIN",
+        organizationId: org.id,
+        aggregateType: "ORGANIZATION",
+        aggregateId: org.id,
+        detail: `Chuyển trạng thái ${org.displayName}: ${org.status} → ${input.nextStatus}${input.reason ? ` (${normalizeText(input.reason)})` : ""}`,
+      }),
+    },
+  };
 };
 
 export const authorizeOrganizationWallet = (
@@ -1060,7 +656,10 @@ export const authorizeOrganizationWallet = (
       wallet.status === "AUTHORIZED",
   );
   if (conflict) {
-    return { state, error: "Địa chỉ ví này đang được ủy quyền cho một tổ chức khác trên cùng mạng." };
+    return {
+      state,
+      error: "Địa chỉ ví này đang được ủy quyền cho một tổ chức khác trên cùng mạng.",
+    };
   }
 
   const nowIso = new Date().toISOString();
@@ -1080,20 +679,21 @@ export const authorizeOrganizationWallet = (
     revokedAt: null,
   };
 
-  const next = syncLegacyMirrors({
-    ...state,
-    wallets: [...updatedWallets, newWallet],
-    events: appendAuditEvent(state, {
-      action: "WALLET_AUTHORIZED",
-      actorRole: "SYSTEM_ADMIN",
-      actorName: "Quản trị viên Hệ thống",
-      organizationId: org.id,
-      aggregateType: "WALLET",
-      aggregateId: newWallet.id,
-      detail: `Ủy quyền ví ${normalized} cho ${org.displayName} trên Chain ${input.chainId}`,
-    }),
-  });
-  return { state: next };
+  return {
+    state: {
+      ...state,
+      wallets: [...updatedWallets, newWallet],
+      events: appendAuditEvent(state, {
+        action: "WALLET_AUTHORIZED",
+        actorRole: "SYSTEM_ADMIN",
+        actorName: "SYSTEM_ADMIN",
+        organizationId: org.id,
+        aggregateType: "WALLET",
+        aggregateId: newWallet.id,
+        detail: `Ủy quyền ví ${normalized} cho ${org.displayName} trên Chain ${input.chainId}`,
+      }),
+    },
+  };
 };
 
 // UC-02: Courses & Learners
@@ -1107,14 +707,20 @@ export const createCourse = (
     durationHours: number;
     gradingRule: string;
   },
-): { state: AppState; error?: string } => {
+): { state: AppState; course?: Course; error?: string } => {
   const code = normalizeText(input.code).toUpperCase();
   const name = normalizeText(input.name);
-  const version = normalizeText(input.version) || "v1.0";
-  const gradingRule = normalizeText(input.gradingRule) || "Hoàn thành khóa học";
+  const version = normalizeText(input.version);
+  const gradingRule = normalizeText(input.gradingRule);
 
-  if (!code || !name || input.durationHours <= 0) {
-    return { state, error: "Vui lòng nhập mã khóa học, tên khóa học và thời lượng hợp lệ." };
+  if (!input.organizationId) {
+    return { state, error: "Vui lòng chọn tổ chức đào tạo trước khi tạo khóa học." };
+  }
+  if (!code || !name || !version || !gradingRule || !Number.isFinite(input.durationHours) || input.durationHours <= 0) {
+    return {
+      state,
+      error: "Vui lòng nhập đầy đủ mã khóa học, tên khóa học, phiên bản, quy tắc xét đạt và thời lượng hợp lệ.",
+    };
   }
   if (
     state.courses.some(
@@ -1140,19 +746,20 @@ export const createCourse = (
   };
 
   return {
-    state: syncLegacyMirrors({
+    course: newCourse,
+    state: {
       ...state,
       courses: [...state.courses, newCourse],
       events: appendAuditEvent(state, {
         action: "COURSE_CREATED",
         actorRole: state.activeRole,
-        actorName: "Vận hành viên Đơn vị",
+        actorName: state.activeRole,
         organizationId: input.organizationId,
         aggregateType: "COURSE",
         aggregateId: newCourse.id,
         detail: `Tạo khóa học ${code} — ${name} (${version})`,
       }),
-    }),
+    },
   };
 };
 
@@ -1167,10 +774,13 @@ export const createLearner = (
 ): { state: AppState; learner?: Learner; error?: string } => {
   const subjectRef = normalizeText(input.subjectRef).toUpperCase();
   const displayName = normalizeText(input.displayName);
-  const cohort = normalizeText(input.cohort) || "2026";
+  const cohort = normalizeText(input.cohort);
 
-  if (!subjectRef || !displayName) {
-    return { state, error: "Mã định danh nội bộ và họ tên học viên là bắt buộc." };
+  if (!input.organizationId) {
+    return { state, error: "Vui lòng chọn tổ chức đào tạo trước khi thêm học viên." };
+  }
+  if (!subjectRef || !displayName || !cohort) {
+    return { state, error: "Vui lòng nhập đầy đủ mã học viên, họ tên và khóa/lớp." };
   }
   if (
     state.learners.some(
@@ -1193,19 +803,19 @@ export const createLearner = (
 
   return {
     learner: newLearner,
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       learners: [...state.learners, newLearner],
       events: appendAuditEvent(state, {
         action: "LEARNER_CREATED",
         actorRole: state.activeRole,
-        actorName: "Vận hành viên Đơn vị",
+        actorName: state.activeRole,
         organizationId: input.organizationId,
         aggregateType: "LEARNER",
         aggregateId: newLearner.id,
         detail: `Thêm hồ sơ học viên ${displayName} (${subjectRef})`,
       }),
-    }),
+    },
   };
 };
 
@@ -1230,8 +840,8 @@ export const createBatch = (
   if (!title) return { state, error: "Vui lòng nhập tên lô phát hành." };
 
   const seq = state.batches.length + 1;
-  const batchId = `batch_2026_${String(seq).padStart(2, "0")}`;
-  const batchCode = `BATCH-2026-Q4-${String(seq).padStart(2, "0")}`;
+  const batchId = `batch_${String(seq).padStart(2, "0")}`;
+  const batchCode = `BATCH-${String(seq).padStart(3, "0")}`;
   const emptyTree = buildMerkleTree([]);
 
   const newBatch: Batch = {
@@ -1246,26 +856,26 @@ export const createBatch = (
     merkleRoot: emptyTree.root,
     inputDigest: computeDigestHex(`BATCH_INIT:${batchId}`, 64),
     idempotencyKey: `idem_publish_${batchId}`,
-    createdBy: "Vận hành viên Đơn vị",
+    createdBy: state.activeRole,
     createdAt: new Date().toISOString(),
     entries: [],
   };
 
   return {
     batch: newBatch,
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: [newBatch, ...state.batches],
       events: appendAuditEvent(state, {
         action: "BATCH_CREATED",
         actorRole: state.activeRole,
-        actorName: "Vận hành viên Đơn vị",
+        actorName: state.activeRole,
         organizationId: input.organizationId,
         aggregateType: "BATCH",
         aggregateId: newBatch.id,
         detail: `Khởi tạo lô ${batchCode} (${title}) ở trạng thái DRAFT`,
       }),
-    }),
+    },
   };
 };
 
@@ -1284,24 +894,32 @@ export const addEntryToBatch = (
   const batch = state.batches.find((item) => item.id === input.batchId);
   if (!batch) return { state, error: "Không tìm thấy lô chứng chỉ." };
   if (batch.status !== "DRAFT" && batch.status !== "VALIDATED") {
-    return { state, error: `Lô đang ở trạng thái ${batch.status}, không được phép chỉnh sửa danh sách.` };
+    return {
+      state,
+      error: `Lô đang ở trạng thái ${batch.status}, không được phép chỉnh sửa danh sách.`,
+    };
   }
 
   const learner = state.learners.find(
     (item) => item.id === input.learnerId && item.organizationId === batch.organizationId,
   );
   if (!learner) return { state, error: "Vui lòng chọn học viên hợp lệ thuộc đơn vị." };
+  if (!normalizeText(input.result) || !normalizeText(input.issuedAt)) {
+    return { state, error: "Vui lòng nhập đầy đủ kết quả đạt được và ngày cấp." };
+  }
 
   const course = state.courses.find((item) => item.id === batch.courseId);
   const entryIndex = batch.entries.length + 1;
   const entryId = `entry_${batch.id}_${entryIndex}_${Date.now().toString(36).slice(-3)}`;
   const pdfFileName =
-    normalizeText(input.pdfFileName ?? "") ||
-    `${batch.code}-${learner.subjectRef}.pdf`;
+    normalizeText(input.pdfFileName ?? "") || `${batch.code}-${learner.subjectRef}.pdf`;
   const pdfSha256 =
     input.pdfSha256 && isValidHexDigest(input.pdfSha256)
       ? normalizeAddress(input.pdfSha256)
-      : computeDigestHex(`PDF:${pdfFileName}:${learner.subjectRef}:${input.result}`, 64);
+      : computeDigestHex(
+          `PAYLOAD_ATTACHMENT:${batch.id}:${learner.subjectRef}:${normalizeText(input.result)}:${normalizeText(input.issuedAt)}`,
+          64,
+        );
 
   const entry = createBuiltCredentialEntry({
     entryId,
@@ -1315,7 +933,7 @@ export const addEntryToBatch = (
     courseId: course?.id ?? batch.courseId,
     courseName: course?.name ?? batch.title,
     result: input.result,
-    issuedAt: input.issuedAt || new Date().toISOString().slice(0, 10) + "T00:00:00Z",
+    issuedAt: input.issuedAt,
     expiresAt: input.expiresAt,
     nonce: `n_${batch.id}_${entryIndex}`,
     pdfFileName,
@@ -1336,19 +954,19 @@ export const addEntryToBatch = (
   };
 
   return {
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: state.batches.map((item) => (item.id === batch.id ? updatedBatch : item)),
       events: appendAuditEvent(state, {
         action: "BATCH_ENTRY_ADDED",
         actorRole: state.activeRole,
-        actorName: "Vận hành viên Đơn vị",
+        actorName: state.activeRole,
         organizationId: batch.organizationId,
         aggregateType: "BATCH",
         aggregateId: batch.id,
         detail: `Thêm học viên ${learner.displayName} (${learner.subjectRef}) vào lô ${batch.code}`,
       }),
-    }),
+    },
   };
 };
 
@@ -1366,14 +984,14 @@ export const removeBatchEntry = (
   const nextTree = buildMerkleTree(nextEntries.map((item) => item.leaf));
 
   return {
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: state.batches.map((item) =>
         item.id === batch.id
           ? { ...batch, status: "DRAFT", merkleRoot: nextTree.root, entries: nextEntries }
           : item,
       ),
-    }),
+    },
   };
 };
 
@@ -1384,7 +1002,10 @@ export const validateBatch = (
   const batch = state.batches.find((item) => item.id === batchId);
   if (!batch) return { state, error: "Không tìm thấy lô chứng chỉ." };
   if (batch.status !== "DRAFT" && batch.status !== "VALIDATED") {
-    return { state, error: `Lô đang ở trạng thái ${batch.status}, không thể chạy kiểm tra lại.` };
+    return {
+      state,
+      error: `Lô đang ở trạng thái ${batch.status}, không thể chạy kiểm tra lại.`,
+    };
   }
   if (batch.entries.length === 0) {
     return { state, error: "Lô chứng chỉ phải có ít nhất 1 học viên trước khi kiểm tra." };
@@ -1438,7 +1059,7 @@ export const validateBatch = (
   const tree = buildMerkleTree(validatedEntries.map((item) => item.leaf));
   const nextStatus: BatchStatus = hasErrors ? "DRAFT" : "VALIDATED";
 
-  const nextState = syncLegacyMirrors({
+  const nextState: AppState = {
     ...state,
     batches: state.batches.map((item) =>
       item.id === batch.id
@@ -1453,7 +1074,7 @@ export const validateBatch = (
     events: appendAuditEvent(state, {
       action: hasErrors ? "BATCH_VALIDATION_FAILED" : "BATCH_VALIDATED",
       actorRole: state.activeRole,
-      actorName: "Vận hành viên Đơn vị",
+      actorName: state.activeRole,
       organizationId: batch.organizationId,
       aggregateType: "BATCH",
       aggregateId: batch.id,
@@ -1461,17 +1082,20 @@ export const validateBatch = (
         ? `Kiểm tra lô ${batch.code} phát hiện dòng dữ liệu lỗi`
         : `Đã chuẩn hóa JCS và kiểm tra hợp lệ ${validatedEntries.length} hồ sơ trong lô ${batch.code}`,
     }),
-  });
+  };
 
   return hasErrors
-    ? { state: nextState, error: "Phát hiện lỗi trong danh sách học viên. Vui lòng xử lý các dòng báo đỏ." }
+    ? {
+        state: nextState,
+        error: "Phát hiện lỗi trong danh sách học viên. Vui lòng xử lý các dòng báo đỏ.",
+      }
     : { state: nextState };
 };
 
 export const approveBatch = (
   state: AppState,
   batchId: string,
-  approverName = "Hội đồng Phê duyệt Đào tạo",
+  approverName = "ISSUER_APPROVER",
 ): { state: AppState; error?: string } => {
   const batch = state.batches.find((item) => item.id === batchId);
   if (!batch) return { state, error: "Không tìm thấy lô chứng chỉ." };
@@ -1480,7 +1104,7 @@ export const approveBatch = (
   }
 
   return {
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: state.batches.map((item) =>
         item.id === batch.id
@@ -1496,7 +1120,7 @@ export const approveBatch = (
         aggregateId: batch.id,
         detail: `Phê duyệt lô ${batch.code} (${batch.entries.length} học viên)`,
       }),
-    }),
+    },
   };
 };
 
@@ -1528,7 +1152,9 @@ export const freezeBatch = (
     .filter((entry) => !existingBatchCredIds.has(entry.id))
     .map((entry, idx) => ({
       id: `cred_${state.credentials.length + idx + 1}`,
-      code: `CERT-${batch.code.slice(-5).replace(/[^A-Z0-9]/g, "")}-${String(state.credentials.length + idx + 1).padStart(3, "0")}`,
+      code: `CERT-${batch.code.replace(/[^A-Z0-9]/g, "").slice(-5)}-${String(
+        state.credentials.length + idx + 1,
+      ).padStart(3, "0")}`,
       organizationId: batch.organizationId,
       batchId: batch.id,
       batchEntryId: entry.id,
@@ -1536,7 +1162,7 @@ export const freezeBatch = (
       subjectRef: entry.subjectRef,
       holder: entry.holderName,
       courseId: course?.id ?? batch.courseId,
-      courseCode: course?.code ?? "COURSE",
+      courseCode: course?.code ?? batch.courseId,
       course: course?.name ?? batch.title,
       score: entry.result,
       issuedAt: entry.issuedAt,
@@ -1551,11 +1177,10 @@ export const freezeBatch = (
       chainId: batch.chainId,
       registryAddress: batch.registryAddress,
       status: "PREPARED",
-      tampered: false,
     }));
 
   return {
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: state.batches.map((item) =>
         item.id === batch.id
@@ -1572,13 +1197,13 @@ export const freezeBatch = (
       events: appendAuditEvent(state, {
         action: "BATCH_FROZEN",
         actorRole: "ISSUER_APPROVER",
-        actorName: batch.approvedBy ?? "Người phê duyệt",
+        actorName: batch.approvedBy ?? "ISSUER_APPROVER",
         organizationId: batch.organizationId,
         aggregateType: "BATCH",
         aggregateId: batch.id,
         detail: `Đóng băng lô ${batch.code} · Merkle root ${tree.root.slice(0, 18)}...`,
       }),
-    }),
+    },
   };
 };
 
@@ -1590,7 +1215,9 @@ export const buildPublishIntent = (
   const batch = state.batches.find((item) => item.id === batchId);
   if (!batch) return { error: "Không tìm thấy lô chứng chỉ." };
   if (batch.status !== "FROZEN" && batch.status !== "FAILED") {
-    return { error: "Chỉ lô đã đóng băng (FROZEN) hoặc cần gửi lại (FAILED) mới tạo được Publish Intent." };
+    return {
+      error: "Chỉ lô đã đóng băng (FROZEN) hoặc cần gửi lại (FAILED) mới tạo được Publish Intent.",
+    };
   }
 
   const org = state.organizations.find((item) => item.id === batch.organizationId);
@@ -1605,7 +1232,9 @@ export const buildPublishIntent = (
       item.status === "AUTHORIZED",
   );
   if (!wallet) {
-    return { error: `Tổ chức chưa có ví được ủy quyền (AUTHORIZED) trên mạng Chain ${batch.chainId}.` };
+    return {
+      error: `Tổ chức chưa có ví được ủy quyền (AUTHORIZED) trên mạng Chain ${batch.chainId}.`,
+    };
   }
 
   const calldata = computeDigestHex(
@@ -1644,7 +1273,7 @@ export const submitPublishTransaction = (
   );
 
   return {
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: state.batches.map((batch) =>
         batch.id === batchId
@@ -1658,20 +1287,20 @@ export const submitPublishTransaction = (
       ),
       events: appendAuditEvent(state, {
         action: "CHAIN_TX_SUBMITTED",
-        actorRole: "ISSUER_OPERATOR",
-        actorName: `Ví Issuer (${intent.walletAddress.slice(0, 10)}...)`,
+        actorRole: "ISSUER_APPROVER",
+        actorName: intent.walletAddress,
         organizationId: intent.issuerId,
         aggregateType: "BATCH",
         aggregateId: batchId,
-        detail: `Đã ký publishBatch và gửi txHash ${txHash.slice(0, 18)}... (trạng thái PENDING_CHAIN, chờ Worker đối chiếu receipt)`,
+        detail: `Đã ký publishBatch và gửi txHash ${txHash.slice(0, 18)}... (trạng thái PENDING_CHAIN)`,
       }),
-    }),
+    },
   };
 };
 
 export const confirmBatchPublish = (
   state: AppState,
-  input: { batchId: string; simulateFailureReason?: string },
+  input: { batchId: string; blockNumber?: number; simulateFailureReason?: string },
 ): { state: AppState; error?: string } => {
   const batch = state.batches.find((item) => item.id === input.batchId);
   if (!batch) return { state, error: "Không tìm thấy lô chứng chỉ." };
@@ -1686,7 +1315,7 @@ export const confirmBatchPublish = (
   if (input.simulateFailureReason) {
     const reason = normalizeText(input.simulateFailureReason);
     return {
-      state: syncLegacyMirrors({
+      state: {
         ...state,
         batches: state.batches.map((item) =>
           item.id === batch.id
@@ -1696,21 +1325,21 @@ export const confirmBatchPublish = (
         events: appendAuditEvent(state, {
           action: "BATCH_PUBLISH_FAILED",
           actorRole: "ISSUER_OPERATOR",
-          actorName: "Worker / Indexer",
+          actorName: "INDEXER",
           organizationId: batch.organizationId,
           aggregateType: "BATCH",
           aggregateId: batch.id,
           detail: `Đối chiếu receipt thất bại cho lô ${batch.code}: ${reason}`,
         }),
-      }),
+      },
     };
   }
 
   const confirmedAt = new Date().toISOString();
-  const blockNumber = 14820 + state.events.length;
+  const blockNumber = input.blockNumber;
 
   return {
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: state.batches.map((item) =>
         item.id === batch.id
@@ -1732,58 +1361,33 @@ export const confirmBatchPublish = (
       events: appendAuditEvent(state, {
         action: "BATCH_CONFIRMED",
         actorRole: "ISSUER_OPERATOR",
-        actorName: "Worker / Indexer",
+        actorName: "INDEXER",
         organizationId: batch.organizationId,
         aggregateType: "BATCH",
         aggregateId: batch.id,
-        detail: `Đã đối chiếu receipt ${txHash.slice(0, 18)}... + BatchPublished event tại block #${blockNumber}. Đã phát hành ${batch.entries.length} chứng chỉ.`,
+        detail: `Đã đối chiếu receipt ${txHash.slice(0, 18)}... và BatchPublished event. Đã phát hành ${batch.entries.length} chứng chỉ.`,
       }),
-    }),
+    },
   };
 };
 
-// Legacy helper kept for compatibility with automated test harness
-export const nextBatchStatus = (status: BatchStatus): BatchStatus | null => {
-  const index = BATCH_PIPELINE_STEPS.indexOf(status);
-  if (index === -1 || index + 1 >= BATCH_PIPELINE_STEPS.length) return null;
-  return BATCH_PIPELINE_STEPS[index + 1];
-};
-
-export const advanceBatch = (state: AppState, targetBatchId?: string): AppState => {
-  const batch =
-    state.batches.find((item) => item.id === (targetBatchId ?? state.batch.id)) ??
-    state.batches[0];
-  if (!batch) return state;
-
-  if (batch.status === "DRAFT") return validateBatch(state, batch.id).state;
-  if (batch.status === "VALIDATED") return approveBatch(state, batch.id).state;
-  if (batch.status === "APPROVED") return freezeBatch(state, batch.id).state;
-  if (batch.status === "FROZEN" || batch.status === "FAILED") {
-    return submitPublishTransaction(state, batch.id).state;
-  }
-  if (batch.status === "PENDING_CHAIN") {
-    return confirmBatchPublish(state, { batchId: batch.id }).state;
-  }
-  return state;
-};
-
-// UC-08: Revoke Credential
+// UC-07: Revoke Credential
 export const revokeCredential = (
   state: AppState,
   credentialId: string,
-  reason = "Thu hồi theo quyết định kiểm tra học vụ của đơn vị phát hành",
+  reason: string,
 ): AppState => {
   const credential = state.credentials.find((item) => item.id === credentialId);
-  if (!credential || credential.status !== "ISSUED") return state;
+  const cleanReason = normalizeText(reason);
+  if (!credential || credential.status !== "ISSUED" || !cleanReason) return state;
 
-  const cleanReason = normalizeText(reason) || "Thu hồi theo quyết định của đơn vị phát hành";
   const revocationTxHash = computeDigestHex(
     `REVOKE:${credential.batchId}:${credential.leaf}:${Date.now()}`,
     64,
   );
   const revokedAt = new Date().toISOString();
 
-  return syncLegacyMirrors({
+  return {
     ...state,
     credentials: state.credentials.map((item) =>
       item.id === credentialId
@@ -1798,17 +1402,17 @@ export const revokeCredential = (
     ),
     events: appendAuditEvent(state, {
       action: "CREDENTIAL_REVOKED",
-      actorRole: "ISSUER_OPERATOR",
-      actorName: "Đơn vị Phát hành",
+      actorRole: "ISSUER_APPROVER",
+      actorName: "ISSUER_APPROVER",
       organizationId: credential.organizationId,
       aggregateType: "CREDENTIAL",
       aggregateId: credential.id,
       detail: `Đã thu hồi chứng chỉ ${credential.code} (${credential.holder}) · Lý do: ${cleanReason}`,
     }),
-  });
+  };
 };
 
-// UC-09: Reissue Credential
+// UC-08: Reissue Credential
 export const reissueCredential = (
   state: AppState,
   input: {
@@ -1822,7 +1426,10 @@ export const reissueCredential = (
   const source = state.credentials.find((item) => item.id === input.credentialId);
   if (!source) return { state, error: "Không tìm thấy chứng chỉ gốc để cấp lại." };
   if (source.status !== "ISSUED" && source.status !== "REVOKED") {
-    return { state, error: "Chỉ chứng chỉ đang ISSUED hoặc đã REVOKED mới có thể cấp lại bản mới." };
+    return {
+      state,
+      error: "Chỉ chứng chỉ đang ISSUED hoặc đã REVOKED mới có thể cấp lại bản mới.",
+    };
   }
 
   const holderName = normalizeText(input.holderName);
@@ -1833,7 +1440,7 @@ export const reissueCredential = (
   }
 
   const seq = state.credentials.length + 1;
-  const newCode = `CERT-R${ String(seq).padStart(3, "0") }-${source.code.slice(-3)}`;
+  const newCode = `CERT-R${String(seq).padStart(3, "0")}-${source.code.slice(-3)}`;
   const issuedAt = new Date().toISOString().slice(0, 10) + "T00:00:00Z";
   const newEntryId = `entry_reissue_${seq}`;
   const newBatchId = `batch_reissue_${seq}`;
@@ -1888,7 +1495,6 @@ export const reissueCredential = (
     registryAddress: source.registryAddress,
     txHash,
     status: "ISSUED",
-    tampered: false,
     reissuedFromId: source.id,
   };
 
@@ -1905,9 +1511,8 @@ export const reissueCredential = (
     inputDigest: entry.payloadDigest,
     idempotencyKey: `idem_${newBatchId}`,
     txHash,
-    blockNumber: 14900 + seq,
-    createdBy: "Vận hành viên Đơn vị",
-    approvedBy: "Hội đồng Phê duyệt Đào tạo",
+    createdBy: "ISSUER_APPROVER",
+    approvedBy: "ISSUER_APPROVER",
     frozenAt: new Date().toISOString(),
     confirmedAt: new Date().toISOString(),
     createdAt: new Date().toISOString(),
@@ -1926,33 +1531,24 @@ export const reissueCredential = (
 
   return {
     newCredential: reissuedCred,
-    state: syncLegacyMirrors({
+    state: {
       ...state,
       batches: [reissueBatch, ...state.batches],
       credentials: [reissuedCred, ...updatedCredentials],
       events: appendAuditEvent(state, {
         action: "CREDENTIAL_REISSUED",
-        actorRole: "ISSUER_OPERATOR",
-        actorName: "Đơn vị Phát hành",
+        actorRole: "ISSUER_APPROVER",
+        actorName: "ISSUER_APPROVER",
         organizationId: source.organizationId,
         aggregateType: "CREDENTIAL",
         aggregateId: reissuedCred.id,
         detail: `Cấp lại chứng chỉ mới ${newCode} thay cho ${source.code} (${reason})`,
       }),
-    }),
+    },
   };
 };
 
-export const toggleTamper = (state: AppState, credentialId: string): AppState => ({
-  ...state,
-  credentials: state.credentials.map((credential) =>
-    credential.id === credentialId
-      ? { ...credential, tampered: !credential.tampered }
-      : credential,
-  ),
-});
-
-// UC-07: Independent Verification of a Credential Package or Code
+// UC-09: Independent Verification of a Credential Package or Code
 export const verifyCredentialPackage = (
   state: AppState,
   pkg: CredentialPackage,
@@ -2002,9 +1598,7 @@ export const verifyCredentialPackage = (
   );
   const issuerPasses = Boolean(issuerOrg && issuerOrg.status !== "PENDING" && issuerWallet);
 
-  const recomputedDigest = schemaPasses
-    ? computePayloadDigest(pkg.payload)
-    : "0x0";
+  const recomputedDigest = schemaPasses ? computePayloadDigest(pkg.payload) : "0x0";
   const recomputedLeaf = schemaPasses
     ? computeLeafHash(pkg.anchor, recomputedDigest)
     : "0x0";
@@ -2082,7 +1676,7 @@ export const verifyCredentialPackage = (
       label: "Payload digest",
       status: digestMatchesLeaf ? "PASS" : "FAIL",
       detail: digestMatchesLeaf
-        ? `JCS + Keccak256 khớp (${recomputedDigest.slice(0, 18)}...)`
+        ? `JCS + SHA-256 khớp (${recomputedDigest.slice(0, 18)}...)`
         : "Nội dung payload đã bị sửa đổi, digest không còn khớp với leaf đã ký",
     },
     {
@@ -2106,7 +1700,11 @@ export const verifyCredentialPackage = (
       detail: !rpcAvailable
         ? "Không thể kết nối EVM RPC để đọc trạng thái batch và thu hồi"
         : batchConfirmedOnChain
-          ? `Đã xác nhận tại block #${matchedBatch?.blockNumber ?? 14820} · Receipt ${matchedBatch?.txHash?.slice(0, 14) ?? "0x"}...`
+          ? `${
+              matchedBatch?.blockNumber !== undefined
+                ? `Đã xác nhận tại block #${matchedBatch.blockNumber}`
+                : "Đã xác nhận trên hợp đồng thông minh"
+            } · Receipt ${matchedBatch?.txHash?.slice(0, 14) ?? "0x"}...`
           : matchedBatch && matchedBatch.status !== "CONFIRMED"
             ? `Lô đang ở trạng thái ${matchedBatch.status}, chưa được xác nhận on-chain`
             : "Không tìm thấy batch hoặc Merkle root tương ứng trên smart contract",
@@ -2143,7 +1741,14 @@ export const verifyCredentialPackage = (
   }
 
   let result: VerifyResult = "VALID";
-  if (!schemaPasses || !trustedChain || !issuerPasses || !digestMatchesLeaf || !merkleProofPasses || !pdfPasses) {
+  if (
+    !schemaPasses ||
+    !trustedChain ||
+    !issuerPasses ||
+    !digestMatchesLeaf ||
+    !merkleProofPasses ||
+    !pdfPasses
+  ) {
     result = "INVALID";
   } else if (!rpcAvailable || (matchedBatch && matchedBatch.status !== "CONFIRMED")) {
     result = "INDETERMINATE";
@@ -2172,6 +1777,13 @@ export const verifyCredential = (
   options: VerifyOptions = {},
 ): VerificationReport => {
   const cleanCode = code.trim();
+  if (!cleanCode) {
+    return {
+      result: "NOT_FOUND",
+      checks: [],
+      verifiedAt: formatTimestamp(),
+    };
+  }
   const credential = state.credentials.find(
     (item) =>
       item.code.toLowerCase() === cleanCode.toLowerCase() ||

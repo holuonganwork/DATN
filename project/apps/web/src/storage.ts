@@ -1,12 +1,11 @@
 import {
-  computeDigestHex,
   createInitialState,
-  syncLegacyMirrors,
   type AppState,
   type CredentialPackage,
 } from "./domain";
 
-export const STORAGE_KEY = "certchain.product.state.v1";
+export const STORAGE_KEY = "certchain.product.state.v2";
+const LEGACY_STORAGE_KEYS = ["certchain.product.state.v1"];
 
 const isBrowser = (): boolean =>
   typeof window !== "undefined" && typeof window.localStorage !== "undefined";
@@ -16,30 +15,40 @@ export const loadWorkspaceState = (): AppState => {
     return createInitialState();
   }
   try {
+    for (const legacyKey of LEGACY_STORAGE_KEYS) {
+      window.localStorage.removeItem(legacyKey);
+    }
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) {
-      const seed = createInitialState();
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
-      return seed;
+      const empty = createInitialState();
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(empty));
+      return empty;
     }
     const parsed = JSON.parse(raw) as Partial<AppState>;
     if (
       !parsed ||
       !Array.isArray(parsed.organizations) ||
+      !Array.isArray(parsed.wallets) ||
+      !Array.isArray(parsed.courses) ||
+      !Array.isArray(parsed.learners) ||
       !Array.isArray(parsed.batches) ||
-      !Array.isArray(parsed.credentials)
+      !Array.isArray(parsed.credentials) ||
+      !Array.isArray(parsed.events)
     ) {
-      const seed = createInitialState();
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(seed));
-      return seed;
+      const empty = createInitialState();
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(empty));
+      return empty;
     }
-    return syncLegacyMirrors(parsed as AppState);
+    return {
+      ...createInitialState(),
+      ...parsed,
+    } as AppState;
   } catch (error) {
-    const fallback = createInitialState();
+    const empty = createInitialState();
     if (error instanceof Error) {
-      return fallback;
+      return empty;
     }
-    return fallback;
+    return empty;
   }
 };
 
@@ -52,12 +61,6 @@ export const saveWorkspaceState = (state: AppState): void => {
       return;
     }
   }
-};
-
-export const resetWorkspaceState = (): AppState => {
-  const seed = createInitialState();
-  saveWorkspaceState(seed);
-  return seed;
 };
 
 export const downloadCredentialPackageJson = (
@@ -78,18 +81,12 @@ export const downloadCredentialPackageJson = (
 };
 
 export const computeFileSha256Hex = async (file: File): Promise<string> => {
-  try {
-    if (typeof window !== "undefined" && window.crypto?.subtle) {
-      const buffer = await file.arrayBuffer();
-      const digest = await window.crypto.subtle.digest("SHA-256", buffer);
-      const bytes = Array.from(new Uint8Array(digest));
-      const hex = bytes.map((b) => b.toString(16).padStart(2, "0")).join("");
-      return `0x${hex}`;
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      return computeDigestHex(`FILE:${file.name}:${file.size}`, 64);
-    }
+  if (typeof window === "undefined" || !window.crypto?.subtle) {
+    throw new Error("Trình duyệt không hỗ trợ Web Crypto API để tính SHA-256 cho tệp tin.");
   }
-  return computeDigestHex(`FILE:${file.name}:${file.size}`, 64);
+  const buffer = await file.arrayBuffer();
+  const digest = await window.crypto.subtle.digest("SHA-256", buffer);
+  const bytes = Array.from(new Uint8Array(digest));
+  const hex = bytes.map((b) => b.toString(16).padStart(2, "0")).join("");
+  return `0x${hex}`;
 };

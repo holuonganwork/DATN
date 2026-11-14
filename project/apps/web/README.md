@@ -5,15 +5,16 @@
 ## 1. Hệ thống thiết kế (`DESIGN.md`) & Nhận diện Thương hiệu
 - **Logo thương hiệu**: Đặt tại `public/logo.png` (khối hình học isometric 3 cổng vòm Đen-Trắng), được tích hợp làm favicon, thanh Header, Sidebar, màn hình Đăng nhập và con dấu trên phôi chứng chỉ.
 - **Chuẩn thiết kế**: Tuân thủ `DESIGN.md` theo phong cách **Vercel / Geist Architectural Monochrome** từ `VoltAgent/awesome-design-md`, hỗ trợ chuyển đổi **Light / Dark Mode**.
+- **Trạng thái dữ liệu trung thực**: Khởi tạo hoàn toàn sạch (`0` tổ chức, `0` ví, `0` khóa học, `0` học viên, `0` lô phát hành, `0` chứng chỉ, `0` sự kiện kiểm toán) tại khóa lưu trữ `certchain.product.state.v2`, không chứa dữ liệu mẫu hay nút bấm giả lập làm sai lệch số liệu khi tích hợp Backend.
 
 ## 2. Kiến trúc Giao diện 3 Chế độ (Dual-Surface + Role Gate)
 1. **Website Công khai (`Public Website`)**:
-   - **Top System Bar**: Trạng thái kết nối EVM RPC (`Chain ID 31337`), địa chỉ hợp đồng `CertificateRegistry`.
+   - **Top System Bar**: Trạng thái cấu hình EVM Registry (`Chain ID 31337`), địa chỉ hợp đồng `CertificateRegistry`.
    - **Sticky Header & Navigation Bar tiêu chuẩn**:
      - `Trang chủ` (`PublicHomeView`): Hero tra cứu chứng chỉ tức thì, 4 thẻ chỉ số mạng lưới, quy trình xác thực 3 bước và bảng chứng chỉ mới phát hành.
-     - `Xác thực Chứng chỉ` (`PublicVerifierView` — `UC-09`): Tra cứu theo mã, tải gói `.json`, kiểm định file `.pdf` bằng SHA-256, `Payload & File Inspector` và báo cáo mật mã 7 bước.
+     - `Xác thực Chứng chỉ` (`PublicVerifierView` — `UC-09`): Tra cứu theo mã, tải gói `.json`, kiểm định file `.pdf` bằng SHA-256 thực (`Web Crypto API`), `Payload & File Inspector` và báo cáo mật mã 7 bước.
      - `Danh bạ Đơn vị Đào tạo` (`PublicDirectoryView`): Tra cứu các tổ chức đào tạo, trạng thái cấp phép và địa chỉ ví EVM đang hoạt động.
-     - `Chuẩn Kỹ thuật & Mật mã` (`PublicStandardsView`): Tài liệu kiến trúc 3 lớp (`RFC 8785 JCS`, `Domain-Separated Merkle Tree`, `EVM Registry`).
+     - `Chuẩn Kỹ thuật & Mật mã` (`PublicStandardsView`): Tài liệu kiến trúc 3 lớp (`RFC 8785 JCS`, `Domain-Separated Merkle Tree`, `EVM Registry`) và lược đồ `CredentialPackage`.
    - **Standard 4-Column Website Footer**: Thông tin thương hiệu, liên kết điều hướng, chuẩn mật mã và thông số mạng EVM.
 2. **Cổng Đăng nhập & Chọn Vai trò (`RoleSwitcherGateView`)**:
    - Cho phép chọn Đơn vị Đào tạo và Vai trò vận hành (`Chuyên viên Phát hành`, `Người Duyệt & Ký số`, `Quản trị Hệ thống`) trước khi vào Bảng điều khiển.

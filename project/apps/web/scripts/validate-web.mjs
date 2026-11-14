@@ -35,6 +35,9 @@ if (packageJson.scripts?.dev !== "vite" || !packageJson.scripts?.build?.includes
 }
 
 const appSource = fs.readFileSync(path.join(webRoot, "src/App.tsx"), "utf8");
+const runtimeSource = ["src/App.tsx", "src/domain.ts", "src/storage.ts"]
+  .map((file) => fs.readFileSync(path.join(webRoot, file), "utf8"))
+  .join("\n");
 const source = ["src/App.tsx", "src/domain.ts", "src/storage.ts", "src/main.tsx", "DESIGN.md"]
   .map((file) => fs.readFileSync(path.join(webRoot, file), "utf8"))
   .join("\n");
@@ -63,6 +66,7 @@ const requiredMarkers = [
   "authorizeOrganizationWallet",
   "buildMerkleTree",
   "STORAGE_KEY",
+  "certchain.product.state.v2",
 ];
 
 for (const marker of requiredMarkers) {
@@ -71,9 +75,25 @@ for (const marker of requiredMarkers) {
   }
 }
 
-for (const prototypeBanner of ["PROTOTYPE · MEMORY ONLY", "VERTICAL SLICE · KHÔNG DATABASE"]) {
-  if (appSource.includes(prototypeBanner)) {
-    throw new Error(`Prototype banner should be removed from product UI: ${prototypeBanner}`);
+const forbiddenMockAndPrototypeMarkers = [
+  "PROTOTYPE · MEMORY ONLY",
+  "VERTICAL SLICE · KHÔNG DATABASE",
+  "BKHN-ACADEMY",
+  "FPT-JETKING",
+  "VNSEC-LAB",
+  "CERT-7K4P-001",
+  "Nguyễn Minh An",
+  "syncLegacyMirrors",
+  "Khôi phục dữ liệu mẫu",
+  "Khôi phục mẫu",
+  "Mẫu PDF gốc",
+  "Mẫu PDF bị sửa",
+  "Thử sửa điểm số trong JSON",
+];
+
+for (const marker of forbiddenMockAndPrototypeMarkers) {
+  if (runtimeSource.includes(marker) || appSource.includes(marker)) {
+    throw new Error(`Forbidden mock/seed/fallback marker found in frontend runtime: ${marker}`);
   }
 }
 
@@ -84,5 +104,5 @@ for (const forbidden of ["DATABASE_URL", "privateKey", "seed phrase", "PRIVATE_K
 }
 
 process.stdout.write(
-  `Web product structure valid: ${requiredFiles.length} files, DESIGN.md + logo.png verified, Public Website (4 pages + Header/Navbar/Footer), Role Switcher Gate, and Internal Console (Sidebar App Shell) present.\n`,
+  `Web product structure valid: ${requiredFiles.length} files, DESIGN.md + logo.png verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n`,
 );

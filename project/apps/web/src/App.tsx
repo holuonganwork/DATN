@@ -6,7 +6,6 @@ import {
   BATCH_PIPELINE_STEPS,
   buildCredentialPackage,
   buildPublishIntent,
-  computeDigestHex,
   confirmBatchPublish,
   createBatch,
   createCourse,
@@ -38,7 +37,6 @@ import {
   computeFileSha256Hex,
   downloadCredentialPackageJson,
   loadWorkspaceState,
-  resetWorkspaceState,
   saveWorkspaceState,
 } from "./storage";
 
@@ -161,7 +159,7 @@ const verifyMeta: Record<
   },
   NOT_FOUND: {
     badge: "KHÔNG TÌM THẤY (NOT FOUND)",
-    title: "Không tìm thấy chứng chỉ hoặc lô phát hành trên sổ đăng ký On-chain",
+    title: "Không tìm thấy chứng chỉ hoặc lô phát hành trên sổ đăng ký",
     summary:
       "Mã chứng chỉ hoặc mã lô phát hành chưa được neo lên hợp đồng thông minh hoặc không tồn tại trong hệ thống.",
     tone: "danger",
@@ -213,36 +211,31 @@ export function App() {
   const [consolePage, setConsolePage] = useState<ConsolePage>("overview");
 
   const [role, setRole] = useState<UserRole>("ISSUER_APPROVER");
-  const [selectedOrgId, setSelectedOrgId] = useState<string>("org_bkhn_01");
-  const [selectedBatchId, setSelectedBatchId] = useState<string>("batch_2026_q4_01");
+  const [selectedOrgId, setSelectedOrgId] = useState<string>("");
+  const [selectedBatchId, setSelectedBatchId] = useState<string>("");
   const [notice, setNotice] = useState<NoticeBanner | null>(null);
   const [headerQuickCode, setHeaderQuickCode] = useState<string>("");
 
-  // Verifier state
+  // Verifier state (starts completely empty until user searches or uploads a file)
   const [verifierMode, setVerifierMode] = useState<VerifierMode>("lookup");
-  const [lookupCode, setLookupCode] = useState<string>("CERT-7K4P-001");
-  const [activePackage, setActivePackage] = useState<CredentialPackage | null>(() =>
-    buildCredentialPackage(loadWorkspaceState(), "cred_1"),
-  );
+  const [lookupCode, setLookupCode] = useState<string>("");
+  const [submittedCode, setSubmittedCode] = useState<string>("");
+  const [activePackage, setActivePackage] = useState<CredentialPackage | null>(null);
   const [inspectorJsonText, setInspectorJsonText] = useState<string>("");
   const [jsonParseError, setJsonParseError] = useState<string | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
   const [uploadedFileHash, setUploadedFileHash] = useState<string | undefined>(undefined);
 
-  // Modals state
+  // Modals state (no pre-filled mock values)
   const [detailCredentialId, setDetailCredentialId] = useState<string | null>(null);
   const [publishIntentModal, setPublishIntentModal] = useState<PublishIntent | null>(null);
   const [revokeTarget, setRevokeTarget] = useState<Credential | null>(null);
-  const [revokeReasonText, setRevokeReasonText] = useState<string>(
-    "Phát hiện sai sót thông tin hồ sơ gốc sau kiểm tra hậu kiểm học vụ",
-  );
+  const [revokeReasonText, setRevokeReasonText] = useState<string>("");
   const [reissueTarget, setReissueTarget] = useState<Credential | null>(null);
   const [reissueName, setReissueName] = useState<string>("");
-  const [reissueResultText, setReissueResultText] = useState<string>("95/100 (Xuất sắc)");
-  const [reissueExpiresAt, setReissueExpiresAt] = useState<string>("2029-11-14");
-  const [reissueReason, setReissueReason] = useState<string>(
-    "Cấp lại chứng chỉ do điều chỉnh chuẩn hóa thông tin học viên",
-  );
+  const [reissueResultText, setReissueResultText] = useState<string>("");
+  const [reissueExpiresAt, setReissueExpiresAt] = useState<string>("");
+  const [reissueReason, setReissueReason] = useState<string>("");
 
   useEffect(() => {
     saveWorkspaceState(state);
@@ -262,39 +255,44 @@ export function App() {
   const primaryChain = TRUSTED_CHAINS[0];
 
   const selectedOrg = useMemo(
-    () => state.organizations.find((item) => item.id === selectedOrgId) ?? state.organizations[0],
+    () =>
+      state.organizations.find((item) => item.id === selectedOrgId) ??
+      state.organizations[0] ??
+      null,
     [state.organizations, selectedOrgId],
   );
 
   const activeOrgWallet = useMemo(
     () =>
-      state.wallets.find(
-        (wallet) => wallet.organizationId === selectedOrg?.id && wallet.status === "AUTHORIZED",
-      ),
+      selectedOrg
+        ? state.wallets.find(
+            (wallet) => wallet.organizationId === selectedOrg.id && wallet.status === "AUTHORIZED",
+          )
+        : undefined,
     [state.wallets, selectedOrg],
   );
 
   const orgCourses = useMemo(
-    () => state.courses.filter((item) => item.organizationId === selectedOrg?.id),
+    () =>
+      selectedOrg ? state.courses.filter((item) => item.organizationId === selectedOrg.id) : [],
     [state.courses, selectedOrg],
   );
 
   const orgLearners = useMemo(
-    () => state.learners.filter((item) => item.organizationId === selectedOrg?.id),
+    () =>
+      selectedOrg ? state.learners.filter((item) => item.organizationId === selectedOrg.id) : [],
     [state.learners, selectedOrg],
   );
 
   const orgBatches = useMemo(
-    () => state.batches.filter((item) => item.organizationId === selectedOrg?.id),
+    () =>
+      selectedOrg ? state.batches.filter((item) => item.organizationId === selectedOrg.id) : [],
     [state.batches, selectedOrg],
   );
 
   const selectedBatch = useMemo(
-    () =>
-      orgBatches.find((item) => item.id === selectedBatchId) ??
-      orgBatches[0] ??
-      state.batches[0],
-    [orgBatches, selectedBatchId, state.batches],
+    () => orgBatches.find((item) => item.id === selectedBatchId) ?? orgBatches[0] ?? undefined,
+    [orgBatches, selectedBatchId],
   );
 
   const selectedBatchEntries = useMemo(
@@ -303,7 +301,10 @@ export function App() {
   );
 
   const orgCredentials = useMemo(
-    () => state.credentials.filter((item) => item.organizationId === selectedOrg?.id),
+    () =>
+      selectedOrg
+        ? state.credentials.filter((item) => item.organizationId === selectedOrg.id)
+        : [],
     [state.credentials, selectedOrg],
   );
 
@@ -312,14 +313,17 @@ export function App() {
     [state.credentials, detailCredentialId],
   );
 
-  const verificationReport: VerificationReport = useMemo(() => {
+  const verificationReport: VerificationReport | null = useMemo(() => {
     if (activePackage) {
       return verifyCredentialPackage(state, activePackage, {
         uploadedPdfSha256: uploadedFileHash,
       });
     }
-    return verifyCredential(state, lookupCode, { uploadedPdfSha256: uploadedFileHash });
-  }, [state, activePackage, lookupCode, uploadedFileHash]);
+    if (submittedCode.trim()) {
+      return verifyCredential(state, submittedCode, { uploadedPdfSha256: uploadedFileHash });
+    }
+    return null;
+  }, [state, activePackage, submittedCode, uploadedFileHash]);
 
   function showNotice(tone: NoticeBanner["tone"], message: string) {
     setNotice({ tone, message });
@@ -330,16 +334,13 @@ export function App() {
   }
 
   function getOrganizationName(orgId: string): string {
-    return (
-      state.organizations.find((o) => o.id === orgId)?.displayName ??
-      state.organizations[0]?.displayName ??
-      orgId
-    );
+    return state.organizations.find((o) => o.id === orgId)?.displayName ?? orgId;
   }
 
   function selectCredentialForVerify(credential: Credential) {
     const pkg = buildCredentialPackage(state, credential.id);
     setLookupCode(credential.code);
+    setSubmittedCode(credential.code);
     setActivePackage(pkg);
     setInspectorJsonText(pkg ? JSON.stringify(pkg, null, 2) : "");
     setJsonParseError(null);
@@ -352,6 +353,12 @@ export function App() {
   function handleCodeSearch(codeInput: string) {
     const normalized = codeInput.trim().toUpperCase();
     setLookupCode(normalized);
+    setSubmittedCode(normalized);
+    if (!normalized) {
+      setActivePackage(null);
+      setInspectorJsonText("");
+      return;
+    }
     const found = state.credentials.find(
       (item) => item.code.toUpperCase() === normalized || item.id.toUpperCase() === normalized,
     );
@@ -377,26 +384,15 @@ export function App() {
     setHeaderQuickCode("");
   }
 
-  function handleResetWorkspace() {
-    const fresh = resetWorkspaceState();
-    setState(fresh);
-    const defaultPkg = buildCredentialPackage(fresh, "cred_1");
-    setLookupCode("CERT-7K4P-001");
-    setActivePackage(defaultPkg);
-    setInspectorJsonText(defaultPkg ? JSON.stringify(defaultPkg, null, 2) : "");
-    setUploadedFileName(null);
-    setUploadedFileHash(undefined);
-    showNotice("success", "Đã khôi phục dữ liệu mẫu ban đầu của hệ thống.");
-  }
-
   function handleEnterConsoleWithRole(nextRole: UserRole, nextOrgId?: string) {
     setRole(nextRole);
     if (nextOrgId) {
       setSelectedOrgId(nextOrgId);
     }
-    setConsolePage(nextRole === "SYSTEM_ADMIN" ? "admin" : "overview");
+    const hasOrgs = state.organizations.length > 0;
+    setConsolePage(nextRole === "SYSTEM_ADMIN" || !hasOrgs ? "admin" : "overview");
     setSurfaceMode("console");
-    showNotice("success", `Đã đăng nhập Cổng Quản lý với vai trò: ${roleLabels[nextRole]}.`);
+    showNotice("success", `Đã mở Cổng Quản lý với vai trò: ${roleLabels[nextRole]}.`);
   }
 
   function handleOpenPublishModal(batchId: string) {
@@ -432,9 +428,14 @@ export function App() {
     }
   }
 
+  function openRevokeModal(credential: Credential) {
+    setRevokeTarget(credential);
+    setRevokeReasonText("");
+  }
+
   function handleConfirmRevoke(event: FormEvent) {
     event.preventDefault();
-    if (!revokeTarget) return;
+    if (!revokeTarget || !revokeReasonText.trim()) return;
     const nextState = revokeCredential(state, revokeTarget.id, revokeReasonText);
     setState(nextState);
     const updatedPkg = buildCredentialPackage(nextState, revokeTarget.id);
@@ -443,6 +444,7 @@ export function App() {
       setInspectorJsonText(updatedPkg ? JSON.stringify(updatedPkg, null, 2) : "");
     }
     setRevokeTarget(null);
+    setRevokeReasonText("");
     showNotice("warning", `Đã thu hồi chứng chỉ ${revokeTarget.code} trên sổ đăng ký On-chain.`);
   }
 
@@ -450,8 +452,8 @@ export function App() {
     setReissueTarget(credential);
     setReissueName(credential.holder);
     setReissueResultText(credential.score);
-    setReissueExpiresAt(credential.expiresAt ? credential.expiresAt.slice(0, 10) : "2029-11-14");
-    setReissueReason("Điều chỉnh thông tin chuẩn hóa học viên và cấp lại chứng chỉ mới");
+    setReissueExpiresAt(credential.expiresAt ? credential.expiresAt.slice(0, 10) : "");
+    setReissueReason("");
   }
 
   function handleConfirmReissue(event: FormEvent) {
@@ -471,6 +473,7 @@ export function App() {
     setState(res.state);
     const newPkg = buildCredentialPackage(res.state, res.newCredential.id);
     setLookupCode(res.newCredential.code);
+    setSubmittedCode(res.newCredential.code);
     setActivePackage(newPkg);
     setInspectorJsonText(newPkg ? JSON.stringify(newPkg, null, 2) : "");
     setReissueTarget(null);
@@ -492,7 +495,7 @@ export function App() {
               <div className="system-bar-left">
                 <span className="live-indicator">
                   <span className="live-dot" />
-                  EVM RPC CONNECTED
+                  {state.rpcOnline ? "EVM REGISTRY CONFIGURED" : "RPC OFFLINE"}
                 </span>
                 <span className="system-divider" />
                 <span className="mono-meta">{primaryChain.name}</span>
@@ -504,14 +507,6 @@ export function App() {
 
               <div className="system-bar-right">
                 <span className="mono-meta">Chuẩn giao thức: JCS RFC 8785 · SHA-256 Merkle</span>
-                <button
-                  type="button"
-                  className="system-reset-btn"
-                  onClick={handleResetWorkspace}
-                  title="Khôi phục dữ liệu mẫu"
-                >
-                  Khôi phục dữ liệu mẫu
-                </button>
               </div>
             </div>
           </div>
@@ -574,7 +569,7 @@ export function App() {
                     className="header-search-input"
                     value={headerQuickCode}
                     onChange={(event) => setHeaderQuickCode(event.target.value)}
-                    placeholder="Tra nhanh mã CERT-..."
+                    placeholder="Tra nhanh mã chứng chỉ..."
                     aria-label="Tra nhanh mã chứng chỉ"
                   />
                   <button type="submit" className="header-search-btn">
@@ -622,7 +617,7 @@ export function App() {
 
               <div className="breadcrumb-meta">
                 <span>
-                  Trạng thái mạng:{" "}
+                  Trạng thái sổ:{" "}
                   <strong>
                     {state.credentials.filter((c) => c.status === "ISSUED").length} chứng chỉ hiệu
                     lực
@@ -699,6 +694,11 @@ export function App() {
                   onOpenDetail={(credId) => setDetailCredentialId(credId)}
                   onInspectorTextChange={(text) => {
                     setInspectorJsonText(text);
+                    if (!text.trim()) {
+                      setJsonParseError(null);
+                      setActivePackage(null);
+                      return;
+                    }
                     try {
                       const parsed = JSON.parse(text) as CredentialPackage;
                       if (!parsed || typeof parsed !== "object" || !parsed.payload || !parsed.anchor) {
@@ -730,6 +730,7 @@ export function App() {
                       setJsonParseError(null);
                       setActivePackage(parsed);
                       setLookupCode(parsed.payload.credentialId);
+                      setSubmittedCode(parsed.payload.credentialId);
                       showNotice("success", `Đã nạp gói chứng chỉ từ file "${file.name}".`);
                     } catch {
                       setJsonParseError("Không thể phân tích cú pháp JSON từ file đã chọn.");
@@ -738,27 +739,26 @@ export function App() {
                   onAttachmentFileUpload={async (event) => {
                     const file = event.target.files?.[0];
                     if (!file) return;
-                    const digest = await computeFileSha256Hex(file);
-                    setUploadedFileName(file.name);
-                    setUploadedFileHash(digest);
-                    showNotice(
-                      "success",
-                      `Đã tính SHA-256 cho file "${file.name}": ${shortHash(digest, 14, 10)}`,
-                    );
+                    try {
+                      const digest = await computeFileSha256Hex(file);
+                      setUploadedFileName(file.name);
+                      setUploadedFileHash(digest);
+                      showNotice(
+                        "success",
+                        `Đã tính SHA-256 cho file "${file.name}": ${shortHash(digest, 14, 10)}`,
+                      );
+                    } catch (err) {
+                      showNotice(
+                        "danger",
+                        err instanceof Error
+                          ? err.message
+                          : "Không thể tính SHA-256 cho tệp tin đã chọn.",
+                      );
+                    }
                   }}
                   onClearAttachment={() => {
                     setUploadedFileName(null);
                     setUploadedFileHash(undefined);
-                  }}
-                  onApplySampleMatchFile={() => {
-                    if (!activePackage) return;
-                    setUploadedFileName(`${activePackage.payload.credentialId}.pdf`);
-                    setUploadedFileHash(activePackage.payload.pdfSha256);
-                  }}
-                  onApplySampleMismatchFile={() => {
-                    if (!activePackage) return;
-                    setUploadedFileName(`${activePackage.payload.credentialId}-tampered.pdf`);
-                    setUploadedFileHash(computeDigestHex("tampered-pdf-binary-content"));
                   }}
                 />
               )}
@@ -774,14 +774,7 @@ export function App() {
                 />
               )}
 
-              {publicPage === "standards" && (
-                <PublicStandardsView
-                  state={state}
-                  onLoadSampleToVerifier={(cred) => {
-                    selectCredentialForVerify(cred);
-                  }}
-                />
-              )}
+              {publicPage === "standards" && <PublicStandardsView />}
             </div>
           </main>
 
@@ -971,21 +964,25 @@ export function App() {
 
               <label className="sidebar-org-field">
                 <span>Đơn vị Đào tạo làm việc</span>
-                <select
-                  value={selectedOrg?.id ?? ""}
-                  onChange={(event) => {
-                    const nextOrgId = event.target.value;
-                    setSelectedOrgId(nextOrgId);
-                    const firstBatch = state.batches.find((b) => b.organizationId === nextOrgId);
-                    if (firstBatch) setSelectedBatchId(firstBatch.id);
-                  }}
-                >
-                  {state.organizations.map((org) => (
-                    <option key={org.id} value={org.id}>
-                      {org.code} — {org.displayName}
-                    </option>
-                  ))}
-                </select>
+                {state.organizations.length > 0 ? (
+                  <select
+                    value={selectedOrg?.id ?? ""}
+                    onChange={(event) => {
+                      const nextOrgId = event.target.value;
+                      setSelectedOrgId(nextOrgId);
+                      const firstBatch = state.batches.find((b) => b.organizationId === nextOrgId);
+                      setSelectedBatchId(firstBatch?.id ?? "");
+                    }}
+                  >
+                    {state.organizations.map((org) => (
+                      <option key={org.id} value={org.id}>
+                        {org.code} — {org.displayName}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="cell-sub">Chưa có tổ chức đào tạo nào</div>
+                )}
               </label>
 
               <div className="session-wallet-strip">
@@ -1069,7 +1066,7 @@ export function App() {
               <div className="sidebar-network-box">
                 <span className="live-indicator">
                   <span className="live-dot" />
-                  Chain ID 31337 · Localnet
+                  Chain ID {primaryChain.chainId}
                 </span>
                 <code>Registry: {shortHash(primaryChain.registryAddress, 8, 6)}</code>
               </div>
@@ -1098,14 +1095,18 @@ export function App() {
                   <span className="breadcrumb-sep">/</span>
                   <span className="breadcrumb-current">{consolePageLabels[consolePage]}</span>
                 </div>
-                <span className="status-pill tone-info">{selectedOrg?.code}</span>
-                <span
-                  className={`status-pill ${
-                    selectedOrg?.status === "ACTIVE" ? "tone-valid" : "tone-warn"
-                  }`}
-                >
-                  {selectedOrg ? organizationStatusLabels[selectedOrg.status] : "—"}
-                </span>
+                {selectedOrg && (
+                  <>
+                    <span className="status-pill tone-info">{selectedOrg.code}</span>
+                    <span
+                      className={`status-pill ${
+                        selectedOrg.status === "ACTIVE" ? "tone-valid" : "tone-warn"
+                      }`}
+                    >
+                      {organizationStatusLabels[selectedOrg.status]}
+                    </span>
+                  </>
+                )}
               </div>
 
               <div className="workspace-topbar-right">
@@ -1115,20 +1116,12 @@ export function App() {
                     className="header-search-input"
                     value={headerQuickCode}
                     onChange={(event) => setHeaderQuickCode(event.target.value)}
-                    placeholder="Kiểm tra nhanh mã CERT-..."
+                    placeholder="Kiểm tra nhanh mã chứng chỉ..."
                   />
                   <button type="submit" className="header-search-btn">
                     Xác thực ↗
                   </button>
                 </form>
-
-                <button
-                  type="button"
-                  className="btn-secondary btn-xs"
-                  onClick={handleResetWorkspace}
-                >
-                  Khôi phục mẫu
-                </button>
 
                 <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>
                   {theme === "light" ? "◐ Tối" : "☀ Sáng"}
@@ -1161,6 +1154,35 @@ export function App() {
             )}
 
             <main className="workspace-main">
+              {(consolePage === "overview" ||
+                consolePage === "batches" ||
+                consolePage === "credentials" ||
+                consolePage === "catalog") &&
+                !selectedOrg && (
+                  <div className="panel-card">
+                    <span className="eyebrow">CHƯA CÓ ĐƠN VỊ ĐÀO TẠO TRONG HỆ THỐNG</span>
+                    <h2>Vui lòng đăng ký Tổ chức Đào tạo trước khi vận hành phát hành</h2>
+                    <p className="panel-desc">
+                      Hệ thống hiện đang ở trạng thái khởi tạo sạch (0 tổ chức, 0 khóa học, 0 lô
+                      chứng chỉ). Hãy chuyển sang mục <strong>Tổ chức &amp; Ví EVM (Admin)</strong>{" "}
+                      để đăng ký đơn vị đào tạo đầu tiên, kích hoạt trạng thái{" "}
+                      <code>ACTIVE</code> và cấp phép địa chỉ ví EVM phát hành.
+                    </p>
+                    <div className="button-row">
+                      <button
+                        type="button"
+                        className="btn-primary"
+                        onClick={() => {
+                          setRole("SYSTEM_ADMIN");
+                          setConsolePage("admin");
+                        }}
+                      >
+                        Mở Quản trị Tổ chức & Ví EVM (UC-01) →
+                      </button>
+                    </div>
+                  </div>
+                )}
+
               {consolePage === "overview" && selectedOrg && (
                 <ConsoleOverviewView
                   state={state}
@@ -1203,7 +1225,7 @@ export function App() {
                     onOpenPublishModal={handleOpenPublishModal}
                     onSelectCredentialForVerify={selectCredentialForVerify}
                     onOpenCredentialDetail={(credId) => setDetailCredentialId(credId)}
-                    onOpenRevokeModal={(cred) => setRevokeTarget(cred)}
+                    onOpenRevokeModal={openRevokeModal}
                     onOpenReissueModal={openReissueModal}
                   />
                 )}
@@ -1213,7 +1235,12 @@ export function App() {
                   state={state}
                   role={role}
                   onSwitchRole={() => setRole("SYSTEM_ADMIN")}
-                  onStateChange={setState}
+                  onStateChange={(nextState, createdOrgId) => {
+                    setState(nextState);
+                    if (createdOrgId && !selectedOrgId) {
+                      setSelectedOrgId(createdOrgId);
+                    }
+                  }}
                   onNotify={showNotice}
                 />
               )}
@@ -1298,28 +1325,15 @@ export function App() {
                       <strong>
                         {detailCredential.expiresAt
                           ? formatDateTime(detailCredential.expiresAt)
-                          : "Vĩnh viễn"}
+                          : "Không thời hạn"}
                       </strong>
                     </div>
                   </div>
                 </div>
 
                 <div className="cert-qr-box">
-                  <div className="qr-matrix" aria-label="Mã QR tra cứu chứng chỉ">
-                    {Array.from({ length: 49 }).map((_, idx) => {
-                      const charCode =
-                        detailCredential.payloadDigest.charCodeAt((idx % 30) + 2) || 48;
-                      const filled = (charCode + idx) % 2 === 0 || idx < 8 || idx > 41;
-                      return (
-                        <span
-                          key={idx}
-                          className={filled ? "qr-cell filled" : "qr-cell"}
-                        />
-                      );
-                    })}
-                  </div>
                   <code>{detailCredential.code}</code>
-                  <small>Quét hoặc nhập mã tại Cổng Xác thực</small>
+                  <small>Mã định danh tra cứu tại Cổng Xác thực</small>
                 </div>
               </div>
 
@@ -1468,6 +1482,7 @@ export function App() {
                 rows={3}
                 value={revokeReasonText}
                 onChange={(event) => setRevokeReasonText(event.target.value)}
+                placeholder="Nhập lý do thu hồi chứng chỉ..."
                 required
               />
             </label>
@@ -1517,6 +1532,7 @@ export function App() {
                 <input
                   value={reissueName}
                   onChange={(event) => setReissueName(event.target.value)}
+                  placeholder="Nhập họ tên học viên..."
                   required
                 />
               </label>
@@ -1525,6 +1541,7 @@ export function App() {
                 <input
                   value={reissueResultText}
                   onChange={(event) => setReissueResultText(event.target.value)}
+                  placeholder="Nhập kết quả / xếp loại..."
                   required
                 />
               </label>
@@ -1532,7 +1549,7 @@ export function App() {
 
             <div className="form-grid-2">
               <label className="form-field">
-                <span>Ngày hết hạn mới</span>
+                <span>Ngày hết hạn mới (tùy chọn)</span>
                 <input
                   type="date"
                   value={reissueExpiresAt}
@@ -1544,6 +1561,7 @@ export function App() {
                 <input
                   value={reissueReason}
                   onChange={(event) => setReissueReason(event.target.value)}
+                  placeholder="Nhập lý do cấp lại..."
                   required
                 />
               </label>
@@ -1600,6 +1618,10 @@ function PublicHomeView({
 
   function handleHeroSubmit(event: FormEvent) {
     event.preventDefault();
+    if (!lookupCode.trim()) {
+      onNavigatePublic("verifier");
+      return;
+    }
     onQuickVerify(lookupCode);
   }
 
@@ -1630,7 +1652,7 @@ function PublicHomeView({
                 type="text"
                 value={lookupCode}
                 onChange={(event) => onLookupCodeChange(event.target.value)}
-                placeholder="Nhập mã (VD: CERT-7K4P-001)..."
+                placeholder="Nhập mã định danh chứng chỉ để tra cứu..."
                 aria-label="Mã chứng chỉ cần xác thực"
               />
             </div>
@@ -1638,29 +1660,6 @@ function PublicHomeView({
               Xác thực Ngay →
             </button>
           </form>
-
-          <div className="hero-sample-strip">
-            <span>Thử nghiệm nhanh:</span>
-            {state.credentials.slice(0, 4).map((cred) => (
-              <button
-                key={cred.id}
-                type="button"
-                className="sample-code-chip"
-                onClick={() => onQuickVerify(cred.code)}
-              >
-                <code>{cred.code}</code>
-                <span
-                  className={`chip-dot ${
-                    cred.status === "ISSUED"
-                      ? "valid"
-                      : cred.status === "REVOKED"
-                        ? "danger"
-                        : "warn"
-                  }`}
-                />
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="hero-arch-col">
@@ -1690,7 +1689,7 @@ function PublicHomeView({
                   <strong>Domain-Separated Merkle Tree</strong>
                   <p>
                     Gom hàng nghìn chứng chỉ vào một <code>merkleRoot</code> duy nhất, tiết kiệm
-                    99% chi phí gas.
+                    chi phí giao dịch trên chuỗi.
                   </p>
                 </div>
               </div>
@@ -1728,7 +1727,7 @@ function PublicHomeView({
 
       <section className="kpi-grid-4">
         <article className="kpi-card">
-          <span className="kpi-label">ĐƠN VỊ ĐÀO TẠO ĐƯỢP CẤP PHÉP</span>
+          <span className="kpi-label">ĐƠN VỊ ĐÀO TẠO ĐƯỢC CẤP PHÉP</span>
           <strong className="kpi-value">{activeOrgsCount}</strong>
           <span className="kpi-foot">
             Trên tổng số {state.organizations.length} tổ chức đã đăng ký
@@ -1774,8 +1773,8 @@ function PublicHomeView({
             </div>
             <h3>Nhập mã chứng chỉ hoặc tải gói .json</h3>
             <p>
-              Người kiểm tra chỉ cần nhập mã chứng chỉ (ví dụ <code>CERT-7K4P-001</code>) hoặc tải
-              lên tệp <code>.json</code> kèm bản <code>.pdf</code> do ứng viên cung cấp.
+              Người kiểm tra nhập mã định danh chứng chỉ hoặc tải lên tệp <code>.json</code> kèm
+              bản <code>.pdf</code> do người sở hữu chứng chỉ cung cấp.
             </p>
           </article>
 
@@ -1845,73 +1844,87 @@ function PublicHomeView({
               </tr>
             </thead>
             <tbody>
-              {state.credentials.slice(0, 6).map((cred) => {
-                const org = state.organizations.find((o) => o.id === cred.organizationId);
-                return (
-                  <tr key={cred.id}>
-                    <td>
-                      <code className="code-strong">{cred.code}</code>
-                    </td>
-                    <td>
-                      <strong>{cred.holder}</strong>
-                      <div className="cell-sub">{cred.subjectRef}</div>
-                    </td>
-                    <td>
-                      <span>{cred.course}</span>
-                      <div className="cell-sub">Kết quả: {cred.score}</div>
-                    </td>
-                    <td>
-                      <span>{org?.code ?? cred.organizationId}</span>
-                      <div className="cell-sub">{org?.displayName}</div>
-                    </td>
-                    <td>
-                      <code>{shortHash(cred.merkleRoot, 10, 8)}</code>
-                      <div className="cell-sub">Chain ID {cred.chainId}</div>
-                    </td>
-                    <td>
-                      <span
-                        className={`status-pill ${
-                          cred.status === "ISSUED"
-                            ? "tone-valid"
-                            : cred.status === "REVOKED"
-                              ? "tone-danger"
-                              : "tone-warn"
-                        }`}
-                      >
-                        {credentialStatusLabels[cred.status]}
+              {state.credentials.length === 0 ? (
+                <tr>
+                  <td colSpan={7}>
+                    <div className="empty-state-cell">
+                      <strong>Chưa có chứng chỉ nào được phát hành trên sổ đăng ký.</strong>
+                      <span>
+                        Dữ liệu sẽ hiển thị tại đây sau khi đơn vị đào tạo đóng băng lô và xác nhận
+                        giao dịch phát hành.
                       </span>
-                    </td>
-                    <td className="text-right">
-                      <div className="table-actions">
-                        <button
-                          type="button"
-                          className="btn-secondary btn-xs"
-                          onClick={() => onSelectCredential(cred)}
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                state.credentials.slice(0, 6).map((cred) => {
+                  const org = state.organizations.find((o) => o.id === cred.organizationId);
+                  return (
+                    <tr key={cred.id}>
+                      <td>
+                        <code className="code-strong">{cred.code}</code>
+                      </td>
+                      <td>
+                        <strong>{cred.holder}</strong>
+                        <div className="cell-sub">{cred.subjectRef}</div>
+                      </td>
+                      <td>
+                        <span>{cred.course}</span>
+                        <div className="cell-sub">Kết quả: {cred.score}</div>
+                      </td>
+                      <td>
+                        <span>{org?.code ?? cred.organizationId}</span>
+                        <div className="cell-sub">{org?.displayName}</div>
+                      </td>
+                      <td>
+                        <code>{shortHash(cred.merkleRoot, 10, 8)}</code>
+                        <div className="cell-sub">Chain ID {cred.chainId}</div>
+                      </td>
+                      <td>
+                        <span
+                          className={`status-pill ${
+                            cred.status === "ISSUED"
+                              ? "tone-valid"
+                              : cred.status === "REVOKED"
+                                ? "tone-danger"
+                                : "tone-warn"
+                          }`}
                         >
-                          Xác thực
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-secondary btn-xs"
-                          onClick={() => onOpenDetail(cred.id)}
-                        >
-                          Xem Phôi & QR
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-secondary btn-xs"
-                          onClick={() => {
-                            const pkg = buildCredentialPackage(state, cred.id);
-                            if (pkg) downloadCredentialPackageJson(cred.code, pkg);
-                          }}
-                        >
-                          Tải .json
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                          {credentialStatusLabels[cred.status]}
+                        </span>
+                      </td>
+                      <td className="text-right">
+                        <div className="table-actions">
+                          <button
+                            type="button"
+                            className="btn-secondary btn-xs"
+                            onClick={() => onSelectCredential(cred)}
+                          >
+                            Xác thực
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-secondary btn-xs"
+                            onClick={() => onOpenDetail(cred.id)}
+                          >
+                            Xem Phôi & QR
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-secondary btn-xs"
+                            onClick={() => {
+                              const pkg = buildCredentialPackage(state, cred.id);
+                              if (pkg) downloadCredentialPackageJson(cred.code, pkg);
+                            }}
+                          >
+                            Tải .json
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -1936,15 +1949,13 @@ interface PublicVerifierViewProps {
   jsonParseError: string | null;
   uploadedFileName: string | null;
   uploadedFileHash: string | undefined;
-  verificationReport: VerificationReport;
+  verificationReport: VerificationReport | null;
   onSelectCredential: (credential: Credential) => void;
   onOpenDetail: (credentialId: string) => void;
   onInspectorTextChange: (text: string) => void;
   onJsonFileUpload: (event: ChangeEvent<HTMLInputElement>) => void;
   onAttachmentFileUpload: (event: ChangeEvent<HTMLInputElement>) => void;
   onClearAttachment: () => void;
-  onApplySampleMatchFile: () => void;
-  onApplySampleMismatchFile: () => void;
 }
 
 function PublicVerifierView({
@@ -1966,11 +1977,9 @@ function PublicVerifierView({
   onJsonFileUpload,
   onAttachmentFileUpload,
   onClearAttachment,
-  onApplySampleMatchFile,
-  onApplySampleMismatchFile,
 }: PublicVerifierViewProps) {
-  const verdict = verifyMeta[verificationReport.result];
-  const matchedCred = verificationReport.credential;
+  const verdict = verificationReport ? verifyMeta[verificationReport.result] : null;
+  const matchedCred = verificationReport?.credential;
   const issuerOrg = state.organizations.find((o) => o.id === activePackage?.payload.issuerId);
 
   function handleSearchForm(event: FormEvent) {
@@ -2023,46 +2032,13 @@ function PublicVerifierView({
                 <input
                   value={lookupCode}
                   onChange={(event) => onLookupCodeChange(event.target.value)}
-                  placeholder="Nhập mã chứng chỉ (VD: CERT-7K4P-001)..."
+                  placeholder="Nhập mã định danh chứng chỉ..."
                   aria-label="Mã chứng chỉ"
                 />
                 <button type="submit" className="btn-primary">
                   Xác thực ngay
                 </button>
               </form>
-
-              <div className="quick-pick-block">
-                <span className="field-caption">Chọn nhanh chứng chỉ mẫu trong sổ đăng ký:</span>
-                <div className="credential-pill-list">
-                  {state.credentials.map((cred) => (
-                    <button
-                      key={cred.id}
-                      type="button"
-                      className={
-                        lookupCode.toUpperCase() === cred.code.toUpperCase()
-                          ? "cred-chip active"
-                          : "cred-chip"
-                      }
-                      onClick={() => onSelectCredential(cred)}
-                    >
-                      <div className="cred-chip-top">
-                        <code>{cred.code}</code>
-                        <span
-                          className={`status-dot ${
-                            cred.status === "ISSUED"
-                              ? "valid"
-                              : cred.status === "REVOKED"
-                                ? "danger"
-                                : "warn"
-                          }`}
-                        />
-                      </div>
-                      <strong>{cred.holder}</strong>
-                      <small>{credentialStatusLabels[cred.status]}</small>
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               <div className="divider-line" />
 
@@ -2093,20 +2069,6 @@ function PublicVerifierView({
                       <input type="file" onChange={onAttachmentFileUpload} />
                       <span>Chọn file PDF / Bản in</span>
                     </label>
-                    <button
-                      type="button"
-                      className="btn-secondary btn-xs"
-                      onClick={onApplySampleMatchFile}
-                    >
-                      Mẫu PDF gốc
-                    </button>
-                    <button
-                      type="button"
-                      className="btn-secondary btn-xs"
-                      onClick={onApplySampleMismatchFile}
-                    >
-                      Mẫu PDF bị sửa
-                    </button>
                   </div>
                   {uploadedFileName && (
                     <div className="uploaded-file-pill">
@@ -2126,7 +2088,7 @@ function PublicVerifierView({
             <>
               <div className="panel-head">
                 <div>
-                  <span className="eyebrow">TRÌNH KIỂM TRA DỮ LIỆU & MÔ PHỎNG KIỂM ĐỊNH</span>
+                  <span className="eyebrow">TRÌNH KIỂM TRA CẤU TRÚC GÓI CHỨNG CHỈ</span>
                   <h2>Payload & File Inspector (JSON Canonicalization)</h2>
                 </div>
                 {matchedCred && (
@@ -2135,58 +2097,23 @@ function PublicVerifierView({
                     className="btn-secondary btn-xs"
                     onClick={() => onSelectCredential(matchedCred)}
                   >
-                    Khôi phục gói chuẩn gốc
+                    Tải lại gói gốc từ sổ
                   </button>
                 )}
               </div>
 
               <p className="panel-desc">
-                Dành cho kiểm toán viên kỹ thuật: Bạn có thể kiểm tra cấu trúc gói{" "}
-                <code>CredentialPackage</code> hoặc thử thay đổi bất kỳ ký tự nào trong{" "}
-                <code>payload</code> bên dưới để kiểm chứng cơ chế phát hiện giả mạo{" "}
-                <code>INVALID</code> của cây Merkle.
+                Dán nội dung tệp <code>CredentialPackage (.json)</code> vào khung bên dưới để kiểm
+                tra trực tiếp cấu trúc <code>payload</code>, <code>anchor</code> và{" "}
+                <code>proof</code> theo chuẩn RFC 8785.
               </p>
-
-              <div className="inspector-presets">
-                <span>Kịch bản kiểm định nhanh:</span>
-                <button
-                  type="button"
-                  className="btn-secondary btn-xs"
-                  onClick={() => {
-                    if (!activePackage) return;
-                    const clone: CredentialPackage = JSON.parse(JSON.stringify(activePackage));
-                    clone.payload.result = "100/100 (Đã chỉnh sửa trái phép)";
-                    onInspectorTextChange(JSON.stringify(clone, null, 2));
-                  }}
-                >
-                  Thử sửa điểm số trong JSON
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary btn-xs"
-                  onClick={() => {
-                    if (!activePackage) return;
-                    const clone: CredentialPackage = JSON.parse(JSON.stringify(activePackage));
-                    clone.anchor.chainId = 99999;
-                    onInspectorTextChange(JSON.stringify(clone, null, 2));
-                  }}
-                >
-                  Thử đổi sang Chain ID lạ
-                </button>
-                <button
-                  type="button"
-                  className="btn-secondary btn-xs"
-                  onClick={onApplySampleMismatchFile}
-                >
-                  Thử đính kèm file PDF sai mã băm
-                </button>
-              </div>
 
               <textarea
                 className="json-editor"
                 rows={16}
                 value={inspectorJsonText}
                 onChange={(event) => onInspectorTextChange(event.target.value)}
+                placeholder='{"payload": {...}, "anchor": {...}, "proof": {...}}'
                 spellCheck={false}
               />
 
@@ -2196,138 +2123,162 @@ function PublicVerifierView({
         </div>
 
         <div className="panel-card">
-          <div className={`verdict-banner tone-${verdict.tone}`}>
-            <div className="verdict-top">
-              <span className="verdict-badge">{verdict.badge}</span>
-              <span className="verdict-code">
-                {matchedCred?.code ?? activePackage?.payload.credentialId ?? lookupCode}
-              </span>
+          {!verificationReport || !verdict ? (
+            <div className="verifier-empty-state">
+              <span className="eyebrow">TRẠNG THÁI CHỜ XÁC THỰC</span>
+              <h2>Chưa có dữ liệu chứng chỉ được nạp để kiểm định</h2>
+              <p className="panel-desc">
+                Vui lòng nhập mã định danh chứng chỉ ở khung bên trái và nhấn{" "}
+                <strong>Xác thực ngay</strong>, hoặc tải lên tệp gói chứng chỉ{" "}
+                <code>.json</code> để hệ thống thực hiện đối chiếu mật mã 7 bước.
+              </p>
             </div>
-            <h2>{verdict.title}</h2>
-            <p>{verdict.summary}</p>
-
-            {matchedCred?.status === "REVOKED" && (
-              <div className="lineage-alert danger">
-                <strong>Lý do thu hồi ({formatDateTime(matchedCred.revokedAt)}):</strong>{" "}
-                {matchedCred.revokedReason}
-              </div>
-            )}
-
-            {matchedCred?.status === "SUPERSEDED" && matchedCred.reissuedToId && (
-              <div className="lineage-alert warn">
-                <span>
-                  Chứng chỉ này đã được thay thế bởi bản cấp lại mới hơn trên sổ đăng ký.
-                </span>
-                <button
-                  type="button"
-                  className="btn-secondary btn-xs"
-                  onClick={() => {
-                    const replacement = state.credentials.find(
-                      (item) => item.id === matchedCred.reissuedToId,
-                    );
-                    if (replacement) onSelectCredential(replacement);
-                  }}
-                >
-                  Xem bản thay thế mới →
-                </button>
-              </div>
-            )}
-
-            {matchedCred?.reissuedFromId && (
-              <div className="lineage-alert info">
-                <span>
-                  Đây là chứng chỉ cấp lại chính thức (kế thừa lịch sử từ bản gốc{" "}
-                  <code>
-                    {state.credentials.find((c) => c.id === matchedCred.reissuedFromId)?.code ??
-                      matchedCred.reissuedFromId}
-                  </code>
-                  ).
-                </span>
-              </div>
-            )}
-          </div>
-
-          {activePackage && (
-            <div className="verified-summary-card">
-              <div className="summary-header">
-                <div>
-                  <span className="eyebrow">THÔNG TIN CHỨNG CHỈ ĐANG KIỂM ĐỊNH</span>
-                  <h3>{activePackage.payload.holder}</h3>
+          ) : (
+            <>
+              <div className={`verdict-banner tone-${verdict.tone}`}>
+                <div className="verdict-top">
+                  <span className="verdict-badge">{verdict.badge}</span>
+                  <span className="verdict-code">
+                    {matchedCred?.code ?? activePackage?.payload.credentialId ?? lookupCode}
+                  </span>
                 </div>
-                <div className="button-row">
-                  {matchedCred && (
+                <h2>{verdict.title}</h2>
+                <p>{verdict.summary}</p>
+
+                {matchedCred?.status === "REVOKED" && (
+                  <div className="lineage-alert danger">
+                    <strong>Lý do thu hồi ({formatDateTime(matchedCred.revokedAt)}):</strong>{" "}
+                    {matchedCred.revokedReason}
+                  </div>
+                )}
+
+                {matchedCred?.status === "SUPERSEDED" && matchedCred.reissuedToId && (
+                  <div className="lineage-alert warn">
+                    <span>
+                      Chứng chỉ này đã được thay thế bởi bản cấp lại mới hơn trên sổ đăng ký.
+                    </span>
                     <button
                       type="button"
                       className="btn-secondary btn-xs"
-                      onClick={() => onOpenDetail(matchedCred.id)}
+                      onClick={() => {
+                        const replacement = state.credentials.find(
+                          (item) => item.id === matchedCred.reissuedToId,
+                        );
+                        if (replacement) onSelectCredential(replacement);
+                      }}
                     >
-                      Xem Phôi & Mã QR
+                      Xem bản thay thế mới →
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    className="btn-secondary btn-xs"
-                    onClick={() =>
-                      downloadCredentialPackageJson(
-                        matchedCred?.code ?? activePackage.payload.credentialId,
-                        activePackage,
-                      )
-                    }
-                  >
-                    Tải gói .json
-                  </button>
-                </div>
+                  </div>
+                )}
+
+                {matchedCred?.reissuedFromId && (
+                  <div className="lineage-alert info">
+                    <span>
+                      Đây là chứng chỉ cấp lại chính thức (kế thừa lịch sử từ bản gốc{" "}
+                      <code>
+                        {state.credentials.find((c) => c.id === matchedCred.reissuedFromId)?.code ??
+                          matchedCred.reissuedFromId}
+                      </code>
+                      ).
+                    </span>
+                  </div>
+                )}
               </div>
 
-              <div className="summary-grid-3">
-                <div>
-                  <span>Khóa đào tạo</span>
-                  <strong>{activePackage.payload.courseName}</strong>
-                </div>
-                <div>
-                  <span>Đơn vị cấp</span>
-                  <strong>{issuerOrg?.displayName ?? activePackage.payload.issuerId}</strong>
-                </div>
-                <div>
-                  <span>Kết quả & Ngày cấp</span>
-                  <strong>
-                    {activePackage.payload.result} · {formatDateTime(activePackage.payload.issuedAt)}
-                  </strong>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="steps-section">
-            <div className="steps-head">
-              <span className="eyebrow">
-                BÁO CÁO ĐỐI CHIẾU MẬT MÃ ({verificationReport.checks.length} BƯỚC)
-              </span>
-              <span>
-                Leaf: <code>{shortHash(activePackage?.proof.leaf, 10, 8)}</code>
-              </span>
-            </div>
-
-            <div className="verify-step-list">
-              {verificationReport.checks.map((step, index) => {
-                const passed = step.status === "PASS";
-                return (
-                  <div key={step.key} className={`verify-step-item ${passed ? "pass" : "fail"}`}>
-                    <div className="step-num">{index + 1}</div>
-                    <div className="step-body">
-                      <div className="step-title-row">
-                        <strong>{step.label}</strong>
-                        <span className={passed ? "step-tag pass" : "step-tag fail"}>
-                          {step.status}
-                        </span>
-                      </div>
-                      <p>{step.detail}</p>
+              {activePackage && (
+                <div className="verified-summary-card">
+                  <div className="summary-header">
+                    <div>
+                      <span className="eyebrow">THÔNG TIN CHỨNG CHỈ ĐANG KIỂM ĐỊNH</span>
+                      <h3>{activePackage.payload.holder}</h3>
+                    </div>
+                    <div className="button-row">
+                      {matchedCred && (
+                        <button
+                          type="button"
+                          className="btn-secondary btn-xs"
+                          onClick={() => onOpenDetail(matchedCred.id)}
+                        >
+                          Xem Phôi & Mã QR
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="btn-secondary btn-xs"
+                        onClick={() =>
+                          downloadCredentialPackageJson(
+                            matchedCred?.code ?? activePackage.payload.credentialId,
+                            activePackage,
+                          )
+                        }
+                      >
+                        Tải gói .json
+                      </button>
                     </div>
                   </div>
-                );
-              })}
-            </div>
-          </div>
+
+                  <div className="summary-grid-3">
+                    <div>
+                      <span>Khóa đào tạo</span>
+                      <strong>{activePackage.payload.courseName}</strong>
+                    </div>
+                    <div>
+                      <span>Đơn vị cấp</span>
+                      <strong>{issuerOrg?.displayName ?? activePackage.payload.issuerId}</strong>
+                    </div>
+                    <div>
+                      <span>Kết quả & Ngày cấp</span>
+                      <strong>
+                        {activePackage.payload.result} ·{" "}
+                        {formatDateTime(activePackage.payload.issuedAt)}
+                      </strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="steps-section">
+                <div className="steps-head">
+                  <span className="eyebrow">
+                    BÁO CÁO ĐỐI CHIẾU MẬT MÃ ({verificationReport.checks.length} BƯỚC)
+                  </span>
+                  <span>
+                    Leaf: <code>{shortHash(activePackage?.proof.leaf, 10, 8)}</code>
+                  </span>
+                </div>
+
+                {verificationReport.checks.length === 0 ? (
+                  <p className="panel-desc">
+                    Không tìm thấy gói chứng chỉ tương ứng với mã đã nhập trong sổ đăng ký hiện tại.
+                  </p>
+                ) : (
+                  <div className="verify-step-list">
+                    {verificationReport.checks.map((step, index) => {
+                      const passed = step.status === "PASS";
+                      return (
+                        <div
+                          key={step.key}
+                          className={`verify-step-item ${passed ? "pass" : "fail"}`}
+                        >
+                          <div className="step-num">{index + 1}</div>
+                          <div className="step-body">
+                            <div className="step-title-row">
+                              <strong>{step.label}</strong>
+                              <span className={passed ? "step-tag pass" : "step-tag fail"}>
+                                {step.status}
+                              </span>
+                            </div>
+                            <p>{step.detail}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
@@ -2381,88 +2332,101 @@ function PublicDirectoryView({
         </div>
       </div>
 
-      <div className="directory-grid">
-        {filteredOrgs.map((org) => {
-          const activeWallet = state.wallets.find(
-            (w) => w.organizationId === org.id && w.status === "AUTHORIZED",
-          );
-          const orgBatches = state.batches.filter(
-            (b) => b.organizationId === org.id && b.status === "CONFIRMED",
-          );
-          const orgCreds = state.credentials.filter((c) => c.organizationId === org.id);
-          const latestCred = orgCreds[0];
+      {filteredOrgs.length === 0 ? (
+        <div className="panel-card">
+          <span className="eyebrow">DANH BẠ ĐANG TRỐNG</span>
+          <h2>Chưa có đơn vị đào tạo nào được đăng ký</h2>
+          <p className="panel-desc">
+            Danh bạ công khai sẽ tự động cập nhật khi Quản trị viên Hệ thống đăng ký và phê duyệt
+            các tổ chức đào tạo trong Cổng Quản lý.
+          </p>
+        </div>
+      ) : (
+        <div className="directory-grid">
+          {filteredOrgs.map((org) => {
+            const activeWallet = state.wallets.find(
+              (w) => w.organizationId === org.id && w.status === "AUTHORIZED",
+            );
+            const orgBatches = state.batches.filter(
+              (b) => b.organizationId === org.id && b.status === "CONFIRMED",
+            );
+            const orgCreds = state.credentials.filter((c) => c.organizationId === org.id);
+            const latestCred = orgCreds[0];
 
-          return (
-            <article key={org.id} className="panel-card directory-card">
-              <div className="directory-card-head">
-                <div className="directory-title-group">
-                  <span className="code-badge">{org.code}</span>
-                  <div>
-                    <h2>{org.displayName}</h2>
-                    <span className="cell-sub">
-                      Pháp nhân: <strong>{org.legalName}</strong> · Hồ sơ: {org.verificationRef}
-                    </span>
+            return (
+              <article key={org.id} className="panel-card directory-card">
+                <div className="directory-card-head">
+                  <div className="directory-title-group">
+                    <span className="code-badge">{org.code}</span>
+                    <div>
+                      <h2>{org.displayName}</h2>
+                      <span className="cell-sub">
+                        Pháp nhân: <strong>{org.legalName}</strong> · Hồ sơ: {org.verificationRef}
+                      </span>
+                    </div>
+                  </div>
+                  <span
+                    className={`status-pill ${
+                      org.status === "ACTIVE"
+                        ? "tone-valid"
+                        : org.status === "PENDING"
+                          ? "tone-warn"
+                          : "tone-danger"
+                    }`}
+                  >
+                    {organizationStatusLabels[org.status]}
+                  </span>
+                </div>
+
+                <div className="kv-list">
+                  <div className="kv-row">
+                    <span>Địa chỉ Ví EVM đang ủy quyền</span>
+                    <code>
+                      {activeWallet ? activeWallet.address : "Chưa cấp phép ví AUTHORIZED"}
+                    </code>
+                  </div>
+                  <div className="kv-row">
+                    <span>Mạng Blockchain</span>
+                    <strong>Chain ID {activeWallet?.chainId ?? 31337}</strong>
+                  </div>
+                  <div className="kv-row">
+                    <span>Số lô Merkle đã neo On-chain</span>
+                    <strong>{orgBatches.length} lô phát hành</strong>
+                  </div>
+                  <div className="kv-row">
+                    <span>Tổng số chứng chỉ đã cấp</span>
+                    <strong>
+                      {orgCreds.filter((c) => c.status === "ISSUED").length} hiệu lực /{" "}
+                      {orgCreds.length} tổng số
+                    </strong>
                   </div>
                 </div>
-                <span
-                  className={`status-pill ${
-                    org.status === "ACTIVE"
-                      ? "tone-valid"
-                      : org.status === "PENDING"
-                        ? "tone-warn"
-                        : "tone-danger"
-                  }`}
-                >
-                  {organizationStatusLabels[org.status]}
-                </span>
-              </div>
 
-              <div className="kv-list">
-                <div className="kv-row">
-                  <span>Địa chỉ Ví EVM đang ủy quyền</span>
-                  <code>{activeWallet ? activeWallet.address : "Chưa cấp phép ví AUTHORIZED"}</code>
-                </div>
-                <div className="kv-row">
-                  <span>Mạng Blockchain</span>
-                  <strong>Chain ID {activeWallet?.chainId ?? 31337}</strong>
-                </div>
-                <div className="kv-row">
-                  <span>Số lô Merkle đã neo On-chain</span>
-                  <strong>{orgBatches.length} lô phát hành</strong>
-                </div>
-                <div className="kv-row">
-                  <span>Tổng số chứng chỉ đã cấp</span>
-                  <strong>
-                    {orgCreds.filter((c) => c.status === "ISSUED").length} hiệu lực /{" "}
-                    {orgCreds.length} tổng số
-                  </strong>
-                </div>
-              </div>
-
-              <div className="directory-card-foot">
-                {latestCred ? (
+                <div className="directory-card-foot">
+                  {latestCred ? (
+                    <button
+                      type="button"
+                      className="btn-secondary btn-sm"
+                      onClick={() => onSelectCredential(latestCred)}
+                    >
+                      Kiểm định chứng chỉ ({latestCred.code})
+                    </button>
+                  ) : (
+                    <span className="cell-sub">Đơn vị chưa có chứng chỉ phát hành công khai</span>
+                  )}
                   <button
                     type="button"
-                    className="btn-secondary btn-sm"
-                    onClick={() => onSelectCredential(latestCred)}
+                    className="btn-primary btn-sm"
+                    onClick={() => onOpenAuthGateForOrg(org.id)}
                   >
-                    Kiểm định chứng chỉ mẫu ({latestCred.code})
+                    Vào Cổng Quản lý Đơn vị →
                   </button>
-                ) : (
-                  <span className="cell-sub">Đơn vị chưa có chứng chỉ phát hành công khai</span>
-                )}
-                <button
-                  type="button"
-                  className="btn-primary btn-sm"
-                  onClick={() => onOpenAuthGateForOrg(org.id)}
-                >
-                  Vào Cổng Quản lý Đơn vị →
-                </button>
-              </div>
-            </article>
-          );
-        })}
-      </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -2471,18 +2435,7 @@ function PublicDirectoryView({
    PUBLIC WEBSITE VIEW 4: CRYPTOGRAPHIC & PROTOCOL STANDARDS
    ========================================================================= */
 
-interface PublicStandardsViewProps {
-  state: AppState;
-  onLoadSampleToVerifier: (cred: Credential) => void;
-}
-
-function PublicStandardsView({ state, onLoadSampleToVerifier }: PublicStandardsViewProps) {
-  const sampleCred = state.credentials[0];
-  const samplePackage = useMemo(
-    () => (sampleCred ? buildCredentialPackage(state, sampleCred.id) : null),
-    [state, sampleCred],
-  );
-
+function PublicStandardsView() {
   return (
     <div className="page-stack">
       <div className="page-title-bar">
@@ -2490,15 +2443,6 @@ function PublicStandardsView({ state, onLoadSampleToVerifier }: PublicStandardsV
           <span className="eyebrow">ĐẶC TẢ GIAO THỨC & MẬT MÃ HỌC</span>
           <h1>Chuẩn Kỹ thuật Xác thực Chứng chỉ Đào tạo trên Blockchain</h1>
         </div>
-        {sampleCred && (
-          <button
-            type="button"
-            className="btn-primary"
-            onClick={() => onLoadSampleToVerifier(sampleCred)}
-          >
-            Chạy Kiểm định Gói Mẫu ({sampleCred.code}) →
-          </button>
-        )}
       </div>
 
       <div className="feature-grid-3">
@@ -2545,24 +2489,45 @@ function PublicStandardsView({ state, onLoadSampleToVerifier }: PublicStandardsV
         </article>
       </div>
 
-      {samplePackage && sampleCred && (
-        <div className="panel-card">
-          <div className="panel-head">
-            <div>
-              <span className="eyebrow">CẤU TRÚC GÓI CHỨNG CHỈ ĐỘC LẬP (CREDENTIAL PACKAGE)</span>
-              <h2>Mẫu tệp JSON tự chứa (Payload + On-chain Anchor + Merkle Proof)</h2>
-            </div>
-            <button
-              type="button"
-              className="btn-secondary btn-sm"
-              onClick={() => downloadCredentialPackageJson(sampleCred.code, samplePackage)}
-            >
-              Tải tệp mẫu .json
-            </button>
+      <div className="panel-card">
+        <div className="panel-head">
+          <div>
+            <span className="eyebrow">LƯỢC ĐỒ GÓI CHỨNG CHỈ ĐỘC LẬP (CREDENTIAL PACKAGE SCHEMA)</span>
+            <h2>Cấu trúc chuẩn của tệp JSON tự chứa (Payload + Anchor + Proof)</h2>
           </div>
-          <pre className="code-pre-block">{JSON.stringify(samplePackage, null, 2)}</pre>
         </div>
-      )}
+        <pre className="code-pre-block">
+          {JSON.stringify(
+            {
+              payload: {
+                credentialId: "<string>",
+                issuerId: "<string>",
+                holder: "<string (NFC normalized)>",
+                courseId: "<string>",
+                courseName: "<string>",
+                result: "<string>",
+                issuedAt: "<ISO-8601 UTC>",
+                expiresAt: "<ISO-8601 UTC | null>",
+                nonce: "<string>",
+                pdfSha256: "<0x + 64 hex chars>",
+              },
+              anchor: {
+                chainId: 31337,
+                registryAddress: "0x5fbdb2315678afecb367f032d93f642f64180aa3",
+                batchId: "<string>",
+                issuerId: "<string>",
+              },
+              proof: {
+                leaf: "<0x + 64 hex chars>",
+                path: ["<0x + 64 hex chars>"],
+                root: "<0x + 64 hex chars>",
+              },
+            },
+            null,
+            2,
+          )}
+        </pre>
+      </div>
     </div>
   );
 }
@@ -2579,7 +2544,7 @@ interface RoleSwitcherGateViewProps {
   onToggleTheme: () => void;
   onSelectRole: (role: UserRole) => void;
   onSelectOrgId: (orgId: string) => void;
-  onContinue: (role: UserRole, orgId: string) => void;
+  onContinue: (role: UserRole, orgId?: string) => void;
   onBackToPublic: () => void;
 }
 
@@ -2597,14 +2562,16 @@ function RoleSwitcherGateView({
   const roles: UserRole[] = ["ISSUER_APPROVER", "ISSUER_OPERATOR", "SYSTEM_ADMIN"];
 
   const currentOrg =
-    state.organizations.find((o) => o.id === selectedOrgId) ?? state.organizations[0];
-  const currentWallet = state.wallets.find(
-    (w) => w.organizationId === currentOrg?.id && w.status === "AUTHORIZED",
-  );
+    state.organizations.find((o) => o.id === selectedOrgId) ?? state.organizations[0] ?? null;
+  const currentWallet = currentOrg
+    ? state.wallets.find(
+        (w) => w.organizationId === currentOrg.id && w.status === "AUTHORIZED",
+      )
+    : undefined;
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    onContinue(selectedRole, currentOrg.id);
+    onContinue(selectedRole, currentOrg?.id);
   }
 
   return (
@@ -2669,33 +2636,44 @@ function RoleSwitcherGateView({
 
           <div className="auth-section">
             <span className="auth-step-label">2. Chọn Đơn vị Đào tạo làm việc (Organization)</span>
-            <div className="form-grid-2">
-              <label className="form-field">
-                <span>Đơn vị Đào tạo</span>
-                <select
-                  value={currentOrg?.id ?? ""}
-                  onChange={(event) => onSelectOrgId(event.target.value)}
-                >
-                  {state.organizations.map((org) => (
-                    <option key={org.id} value={org.id}>
-                      {org.code} — {org.displayName} ({organizationStatusLabels[org.status]})
-                    </option>
-                  ))}
-                </select>
-              </label>
-
+            {state.organizations.length === 0 ? (
               <div className="auth-wallet-preview">
-                <span>Ví EVM đang ủy quyền của đơn vị</span>
-                <code>
-                  {currentWallet ? currentWallet.address : "Đơn vị chưa có ví EVM AUTHORIZED"}
-                </code>
+                <span>Trạng thái Tổ chức Đào tạo</span>
+                <strong>Chưa có đơn vị đào tạo nào được đăng ký trong hệ thống</strong>
                 <small>
-                  {currentWallet
-                    ? `Chain ID ${currentWallet.chainId} · Ký giao dịch trực tiếp qua EIP-1193`
-                    : "Cần Quản trị Hệ thống cấp phép ví trước khi ký lô"}
+                  Khi tiếp tục, bạn sẽ được đưa tới trang Quản trị Hệ thống (UC-01) để khởi tạo tổ
+                  chức đào tạo đầu tiên.
                 </small>
               </div>
-            </div>
+            ) : (
+              <div className="form-grid-2">
+                <label className="form-field">
+                  <span>Đơn vị Đào tạo</span>
+                  <select
+                    value={currentOrg?.id ?? ""}
+                    onChange={(event) => onSelectOrgId(event.target.value)}
+                  >
+                    {state.organizations.map((org) => (
+                      <option key={org.id} value={org.id}>
+                        {org.code} — {org.displayName} ({organizationStatusLabels[org.status]})
+                      </option>
+                    ))}
+                  </select>
+                </label>
+
+                <div className="auth-wallet-preview">
+                  <span>Ví EVM đang ủy quyền của đơn vị</span>
+                  <code>
+                    {currentWallet ? currentWallet.address : "Đơn vị chưa có ví EVM AUTHORIZED"}
+                  </code>
+                  <small>
+                    {currentWallet
+                      ? `Chain ID ${currentWallet.chainId} · Ký giao dịch trực tiếp qua EIP-1193`
+                      : "Cần Quản trị Hệ thống cấp phép ví trước khi ký lô"}
+                  </small>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="auth-gate-actions">
@@ -2831,42 +2809,53 @@ function ConsoleOverviewView({
               </tr>
             </thead>
             <tbody>
-              {orgBatches.map((batch) => (
-                <tr key={batch.id}>
-                  <td>
-                    <code>{batch.code}</code>
-                  </td>
-                  <td>
-                    <strong>{batch.title}</strong>
-                    <div className="cell-sub">
-                      Merkle Root: {batch.merkleRoot ? shortHash(batch.merkleRoot, 10, 6) : "—"}
+              {orgBatches.length === 0 ? (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="empty-state-cell">
+                      <strong>Chưa có lô phát hành nào.</strong>
+                      <span>Hãy tạo khóa học, thêm học viên và khởi tạo lô mới.</span>
                     </div>
                   </td>
-                  <td>{batch.entries.length} hồ sơ</td>
-                  <td>
-                    <span
-                      className={`status-pill ${
-                        batch.status === "CONFIRMED"
-                          ? "tone-valid"
-                          : batch.status === "DRAFT"
-                            ? "tone-info"
-                            : "tone-warn"
-                      }`}
-                    >
-                      {batchStatusLabels[batch.status]}
-                    </span>
-                  </td>
-                  <td className="text-right">
-                    <button
-                      type="button"
-                      className="btn-secondary btn-xs"
-                      onClick={() => onSelectBatch(batch.id)}
-                    >
-                      Mở lô →
-                    </button>
-                  </td>
                 </tr>
-              ))}
+              ) : (
+                orgBatches.map((batch) => (
+                  <tr key={batch.id}>
+                    <td>
+                      <code>{batch.code}</code>
+                    </td>
+                    <td>
+                      <strong>{batch.title}</strong>
+                      <div className="cell-sub">
+                        Merkle Root: {batch.merkleRoot ? shortHash(batch.merkleRoot, 10, 6) : "—"}
+                      </div>
+                    </td>
+                    <td>{batch.entries.length} hồ sơ</td>
+                    <td>
+                      <span
+                        className={`status-pill ${
+                          batch.status === "CONFIRMED"
+                            ? "tone-valid"
+                            : batch.status === "DRAFT"
+                              ? "tone-info"
+                              : "tone-warn"
+                        }`}
+                      >
+                        {batchStatusLabels[batch.status]}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <button
+                        type="button"
+                        className="btn-secondary btn-xs"
+                        onClick={() => onSelectBatch(batch.id)}
+                      >
+                        Mở lô →
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -2896,48 +2885,58 @@ function ConsoleOverviewView({
               </tr>
             </thead>
             <tbody>
-              {orgCredentials.slice(0, 5).map((cred) => (
-                <tr key={cred.id}>
-                  <td>
-                    <code className="code-strong">{cred.code}</code>
-                  </td>
-                  <td>
-                    <strong>{cred.holder}</strong>
-                    <div className="cell-sub">{cred.course}</div>
-                  </td>
-                  <td>
-                    <span
-                      className={`status-pill ${
-                        cred.status === "ISSUED"
-                          ? "tone-valid"
-                          : cred.status === "REVOKED"
-                            ? "tone-danger"
-                            : "tone-warn"
-                      }`}
-                    >
-                      {credentialStatusLabels[cred.status]}
-                    </span>
-                  </td>
-                  <td className="text-right">
-                    <div className="table-actions">
-                      <button
-                        type="button"
-                        className="btn-secondary btn-xs"
-                        onClick={() => onOpenDetail(cred.id)}
-                      >
-                        Phôi & QR
-                      </button>
-                      <button
-                        type="button"
-                        className="btn-secondary btn-xs"
-                        onClick={() => onSelectCredential(cred)}
-                      >
-                        Kiểm định ↗
-                      </button>
+              {orgCredentials.length === 0 ? (
+                <tr>
+                  <td colSpan={4}>
+                    <div className="empty-state-cell">
+                      <strong>Chưa có chứng chỉ nào được phát hành.</strong>
                     </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                orgCredentials.slice(0, 5).map((cred) => (
+                  <tr key={cred.id}>
+                    <td>
+                      <code className="code-strong">{cred.code}</code>
+                    </td>
+                    <td>
+                      <strong>{cred.holder}</strong>
+                      <div className="cell-sub">{cred.course}</div>
+                    </td>
+                    <td>
+                      <span
+                        className={`status-pill ${
+                          cred.status === "ISSUED"
+                            ? "tone-valid"
+                            : cred.status === "REVOKED"
+                              ? "tone-danger"
+                              : "tone-warn"
+                        }`}
+                      >
+                        {credentialStatusLabels[cred.status]}
+                      </span>
+                    </td>
+                    <td className="text-right">
+                      <div className="table-actions">
+                        <button
+                          type="button"
+                          className="btn-secondary btn-xs"
+                          onClick={() => onOpenDetail(cred.id)}
+                        >
+                          Phôi & QR
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-secondary btn-xs"
+                          onClick={() => onSelectCredential(cred)}
+                        >
+                          Kiểm định ↗
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -2994,19 +2993,22 @@ function IssuerPortal({
   onOpenReissueModal,
 }: IssuerPortalProps) {
   const [newBatchTitle, setNewBatchTitle] = useState<string>("");
-  const [newBatchCourseId, setNewBatchCourseId] = useState<string>(orgCourses[0]?.id ?? "");
+  const [newBatchCourseId, setNewBatchCourseId] = useState<string>("");
 
-  const [entryLearnerId, setEntryLearnerId] = useState<string>(orgLearners[0]?.id ?? "");
-  const [entryResult, setEntryResult] = useState<string>("92/100 (Xuất sắc)");
-  const [entryIssuedDate, setEntryIssuedDate] = useState<string>("2026-11-14");
+  const [entryLearnerId, setEntryLearnerId] = useState<string>("");
+  const [entryResult, setEntryResult] = useState<string>("");
+  const [entryIssuedDate, setEntryIssuedDate] = useState<string>("");
+  const [entryExpiresDate, setEntryExpiresDate] = useState<string>("");
 
   const [courseCode, setCourseCode] = useState<string>("");
   const [courseTitle, setCourseTitle] = useState<string>("");
-  const [courseHours, setCourseHours] = useState<string>("90");
+  const [courseVersion, setCourseVersion] = useState<string>("");
+  const [courseHours, setCourseHours] = useState<string>("");
+  const [courseGradingRule, setCourseGradingRule] = useState<string>("");
 
   const [learnerCode, setLearnerCode] = useState<string>("");
   const [learnerName, setLearnerName] = useState<string>("");
-  const [learnerCohort, setLearnerCohort] = useState<string>("K68-CNTT");
+  const [learnerCohort, setLearnerCohort] = useState<string>("");
 
   const [credSearch, setCredSearch] = useState<string>("");
   const [credFilterStatus, setCredFilterStatus] = useState<string>("ALL");
@@ -3050,14 +3052,17 @@ function IssuerPortal({
       batchId: selectedBatch.id,
       learnerId: entryLearnerId || orgLearners[0]?.id || "",
       result: entryResult,
-      issuedAt: `${entryIssuedDate}T00:00:00Z`,
-      expiresAt: "2029-11-14T00:00:00Z",
+      issuedAt: entryIssuedDate ? `${entryIssuedDate}T00:00:00Z` : "",
+      expiresAt: entryExpiresDate ? `${entryExpiresDate}T00:00:00Z` : null,
     });
     if (res.error) {
       onNotify("danger", res.error);
       return;
     }
     onStateChange(res.state);
+    setEntryResult("");
+    setEntryIssuedDate("");
+    setEntryExpiresDate("");
     onNotify("success", "Đã thêm hồ sơ học viên vào lô nháp.");
   }
 
@@ -3067,9 +3072,9 @@ function IssuerPortal({
       organizationId: selectedOrg.id,
       code: courseCode,
       name: courseTitle,
-      version: "v1.0",
+      version: courseVersion,
       durationHours: Number(courseHours),
-      gradingRule: "Điểm tổng kết >= 70/100",
+      gradingRule: courseGradingRule,
     });
     if (res.error) {
       onNotify("danger", res.error);
@@ -3078,6 +3083,9 @@ function IssuerPortal({
     onStateChange(res.state);
     setCourseCode("");
     setCourseTitle("");
+    setCourseVersion("");
+    setCourseHours("");
+    setCourseGradingRule("");
     onNotify("success", "Đã thêm chương trình đào tạo mới.");
   }
 
@@ -3096,6 +3104,7 @@ function IssuerPortal({
     onStateChange(res.state);
     setLearnerCode("");
     setLearnerName("");
+    setLearnerCohort("");
     onNotify("success", `Đã thêm học viên ${res.learner?.displayName}.`);
   }
 
@@ -3149,31 +3158,35 @@ function IssuerPortal({
             </div>
 
             <div className="batch-list">
-              {orgBatches.map((batch) => (
-                <button
-                  key={batch.id}
-                  type="button"
-                  className={selectedBatch?.id === batch.id ? "batch-item active" : "batch-item"}
-                  onClick={() => onSelectBatch(batch.id)}
-                >
-                  <div className="batch-item-top">
-                    <code>{batch.code}</code>
-                    <span
-                      className={`status-pill ${
-                        batch.status === "CONFIRMED"
-                          ? "tone-valid"
-                          : batch.status === "DRAFT"
-                            ? "tone-info"
-                            : "tone-warn"
-                      }`}
-                    >
-                      {batchStatusLabels[batch.status]}
-                    </span>
-                  </div>
-                  <strong>{batch.title}</strong>
-                  <small>{batch.entries.length} hồ sơ trong lô</small>
-                </button>
-              ))}
+              {orgBatches.length === 0 ? (
+                <div className="cell-sub">Chưa có lô phát hành nào.</div>
+              ) : (
+                orgBatches.map((batch) => (
+                  <button
+                    key={batch.id}
+                    type="button"
+                    className={selectedBatch?.id === batch.id ? "batch-item active" : "batch-item"}
+                    onClick={() => onSelectBatch(batch.id)}
+                  >
+                    <div className="batch-item-top">
+                      <code>{batch.code}</code>
+                      <span
+                        className={`status-pill ${
+                          batch.status === "CONFIRMED"
+                            ? "tone-valid"
+                            : batch.status === "DRAFT"
+                              ? "tone-info"
+                              : "tone-warn"
+                        }`}
+                      >
+                        {batchStatusLabels[batch.status]}
+                      </span>
+                    </div>
+                    <strong>{batch.title}</strong>
+                    <small>{batch.entries.length} hồ sơ trong lô</small>
+                  </button>
+                ))
+              )}
             </div>
 
             <form className="compact-form" onSubmit={handleCreateBatch}>
@@ -3183,12 +3196,17 @@ function IssuerPortal({
                 <select
                   value={newBatchCourseId || orgCourses[0]?.id || ""}
                   onChange={(event) => setNewBatchCourseId(event.target.value)}
+                  disabled={orgCourses.length === 0}
                 >
-                  {orgCourses.map((course) => (
-                    <option key={course.id} value={course.id}>
-                      {course.code} — {course.name}
-                    </option>
-                  ))}
+                  {orgCourses.length === 0 ? (
+                    <option value="">Chưa có khóa học (Hãy tạo ở mục Khóa học)</option>
+                  ) : (
+                    orgCourses.map((course) => (
+                      <option key={course.id} value={course.id}>
+                        {course.code} — {course.name}
+                      </option>
+                    ))
+                  )}
                 </select>
               </label>
               <label className="form-field">
@@ -3196,11 +3214,15 @@ function IssuerPortal({
                 <input
                   value={newBatchTitle}
                   onChange={(event) => setNewBatchTitle(event.target.value)}
-                  placeholder="VD: Đợt tốt nghiệp Tháng 11/2026"
+                  placeholder="Nhập tên đợt phát hành..."
                   required
                 />
               </label>
-              <button type="submit" className="btn-secondary full-width">
+              <button
+                type="submit"
+                className="btn-secondary full-width"
+                disabled={orgCourses.length === 0}
+              >
                 + Tạo Lô Nháp (DRAFT)
               </button>
             </form>
@@ -3362,8 +3384,10 @@ function IssuerPortal({
                       <div>
                         <span>ON-CHAIN TX HASH</span>
                         <code>
-                          {shortHash(selectedBatch.txHash, 14, 10)} (Block #
-                          {selectedBatch.blockNumber ?? "Pending"})
+                          {shortHash(selectedBatch.txHash, 14, 10)}
+                          {selectedBatch.blockNumber !== undefined
+                            ? ` (Block #${selectedBatch.blockNumber})`
+                            : ""}
                         </code>
                       </div>
                     )}
@@ -3377,12 +3401,17 @@ function IssuerPortal({
                       <select
                         value={entryLearnerId || orgLearners[0]?.id || ""}
                         onChange={(event) => setEntryLearnerId(event.target.value)}
+                        disabled={orgLearners.length === 0}
                       >
-                        {orgLearners.map((learner) => (
-                          <option key={learner.id} value={learner.id}>
-                            {learner.subjectRef} — {learner.displayName}
-                          </option>
-                        ))}
+                        {orgLearners.length === 0 ? (
+                          <option value="">Chưa có học viên</option>
+                        ) : (
+                          orgLearners.map((learner) => (
+                            <option key={learner.id} value={learner.id}>
+                              {learner.subjectRef} — {learner.displayName}
+                            </option>
+                          ))
+                        )}
                       </select>
                     </label>
                     <label className="form-field">
@@ -3390,6 +3419,7 @@ function IssuerPortal({
                       <input
                         value={entryResult}
                         onChange={(event) => setEntryResult(event.target.value)}
+                        placeholder="Nhập điểm hoặc xếp loại..."
                         required
                       />
                     </label>
@@ -3402,7 +3432,19 @@ function IssuerPortal({
                         required
                       />
                     </label>
-                    <button type="submit" className="btn-secondary">
+                    <label className="form-field">
+                      <span>Hết hạn (tùy chọn)</span>
+                      <input
+                        type="date"
+                        value={entryExpiresDate}
+                        onChange={(event) => setEntryExpiresDate(event.target.value)}
+                      />
+                    </label>
+                    <button
+                      type="submit"
+                      className="btn-secondary"
+                      disabled={orgLearners.length === 0}
+                    >
                       + Thêm vào Lô
                     </button>
                   </form>
@@ -3421,85 +3463,112 @@ function IssuerPortal({
                       </tr>
                     </thead>
                     <tbody>
-                      {selectedBatchEntries.map((entry, idx) => {
-                        const issuedCred = state.credentials.find(
-                          (c) => c.batchEntryId === entry.id,
-                        );
-                        return (
-                          <tr key={entry.id}>
-                            <td>
-                              <code>#{idx + 1}</code>
-                            </td>
-                            <td>
-                              <strong>{entry.holderName}</strong>
-                              <div className="cell-sub">{entry.subjectRef}</div>
-                            </td>
-                            <td>
-                              <strong>{entry.result}</strong>
-                              <div className="cell-sub">
-                                Ngày cấp: {formatDateTime(entry.issuedAt)}
-                              </div>
-                            </td>
-                            <td>
-                              <code>{entry.pdfFileName}</code>
-                              <div className="cell-sub">
-                                SHA-256: {shortHash(entry.pdfSha256, 8, 6)}
-                              </div>
-                            </td>
-                            <td>
-                              <code>Leaf: {shortHash(entry.leaf, 10, 8)}</code>
-                              <div className="cell-sub">
-                                Digest: {shortHash(entry.payloadDigest, 10, 8)}
-                              </div>
-                            </td>
-                            <td className="text-right">
-                              {selectedBatch.status === "DRAFT" && (
-                                <button
-                                  type="button"
-                                  className="btn-ghost"
-                                  onClick={() => {
-                                    const res = removeBatchEntry(state, {
-                                      batchId: selectedBatch.id,
-                                      entryId: entry.id,
-                                    });
-                                    if (res.error) {
-                                      onNotify("danger", res.error);
-                                      return;
-                                    }
-                                    onStateChange(res.state);
-                                  }}
-                                >
-                                  Xóa
-                                </button>
-                              )}
-                              {issuedCred && (
-                                <div className="table-actions">
-                                  <button
-                                    type="button"
-                                    className="btn-secondary btn-xs"
-                                    onClick={() => onOpenCredentialDetail(issuedCred.id)}
-                                  >
-                                    Xem Phôi & QR
-                                  </button>
-                                  <button
-                                    type="button"
-                                    className="btn-secondary btn-xs"
-                                    onClick={() => onSelectCredentialForVerify(issuedCred)}
-                                  >
-                                    Kiểm định
-                                  </button>
+                      {selectedBatchEntries.length === 0 ? (
+                        <tr>
+                          <td colSpan={6}>
+                            <div className="empty-state-cell">
+                              <strong>Lô này chưa có hồ sơ học viên nào.</strong>
+                              <span>Hãy thêm học viên vào lô ở biểu mẫu phía trên.</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        selectedBatchEntries.map((entry, idx) => {
+                          const issuedCred = state.credentials.find(
+                            (c) => c.batchEntryId === entry.id,
+                          );
+                          return (
+                            <tr key={entry.id}>
+                              <td>
+                                <code>#{idx + 1}</code>
+                              </td>
+                              <td>
+                                <strong>{entry.holderName}</strong>
+                                <div className="cell-sub">{entry.subjectRef}</div>
+                              </td>
+                              <td>
+                                <strong>{entry.result}</strong>
+                                <div className="cell-sub">
+                                  Ngày cấp: {formatDateTime(entry.issuedAt)}
                                 </div>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
+                              </td>
+                              <td>
+                                <code>{entry.pdfFileName}</code>
+                                <div className="cell-sub">
+                                  SHA-256: {shortHash(entry.pdfSha256, 8, 6)}
+                                </div>
+                              </td>
+                              <td>
+                                <code>Leaf: {shortHash(entry.leaf, 10, 8)}</code>
+                                <div className="cell-sub">
+                                  Digest: {shortHash(entry.payloadDigest, 10, 8)}
+                                </div>
+                              </td>
+                              <td className="text-right">
+                                {selectedBatch.status === "DRAFT" && (
+                                  <button
+                                    type="button"
+                                    className="btn-ghost"
+                                    onClick={() => {
+                                      const res = removeBatchEntry(state, {
+                                        batchId: selectedBatch.id,
+                                        entryId: entry.id,
+                                      });
+                                      if (res.error) {
+                                        onNotify("danger", res.error);
+                                        return;
+                                      }
+                                      onStateChange(res.state);
+                                    }}
+                                  >
+                                    Xóa
+                                  </button>
+                                )}
+                                {issuedCred && (
+                                  <div className="table-actions">
+                                    <button
+                                      type="button"
+                                      className="btn-secondary btn-xs"
+                                      onClick={() => onOpenCredentialDetail(issuedCred.id)}
+                                    >
+                                      Xem Phôi & QR
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="btn-secondary btn-xs"
+                                      onClick={() => onSelectCredentialForVerify(issuedCred)}
+                                    >
+                                      Kiểm định
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
                 </div>
               </>
             ) : (
-              <p>Chưa có lô phát hành nào cho đơn vị này.</p>
+              <div className="verifier-empty-state">
+                <span className="eyebrow">CHƯA CÓ LÔ PHÁT HÀNH</span>
+                <h2>Đơn vị {selectedOrg.displayName} chưa khởi tạo lô chứng chỉ nào</h2>
+                <p className="panel-desc">
+                  Trước tiên hãy tạo Chương trình đào tạo và Hồ sơ học viên ở tab{" "}
+                  <strong>Khóa học &amp; Học viên</strong>, sau đó khởi tạo lô nháp ở cột bên trái.
+                </p>
+                <div className="button-row">
+                  <button
+                    type="button"
+                    className="btn-primary"
+                    onClick={() => onSubTabChange("catalog")}
+                  >
+                    Đi tới Khóa học & Học viên (UC-02) →
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -3545,91 +3614,101 @@ function IssuerPortal({
                 </tr>
               </thead>
               <tbody>
-                {filteredCredentials.map((cred) => (
-                  <tr key={cred.id}>
-                    <td>
-                      <code className="code-strong">{cred.code}</code>
-                      {cred.reissuedFromId && (
-                        <div className="cell-sub">Cấp lại từ bản cũ</div>
-                      )}
-                    </td>
-                    <td>
-                      <strong>{cred.holder}</strong>
-                      <div className="cell-sub">{cred.subjectRef}</div>
-                    </td>
-                    <td>
-                      <span>{cred.course}</span>
-                      <div className="cell-sub">{cred.courseCode}</div>
-                    </td>
-                    <td>
-                      <strong>{cred.score}</strong>
-                      <div className="cell-sub">{formatDateTime(cred.issuedAt)}</div>
-                    </td>
-                    <td>
-                      <code>{shortHash(cred.merkleRoot, 8, 6)}</code>
-                      <div className="cell-sub">Batch: {cred.batchId}</div>
-                    </td>
-                    <td>
-                      <span
-                        className={`status-pill ${
-                          cred.status === "ISSUED"
-                            ? "tone-valid"
-                            : cred.status === "REVOKED"
-                              ? "tone-danger"
-                              : "tone-warn"
-                        }`}
-                      >
-                        {credentialStatusLabels[cred.status]}
-                      </span>
-                    </td>
-                    <td className="text-right">
-                      <div className="table-actions">
-                        <button
-                          type="button"
-                          className="btn-secondary btn-xs"
-                          onClick={() => onOpenCredentialDetail(cred.id)}
-                        >
-                          Phôi & QR
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-secondary btn-xs"
-                          onClick={() => onSelectCredentialForVerify(cred)}
-                        >
-                          Kiểm định
-                        </button>
-                        <button
-                          type="button"
-                          className="btn-secondary btn-xs"
-                          onClick={() => {
-                            const pkg = buildCredentialPackage(state, cred.id);
-                            if (pkg) downloadCredentialPackageJson(cred.code, pkg);
-                          }}
-                        >
-                          Tải .json
-                        </button>
-                        {cred.status === "ISSUED" && (
-                          <>
-                            <button
-                              type="button"
-                              className="btn-secondary btn-xs"
-                              onClick={() => onOpenReissueModal(cred)}
-                            >
-                              Cấp lại
-                            </button>
-                            <button
-                              type="button"
-                              className="btn-danger-outline btn-xs"
-                              onClick={() => onOpenRevokeModal(cred)}
-                            >
-                              Thu hồi
-                            </button>
-                          </>
-                        )}
+                {filteredCredentials.length === 0 ? (
+                  <tr>
+                    <td colSpan={7}>
+                      <div className="empty-state-cell">
+                        <strong>Chưa có chứng chỉ nào phù hợp trong sổ đăng ký của đơn vị.</strong>
                       </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  filteredCredentials.map((cred) => (
+                    <tr key={cred.id}>
+                      <td>
+                        <code className="code-strong">{cred.code}</code>
+                        {cred.reissuedFromId && (
+                          <div className="cell-sub">Cấp lại từ bản cũ</div>
+                        )}
+                      </td>
+                      <td>
+                        <strong>{cred.holder}</strong>
+                        <div className="cell-sub">{cred.subjectRef}</div>
+                      </td>
+                      <td>
+                        <span>{cred.course}</span>
+                        <div className="cell-sub">{cred.courseCode}</div>
+                      </td>
+                      <td>
+                        <strong>{cred.score}</strong>
+                        <div className="cell-sub">{formatDateTime(cred.issuedAt)}</div>
+                      </td>
+                      <td>
+                        <code>{shortHash(cred.merkleRoot, 8, 6)}</code>
+                        <div className="cell-sub">Batch: {cred.batchId}</div>
+                      </td>
+                      <td>
+                        <span
+                          className={`status-pill ${
+                            cred.status === "ISSUED"
+                              ? "tone-valid"
+                              : cred.status === "REVOKED"
+                                ? "tone-danger"
+                                : "tone-warn"
+                          }`}
+                        >
+                          {credentialStatusLabels[cred.status]}
+                        </span>
+                      </td>
+                      <td className="text-right">
+                        <div className="table-actions">
+                          <button
+                            type="button"
+                            className="btn-secondary btn-xs"
+                            onClick={() => onOpenCredentialDetail(cred.id)}
+                          >
+                            Phôi & QR
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-secondary btn-xs"
+                            onClick={() => onSelectCredentialForVerify(cred)}
+                          >
+                            Kiểm định
+                          </button>
+                          <button
+                            type="button"
+                            className="btn-secondary btn-xs"
+                            onClick={() => {
+                              const pkg = buildCredentialPackage(state, cred.id);
+                              if (pkg) downloadCredentialPackageJson(cred.code, pkg);
+                            }}
+                          >
+                            Tải .json
+                          </button>
+                          {cred.status === "ISSUED" && (
+                            <>
+                              <button
+                                type="button"
+                                className="btn-secondary btn-xs"
+                                onClick={() => onOpenReissueModal(cred)}
+                              >
+                                Cấp lại
+                              </button>
+                              <button
+                                type="button"
+                                className="btn-danger-outline btn-xs"
+                                onClick={() => onOpenRevokeModal(cred)}
+                              >
+                                Thu hồi
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -3646,27 +3725,58 @@ function IssuerPortal({
               </div>
             </div>
 
-            <form className="inline-create-form" onSubmit={handleCreateCourse}>
-              <input
-                value={courseCode}
-                onChange={(event) => setCourseCode(event.target.value)}
-                placeholder="Mã khóa (VD: AI-401)"
-                required
-              />
-              <input
-                value={courseTitle}
-                onChange={(event) => setCourseTitle(event.target.value)}
-                placeholder="Tên chương trình đào tạo"
-                required
-              />
-              <input
-                type="number"
-                min={1}
-                value={courseHours}
-                onChange={(event) => setCourseHours(event.target.value)}
-                placeholder="Số giờ"
-                required
-              />
+            <form className="compact-form" onSubmit={handleCreateCourse}>
+              <div className="form-grid-2">
+                <label className="form-field">
+                  <span>Mã khóa học</span>
+                  <input
+                    value={courseCode}
+                    onChange={(event) => setCourseCode(event.target.value)}
+                    placeholder="Nhập mã khóa học..."
+                    required
+                  />
+                </label>
+                <label className="form-field">
+                  <span>Phiên bản chương trình</span>
+                  <input
+                    value={courseVersion}
+                    onChange={(event) => setCourseVersion(event.target.value)}
+                    placeholder="Nhập phiên bản (VD: v1.0)..."
+                    required
+                  />
+                </label>
+              </div>
+              <label className="form-field">
+                <span>Tên chương trình đào tạo</span>
+                <input
+                  value={courseTitle}
+                  onChange={(event) => setCourseTitle(event.target.value)}
+                  placeholder="Nhập tên chương trình đào tạo..."
+                  required
+                />
+              </label>
+              <div className="form-grid-2">
+                <label className="form-field">
+                  <span>Thời lượng (giờ)</span>
+                  <input
+                    type="number"
+                    min={1}
+                    value={courseHours}
+                    onChange={(event) => setCourseHours(event.target.value)}
+                    placeholder="Nhập số giờ đào tạo..."
+                    required
+                  />
+                </label>
+                <label className="form-field">
+                  <span>Quy tắc xét hoàn thành</span>
+                  <input
+                    value={courseGradingRule}
+                    onChange={(event) => setCourseGradingRule(event.target.value)}
+                    placeholder="Nhập điều kiện xét đạt..."
+                    required
+                  />
+                </label>
+              </div>
               <button type="submit" className="btn-primary">
                 + Thêm Khóa học
               </button>
@@ -3681,18 +3791,29 @@ function IssuerPortal({
                 </tr>
               </thead>
               <tbody>
-                {orgCourses.map((course) => (
-                  <tr key={course.id}>
-                    <td>
-                      <code>{course.code}</code>
+                {orgCourses.length === 0 ? (
+                  <tr>
+                    <td colSpan={3}>
+                      <div className="empty-state-cell">
+                        <strong>Chưa có khóa học nào.</strong>
+                      </div>
                     </td>
-                    <td>
-                      <strong>{course.name}</strong>
-                      <div className="cell-sub">{course.gradingRule}</div>
-                    </td>
-                    <td>{course.durationHours} giờ</td>
                   </tr>
-                ))}
+                ) : (
+                  orgCourses.map((course) => (
+                    <tr key={course.id}>
+                      <td>
+                        <code>{course.code}</code>
+                        <div className="cell-sub">{course.version}</div>
+                      </td>
+                      <td>
+                        <strong>{course.name}</strong>
+                        <div className="cell-sub">{course.gradingRule}</div>
+                      </td>
+                      <td>{course.durationHours} giờ</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -3705,25 +3826,36 @@ function IssuerPortal({
               </div>
             </div>
 
-            <form className="inline-create-form" onSubmit={handleCreateLearner}>
-              <input
-                value={learnerCode}
-                onChange={(event) => setLearnerCode(event.target.value)}
-                placeholder="Mã HV (VD: SV-2026-109)"
-                required
-              />
-              <input
-                value={learnerName}
-                onChange={(event) => setLearnerName(event.target.value)}
-                placeholder="Họ và tên học viên"
-                required
-              />
-              <input
-                value={learnerCohort}
-                onChange={(event) => setLearnerCohort(event.target.value)}
-                placeholder="Khóa/Lớp"
-                required
-              />
+            <form className="compact-form" onSubmit={handleCreateLearner}>
+              <div className="form-grid-2">
+                <label className="form-field">
+                  <span>Mã định danh học viên</span>
+                  <input
+                    value={learnerCode}
+                    onChange={(event) => setLearnerCode(event.target.value)}
+                    placeholder="Nhập mã học viên..."
+                    required
+                  />
+                </label>
+                <label className="form-field">
+                  <span>Khóa / Lớp</span>
+                  <input
+                    value={learnerCohort}
+                    onChange={(event) => setLearnerCohort(event.target.value)}
+                    placeholder="Nhập khóa/lớp..."
+                    required
+                  />
+                </label>
+              </div>
+              <label className="form-field">
+                <span>Họ và tên học viên</span>
+                <input
+                  value={learnerName}
+                  onChange={(event) => setLearnerName(event.target.value)}
+                  placeholder="Nhập họ và tên học viên..."
+                  required
+                />
+              </label>
               <button type="submit" className="btn-primary">
                 + Thêm Học viên
               </button>
@@ -3738,17 +3870,27 @@ function IssuerPortal({
                 </tr>
               </thead>
               <tbody>
-                {orgLearners.map((learner) => (
-                  <tr key={learner.id}>
-                    <td>
-                      <code>{learner.subjectRef}</code>
+                {orgLearners.length === 0 ? (
+                  <tr>
+                    <td colSpan={3}>
+                      <div className="empty-state-cell">
+                        <strong>Chưa có hồ sơ học viên nào.</strong>
+                      </div>
                     </td>
-                    <td>
-                      <strong>{learner.displayName}</strong>
-                    </td>
-                    <td>{learner.cohort}</td>
                   </tr>
-                ))}
+                ) : (
+                  orgLearners.map((learner) => (
+                    <tr key={learner.id}>
+                      <td>
+                        <code>{learner.subjectRef}</code>
+                      </td>
+                      <td>
+                        <strong>{learner.displayName}</strong>
+                      </td>
+                      <td>{learner.cohort}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -3766,7 +3908,7 @@ interface SystemAdminPortalProps {
   state: AppState;
   role: UserRole;
   onSwitchRole: () => void;
-  onStateChange: (next: AppState) => void;
+  onStateChange: (next: AppState, createdOrgId?: string) => void;
   onNotify: (tone: NoticeBanner["tone"], message: string) => void;
 }
 
@@ -3782,7 +3924,7 @@ function SystemAdminPortal({
   const [orgDisplayName, setOrgDisplayName] = useState<string>("");
   const [orgVerificationRef, setOrgVerificationRef] = useState<string>("");
 
-  const [walletOrgId, setWalletOrgId] = useState<string>(state.organizations[0]?.id ?? "");
+  const [walletOrgId, setWalletOrgId] = useState<string>("");
   const [walletAddress, setWalletAddress] = useState<string>("");
 
   function handleRegisterOrg(event: FormEvent) {
@@ -3797,7 +3939,7 @@ function SystemAdminPortal({
       onNotify("danger", res.error);
       return;
     }
-    onStateChange(res.state);
+    onStateChange(res.state, res.organization?.id);
     setOrgCode("");
     setOrgLegalName("");
     setOrgDisplayName("");
@@ -3810,8 +3952,9 @@ function SystemAdminPortal({
 
   function handleAuthorizeWallet(event: FormEvent) {
     event.preventDefault();
+    const targetOrgId = walletOrgId || state.organizations[0]?.id || "";
     const res = authorizeOrganizationWallet(state, {
-      organizationId: walletOrgId,
+      organizationId: targetOrgId,
       chainId: 31337,
       address: walletAddress,
     });
@@ -3862,90 +4005,101 @@ function SystemAdminPortal({
                 </tr>
               </thead>
               <tbody>
-                {state.organizations.map((org) => {
-                  const activeWallet = state.wallets.find(
-                    (w) => w.organizationId === org.id && w.status === "AUTHORIZED",
-                  );
-                  return (
-                    <tr key={org.id}>
-                      <td>
-                        <code className="code-strong">{org.code}</code>
-                      </td>
-                      <td>
-                        <strong>{org.displayName}</strong>
-                        <div className="cell-sub">
-                          {org.legalName} · Hồ sơ: {org.verificationRef}
-                        </div>
-                      </td>
-                      <td>
-                        {activeWallet ? (
-                          <>
-                            <code>{shortHash(activeWallet.address, 10, 8)}</code>
-                            <div className="cell-sub">Chain ID {activeWallet.chainId}</div>
-                          </>
-                        ) : (
-                          <span className="cell-sub">Chưa cấp phép ví AUTHORIZED</span>
-                        )}
-                      </td>
-                      <td>
-                        <span
-                          className={`status-pill ${
-                            org.status === "ACTIVE"
-                              ? "tone-valid"
-                              : org.status === "PENDING"
-                                ? "tone-warn"
-                                : "tone-danger"
-                          }`}
-                        >
-                          {organizationStatusLabels[org.status]}
-                        </span>
-                      </td>
-                      <td className="text-right">
-                        <div className="table-actions">
-                          {org.status !== "ACTIVE" && (
-                            <button
-                              type="button"
-                              className="btn-secondary btn-xs"
-                              onClick={() => {
-                                const res = updateOrganizationStatus(state, {
-                                  organizationId: org.id,
-                                  nextStatus: "ACTIVE",
-                                });
-                                if (!res.error) {
-                                  onStateChange(res.state);
-                                  onNotify("success", `Đã kích hoạt tổ chức ${org.code}.`);
-                                }
-                              }}
-                            >
-                              Kích hoạt (ACTIVE)
-                            </button>
+                {state.organizations.length === 0 ? (
+                  <tr>
+                    <td colSpan={5}>
+                      <div className="empty-state-cell">
+                        <strong>Chưa có tổ chức đào tạo nào trong hệ thống.</strong>
+                        <span>Hãy điền biểu mẫu bên phải để đăng ký tổ chức đầu tiên.</span>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  state.organizations.map((org) => {
+                    const activeWallet = state.wallets.find(
+                      (w) => w.organizationId === org.id && w.status === "AUTHORIZED",
+                    );
+                    return (
+                      <tr key={org.id}>
+                        <td>
+                          <code className="code-strong">{org.code}</code>
+                        </td>
+                        <td>
+                          <strong>{org.displayName}</strong>
+                          <div className="cell-sub">
+                            {org.legalName} · Hồ sơ: {org.verificationRef}
+                          </div>
+                        </td>
+                        <td>
+                          {activeWallet ? (
+                            <>
+                              <code>{shortHash(activeWallet.address, 10, 8)}</code>
+                              <div className="cell-sub">Chain ID {activeWallet.chainId}</div>
+                            </>
+                          ) : (
+                            <span className="cell-sub">Chưa cấp phép ví AUTHORIZED</span>
                           )}
-                          {org.status === "ACTIVE" && (
-                            <button
-                              type="button"
-                              className="btn-danger-outline btn-xs"
-                              onClick={() => {
-                                const res = updateOrganizationStatus(state, {
-                                  organizationId: org.id,
-                                  nextStatus: "SUSPENDED",
-                                });
-                                if (!res.error) {
-                                  onStateChange(res.state);
-                                  onNotify(
-                                    "warning",
-                                    `Đã tạm ngưng quyền phát hành của ${org.code}.`,
-                                  );
-                                }
-                              }}
-                            >
-                              Tạm ngưng
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                        <td>
+                          <span
+                            className={`status-pill ${
+                              org.status === "ACTIVE"
+                                ? "tone-valid"
+                                : org.status === "PENDING"
+                                  ? "tone-warn"
+                                  : "tone-danger"
+                            }`}
+                          >
+                            {organizationStatusLabels[org.status]}
+                          </span>
+                        </td>
+                        <td className="text-right">
+                          <div className="table-actions">
+                            {org.status !== "ACTIVE" && (
+                              <button
+                                type="button"
+                                className="btn-secondary btn-xs"
+                                onClick={() => {
+                                  const res = updateOrganizationStatus(state, {
+                                    organizationId: org.id,
+                                    nextStatus: "ACTIVE",
+                                  });
+                                  if (!res.error) {
+                                    onStateChange(res.state);
+                                    onNotify("success", `Đã kích hoạt tổ chức ${org.code}.`);
+                                  }
+                                }}
+                              >
+                                Kích hoạt (ACTIVE)
+                              </button>
+                            )}
+                            {org.status === "ACTIVE" && (
+                              <button
+                                type="button"
+                                className="btn-danger-outline btn-xs"
+                                onClick={() => {
+                                  const res = updateOrganizationStatus(state, {
+                                    organizationId: org.id,
+                                    nextStatus: "SUSPENDED",
+                                  });
+                                  if (!res.error) {
+                                    onStateChange(res.state);
+                                    onNotify(
+                                      "warning",
+                                      `Đã tạm ngưng quyền phát hành của ${org.code}.`,
+                                    );
+                                  }
+                                }}
+                              >
+                                Tạm ngưng
+                              </button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -3962,7 +4116,7 @@ function SystemAdminPortal({
                 <input
                   value={orgCode}
                   onChange={(event) => setOrgCode(event.target.value)}
-                  placeholder="VD: FPTPOLY"
+                  placeholder="Nhập mã đơn vị..."
                   required
                 />
               </label>
@@ -3971,7 +4125,7 @@ function SystemAdminPortal({
                 <input
                   value={orgVerificationRef}
                   onChange={(event) => setOrgVerificationRef(event.target.value)}
-                  placeholder="QD-BGD-2026-0999"
+                  placeholder="Nhập mã hồ sơ pháp lý..."
                   required
                 />
               </label>
@@ -3982,7 +4136,7 @@ function SystemAdminPortal({
               <input
                 value={orgDisplayName}
                 onChange={(event) => setOrgDisplayName(event.target.value)}
-                placeholder="VD: Viện Đào tạo Công nghệ FPT"
+                placeholder="Nhập tên hiển thị..."
                 required
               />
             </label>
@@ -3992,7 +4146,7 @@ function SystemAdminPortal({
               <input
                 value={orgLegalName}
                 onChange={(event) => setOrgLegalName(event.target.value)}
-                placeholder="VD: Trường Cao đẳng Thực hành FPT Polytechnic"
+                placeholder="Nhập tên pháp nhân đầy đủ..."
                 required
               />
             </label>
@@ -4009,14 +4163,19 @@ function SystemAdminPortal({
             <label className="form-field">
               <span>Chọn tổ chức đào tạo</span>
               <select
-                value={walletOrgId}
+                value={walletOrgId || state.organizations[0]?.id || ""}
                 onChange={(event) => setWalletOrgId(event.target.value)}
+                disabled={state.organizations.length === 0}
               >
-                {state.organizations.map((org) => (
-                  <option key={org.id} value={org.id}>
-                    {org.code} — {org.displayName}
-                  </option>
-                ))}
+                {state.organizations.length === 0 ? (
+                  <option value="">Chưa có tổ chức đào tạo</option>
+                ) : (
+                  state.organizations.map((org) => (
+                    <option key={org.id} value={org.id}>
+                      {org.code} — {org.displayName}
+                    </option>
+                  ))
+                )}
               </select>
             </label>
 
@@ -4025,12 +4184,16 @@ function SystemAdminPortal({
               <input
                 value={walletAddress}
                 onChange={(event) => setWalletAddress(event.target.value)}
-                placeholder="0x90F79bf6EB2c4f870365E785982E1f101E93b906"
+                placeholder="0x..."
                 required
               />
             </label>
 
-            <button type="submit" className="btn-primary full-width">
+            <button
+              type="submit"
+              className="btn-primary full-width"
+              disabled={state.organizations.length === 0}
+            >
               Ủy quyền Địa chỉ Ví EVM
             </button>
           </form>
@@ -4089,29 +4252,39 @@ function AuditTrailPortal({ state }: { state: AppState }) {
               </tr>
             </thead>
             <tbody>
-              {filteredEvents.map((ev) => (
-                <tr key={ev.id}>
-                  <td>
-                    <code>{ev.time}</code>
-                  </td>
-                  <td>
-                    <span className="status-pill tone-info">{ev.aggregateType}</span>
-                  </td>
-                  <td>
-                    <strong>{ev.action}</strong>
-                  </td>
-                  <td>
-                    <span>{ev.actorName}</span>
-                    <div className="cell-sub">{roleLabels[ev.actorRole]}</div>
-                  </td>
-                  <td>
-                    <span>{ev.detail}</span>
-                    <div className="cell-sub">
-                      Correlation ID: <code>{ev.correlationId}</code>
+              {filteredEvents.length === 0 ? (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="empty-state-cell">
+                      <strong>Chưa có sự kiện kiểm toán nào được ghi nhận.</strong>
                     </div>
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredEvents.map((ev) => (
+                  <tr key={ev.id}>
+                    <td>
+                      <code>{ev.time}</code>
+                    </td>
+                    <td>
+                      <span className="status-pill tone-info">{ev.aggregateType}</span>
+                    </td>
+                    <td>
+                      <strong>{ev.action}</strong>
+                    </td>
+                    <td>
+                      <span>{ev.actorName}</span>
+                      <div className="cell-sub">{roleLabels[ev.actorRole]}</div>
+                    </td>
+                    <td>
+                      <span>{ev.detail}</span>
+                      <div className="cell-sub">
+                        Correlation ID: <code>{ev.correlationId}</code>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
