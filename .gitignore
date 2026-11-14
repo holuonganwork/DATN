@@ -1,1 +1,46 @@
+# Internal agent harness & workspace-root tooling
 /harness
+/package.json
+/package-lock.json
+
+# Dependencies & virtual environments
+node_modules/
+.pnp
+.pnp.js
+.venv/
+venv/
+ENV/
+
+# Build, cache & coverage outputs
+dist/
+dist-ssr/
+build/
+out/
+coverage/
+.nyc_output/
+.turbo/
+.vite/
+*.tsbuildinfo
+
+# Environment variables, secrets & cryptographic keys
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*secret*
+*private-key*
+
+# Logs & OS / editor files
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
