@@ -1,0 +1,268 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  SYSTEM_ADMIN
+  ISSUER_OPERATOR
+  ISSUER_APPROVER
+  AUDITOR
+}
+
+enum UserStatus {
+  ACTIVE
+  LOCKED
+}
+
+enum OrganizationStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REVOKED
+}
+
+enum CourseStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum BatchStatus {
+  DRAFT
+  VALIDATED
+  APPROVED
+  FROZEN
+  PENDING_CHAIN
+  CONFIRMED
+  FAILED
+}
+
+enum EntryValidationStatus {
+  PENDING
+  VALID
+  INVALID
+}
+
+enum CredentialStatus {
+  PREPARED
+  ISSUED
+  REVOKED
+  SUPERSEDED
+}
+
+model Organization {
+  id              String             @id
+  code            String             @unique
+  legalName       String             @map("legal_name")
+  displayName     String             @map("display_name")
+  verificationRef String?            @map("verification_ref")
+  status          OrganizationStatus @default(PENDING)
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  users       User[]
+  courses     Course[]
+  learners    Learner[]
+  batches     Batch[]
+  credentials Credential[]
+  auditLogs   AuditLog[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             String     @id
+  organizationId String?    @map("organization_id")
+  email          String     @unique
+  passwordHash   String     @map("password_hash")
+  displayName    String     @map("display_name")
+  role           Role
+  status         UserStatus @default(ACTIVE)
+  lastSeenAt     DateTime?  @map("last_seen_at")
+  createdAt      DateTime   @default(now()) @map("created_at")
+  updatedAt      DateTime   @updatedAt @map("updated_at")
+
+  organization    Organization? @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  createdBatches  Batch[]       @relation("BatchCreatedBy")
+  approvedBatches Batch[]       @relation("BatchApprovedBy")
+  auditLogs       AuditLog[]
+
+  @@index([organizationId])
+  @@map("users")
+}
+
+model Course {
+  id             String       @id
+  organizationId String       @map("organization_id")
+  code           String
+  name           String
+  version        String
+  durationHours  Int          @map("duration_hours")
+  gradingRule    String       @map("grading_rule")
+  description    String?
+  status         CourseStatus @default(ACTIVE)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  batches      Batch[]
+
+  @@unique([organizationId, code, version])
+  @@index([organizationId, status])
+  @@map("courses")
+}
+
+model Learner {
+  id             String   @id
+  organizationId String   @map("organization_id")
+  subjectRef     String   @map("subject_ref")
+  displayName    String   @map("display_name")
+  cohort         String?
+  contactRef     String?  @map("contact_ref")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  batchEntries BatchEntry[]
+  credentials  Credential[]
+
+  @@unique([organizationId, subjectRef])
+  @@index([organizationId])
+  @@map("learners")
+}
+
+model Batch {
+  id                    String      @id
+  code                  String      @unique
+  organizationId        String      @map("organization_id")
+  courseId              String      @map("course_id")
+  title                 String
+  status                BatchStatus @default(DRAFT)
+  entryCount            Int         @default(0) @map("entry_count")
+  merkleRoot            String?     @map("merkle_root")
+  inputDigest           String?     @map("input_digest")
+  anchorChainId         Int         @map("anchor_chain_id")
+  anchorRegistryAddress String      @map("anchor_registry_address")
+  issuanceRef           String?     @map("issuance_ref")
+  failureCode           String?     @map("failure_code")
+  createdById           String      @map("created_by_id")
+  approvedById          String?     @map("approved_by_id")
+  frozenAt              DateTime?   @map("frozen_at")
+  confirmedAt           DateTime?   @map("confirmed_at")
+  reissueOfCredentialId String?     @map("reissue_of_credential_id")
+  createdAt             DateTime    @default(now()) @map("created_at")
+  updatedAt             DateTime    @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  course       Course       @relation(fields: [courseId], references: [id], onDelete: Restrict)
+  createdBy    User         @relation("BatchCreatedBy", fields: [createdById], references: [id], onDelete: Restrict)
+  approvedBy   User?        @relation("BatchApprovedBy", fields: [approvedById], references: [id], onDelete: Restrict)
+  entries      BatchEntry[]
+  credentials  Credential[]
+
+  @@index([organizationId, status])
+  @@map("batches")
+}
+
+model BatchEntry {
+  id                 String                @id
+  batchId            String                @map("batch_id")
+  learnerId          String                @map("learner_id")
+  credentialId       String                @unique @map("credential_id")
+  subjectRefSnapshot String                @map("subject_ref_snapshot")
+  holderNameSnapshot String                @map("holder_name_snapshot")
+  courseNameSnapshot String                @map("course_name_snapshot")
+  result             String
+  issuedAt           DateTime              @map("issued_at")
+  expiresAt          DateTime?             @map("expires_at")
+  nonce              String
+  pdfFileName        String?               @map("pdf_file_name")
+  pdfSha256          String?               @map("pdf_sha256")
+  validationStatus   EntryValidationStatus @default(PENDING) @map("validation_status")
+  validationErrors   Json                  @map("validation_errors")
+  payloadJson        Json?                 @map("payload_json")
+  payloadDigest      String?               @map("payload_digest")
+  leaf               String?
+  proofJson          Json?                 @map("proof_json")
+  createdAt          DateTime              @default(now()) @map("created_at")
+  updatedAt          DateTime              @updatedAt @map("updated_at")
+
+  batch      Batch       @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  learner    Learner     @relation(fields: [learnerId], references: [id], onDelete: Restrict)
+  credential Credential?
+
+  @@unique([batchId, learnerId])
+  @@index([batchId])
+  @@map("batch_entries")
+}
+
+model Credential {
+  id               String           @id
+  code             String           @unique
+  organizationId   String           @map("organization_id")
+  batchId          String           @map("batch_id")
+  batchEntryId     String           @unique @map("batch_entry_id")
+  learnerId        String           @map("learner_id")
+  status           CredentialStatus @default(PREPARED)
+  payloadDigest    String           @map("payload_digest")
+  leaf             String
+  pdfSha256        String?          @map("pdf_sha256")
+  issuedAt         DateTime         @map("issued_at")
+  expiresAt        DateTime?        @map("expires_at")
+  revokedAt        DateTime?        @map("revoked_at")
+  revocationReason String?          @map("revocation_reason")
+  reissuedFromId   String?          @unique @map("reissued_from_id")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Restrict)
+  batch        Batch        @relation(fields: [batchId], references: [id], onDelete: Restrict)
+  batchEntry   BatchEntry   @relation(fields: [batchEntryId], references: [id], onDelete: Restrict)
+  learner      Learner      @relation(fields: [learnerId], references: [id], onDelete: Restrict)
+  reissuedFrom Credential?  @relation("CredentialReissue", fields: [reissuedFromId], references: [id], onDelete: SetNull)
+  reissuedTo   Credential?  @relation("CredentialReissue")
+
+  @@unique([batchId, leaf])
+  @@index([organizationId, status])
+  @@index([batchId])
+  @@map("credentials")
+}
+
+model IdempotencyRecord {
+  id           String   @id
+  scope        String
+  key          String
+  requestHash  String   @map("request_hash")
+  statusCode   Int      @map("status_code")
+  responseJson Json     @map("response_json")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@unique([scope, key])
+  @@map("idempotency_records")
+}
+
+model AuditLog {
+  id               String   @id
+  actorUserId      String?  @map("actor_user_id")
+  actorRole        Role?    @map("actor_role")
+  actorName        String?  @map("actor_name")
+  organizationId   String?  @map("organization_id")
+  action           String
+  aggregateType    String   @map("aggregate_type")
+  aggregateId      String   @map("aggregate_id")
+  correlationId    String   @map("correlation_id")
+  detail           String
+  metadataRedacted Json     @map("metadata_redacted")
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  actorUser    User?         @relation(fields: [actorUserId], references: [id], onDelete: SetNull)
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([aggregateType, aggregateId])
+  @@map("audit_logs")
+}
