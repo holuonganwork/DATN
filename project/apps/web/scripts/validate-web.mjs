@@ -65,6 +65,8 @@ const requiredMarkers = [
   "reissueCredential",
   "authorizeOrganizationWallet",
   "buildMerkleTree",
+  "toast-popup-viewport",
+  "toast-popup-card",
   "STORAGE_KEY",
   "certchain.product.state.v2",
 ];

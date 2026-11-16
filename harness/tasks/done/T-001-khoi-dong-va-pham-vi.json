@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "id": "T-001",
+  "title": "Khởi động, phạm vi và tiêu chí chấp nhận",
+  "status": "done",
+  "priority": "high",
+  "objective": "Biến ý tưởng trong project/docs/requirements.md thành phạm vi có thể kiểm chứng trong 10 tuần.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [],
+  "preconditions": [
+    "Đã chốt mục tiêu và phạm vi MVP."
+  ],
+  "implementation_notes": [
+    "Xác định vấn đề, tác nhân, use case, giới hạn MVP và các kịch bản demo. Giai đoạn này giúp tránh mở rộng sang W3C Verifiable Credentials, mobile wallet, zero-knowledge hoặc nhiều blockchain."
+  ],
+  "checklist": [
+    "Viết use case cho đăng ký issuer và ủy quyền ví.",
+    "Viết use case nhập, duyệt, đóng băng và phát hành batch.",
+    "Viết use case tải gói JSON/PDF và xác minh.",
+    "Viết use case thu hồi và cấp lại bằng mã mới.",
+    "Ghi rõ những gì blockchain chứng minh và không chứng minh.",
+    "Chốt chain ID, registry address và RPC tin cậy trong cấu hình.",
+    "Chốt kịch bản demo 1.000 chứng chỉ.",
+    "Chốt các kịch bản lỗi bắt buộc.",
+    "Tạo danh sách rủi ro và phương án giảm rủi ro."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Một người khác có thể đọc tài liệu và trả lời được: ai sử dụng hệ thống, phát hành thế nào, xác minh thế nào, blockchain lưu gì, và trường hợp nào bị trả về 'Chưa thể xác minh đầy đủ'.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "task-schema",
+      "command": "node harness/runner/harness.mjs validate-task harness/tasks/done/T-001-khoi-dong-va-pham-vi.json --json"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Đặc tả use case.",
+    "Danh sách yêu cầu chức năng và phi chức năng.",
+    "Danh sách MVP và hướng phát triển.",
+    "Bộ kịch bản chấp nhận cho demo.",
+    "Quyết định công nghệ ban đầu."
+  ],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/01-khoi-dong-va-pham-vi.md",
+  "manual_validation_required": false,
+  "duration": "Tuần 1",
+  "completed_at": "2026-11-11T18:37:38.847Z"
+}

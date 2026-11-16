@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "run_id": "20261111182426-ccc7d681",
+  "task_id": "T-001",
+  "task_file": "harness/tasks/done/T-001-khoi-dong-va-pham-vi.json",
+  "status": "passed",
+  "phase": "finalize",
+  "created_at": "2026-11-11T18:24:26.378Z",
+  "updated_at": "2026-11-11T18:37:38.849Z",
+  "cwd": "F:\\DATN",
+  "hostname": "meowmeow",
+  "node_version": "v22.12.0",
+  "repo_root": "F:\\DATN",
+  "event_log": "harness/runtime/runs/20261111182426-ccc7d681/events.jsonl",
+  "summary_file": "harness/runtime/runs/20261111182426-ccc7d681/summary.json",
+  "last_sequence": 35,
+  "git_before": {
+    "head": "ad9c0a648addb06b7f9d279faba39c6a10403b09",
+    "changed_files": [
+      "AGENTS.md",
+      "project/AGENTS.md",
+      "project/docs/quality-gates.md"
+    ]
+  },
+  "workspace_before": {
+    "project/.env.example": "0:1794165290112.21",
+    "project/.gitignore": "0:1794245526813.0554",
+    "project/AGENTS.md": "1284:1794362147969.9348",
+    "project/docs/De_tai_02.pptx": "21097550:1793441593792.1907",
+    "project/docs/De_tai_02_Bao_cao_hoan_chinh.pptx": "19496612:1793391476538.6414",
+    "project/docs/quality-gates.md": "1521:1794362146483.6733",
+    "project/docs/requirements.md": "17133:1794167326817.1204",
+    "project/package.json": "0:1794165290112.21",
+    "project/README.md": "292:1794167355267.592",
+    "harness/state/active-task.json": "83:1794417209251.5037",
+    "harness/state/project-state.json": "123:1794417209252.5056",
+    "harness/evidence/README.md": "630:1794251212417.28",
+    "harness/evidence/task-reports/T-012-20261109191200-c1bb195f.md": "1471:1794251567174.4048",
+    "harness/evidence/task-reports/T-012-20261109191403-78e81f20.md": "1521:1794251671099.881",
+    "harness/evidence/task-reports/T-012-20261109191604-a7aed15d.md": "1518:1794251836595.1416",
+    "harness/evidence/task-reports/T-012-20261109191813-2e67429f.md": "1545:1794251921077.135",
+    "harness/evidence/task-reports/T-012-20261109192052-78f6f9bd.md": "1566:1794252079147.3262",
+    "harness/evidence/task-reports/T-013-20261111015739-c5a33bd7.md": "1377:1794363066584.729",
+    "harness/evidence/task-reports/T-013-20261111022414-87924690.md": "625:1794363980235.3281",
+    "harness/evidence/task-reports/T-014-20261111171146-3d6868c2.md": "973:1794417193888.0615",
+    "harness/evidence/validation/T-012-20261109191200-c1bb195f.json": "831:1794251569094.3596",
+    "harness/evidence/validation/T-012-20261109191403-78e81f20.json": "558:1794251672927.1584",
+    "harness/evidence/validation/T-012-20261109191604-a7aed15d.json": "558:1794251838493.0461",
+    "harness/evidence/validation/T-012-20261109191813-2e67429f.json": "558:1794251923104.1997",
+    "harness/evidence/validation/T-012-20261109192052-78f6f9bd.json": "558:1794252080635.4348",
+    "harness/evidence/validation/T-013-20261111015739-c5a33bd7.json": "518:1794363068838.919",
+    "harness/evidence/validation/T-013-20261111022414-87924690.json": "393:1794363982493.462",
+    "harness/evidence/validation/T-014-20261111171146-3d6868c2.json": "429:1794417196344.765"
+  },
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "diff-check",
+        "command": "git diff --check",
+        "started_at": "2026-11-11T18:37:38.210Z",
+        "finished_at": "2026-11-11T18:37:38.333Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\n",
+        "stdout_file": "harness/runtime/runs/20261111182426-ccc7d681/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261111182426-ccc7d681/commands/001-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+      "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+      "project/docs/adr/0003-offchain-personal-data.md",
+      "project/docs/api-contract.md",
+      "project/docs/architecture.md",
+      "project/docs/data-model.md",
+      "project/docs/glossary.md",
+      "project/docs/use-cases.md"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+          "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+          "project/docs/adr/0003-offchain-personal-data.md",
+          "project/docs/api-contract.md",
+          "project/docs/architecture.md",
+          "project/docs/data-model.md",
+          "project/docs/glossary.md",
+          "project/docs/use-cases.md"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 26
+      }
+    ]
+  },
+  "completed_at": "2026-11-11T18:37:38.847Z",
+  "files_changed": [
+    "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md",
+    "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+    "harness/evidence/validation/T-001-20261111182426-ccc7d681.json",
+    "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+    "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+    "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+    "project/docs/adr/0003-offchain-personal-data.md",
+    "project/docs/api-contract.md",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md",
+    "project/docs/glossary.md",
+    "project/docs/use-cases.md"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "summary": {
+    "run_id": "20261111182426-ccc7d681",
+    "task_id": "T-001",
+    "status": "passed",
+    "started_at": "2026-11-11T18:24:26.378Z",
+    "completed_at": "2026-11-11T18:37:38.847Z",
+    "phase": "finalize",
+    "files_changed": [
+      "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md",
+      "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+      "harness/evidence/validation/T-001-20261111182426-ccc7d681.json",
+      "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+      "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+      "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+      "project/docs/adr/0003-offchain-personal-data.md",
+      "project/docs/api-contract.md",
+      "project/docs/architecture.md",
+      "project/docs/data-model.md",
+      "project/docs/glossary.md",
+      "project/docs/use-cases.md"
+    ],
+    "internal_files_changed": [
+      "harness/state/active-task.json",
+      "harness/state/project-state.json"
+    ],
+    "execution": {
+      "ok": true,
+      "manual_required": false,
+      "commands": [
+        {
+          "kind": "execution",
+          "index": 0,
+          "attempt": 0,
+          "name": "diff-check",
+          "command": "git diff --check",
+          "started_at": "2026-11-11T18:37:38.210Z",
+          "finished_at": "2026-11-11T18:37:38.333Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\n",
+          "stdout_file": "harness/runtime/runs/20261111182426-ccc7d681/commands/001-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261111182426-ccc7d681/commands/001-execution-0.stderr.log"
+        }
+      ]
+    },
+    "validation": {
+      "ok": true,
+      "manual_required": false,
+      "changed_files": [
+        "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+        "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+        "project/docs/adr/0003-offchain-personal-data.md",
+        "project/docs/api-contract.md",
+        "project/docs/architecture.md",
+        "project/docs/data-model.md",
+        "project/docs/glossary.md",
+        "project/docs/use-cases.md"
+      ],
+      "checks": [
+        {
+          "name": "task_schema",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "scope",
+          "ok": true,
+          "errors": [],
+          "files": [
+            "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+            "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+            "project/docs/adr/0003-offchain-personal-data.md",
+            "project/docs/api-contract.md",
+            "project/docs/architecture.md",
+            "project/docs/data-model.md",
+            "project/docs/glossary.md",
+            "project/docs/use-cases.md"
+          ]
+        },
+        {
+          "name": "secrets",
+          "ok": true,
+          "findings": []
+        },
+        {
+          "name": "quality",
+          "ok": true,
+          "errors": [],
+          "warnings": [],
+          "findings": []
+        },
+        {
+          "name": "commands",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "event_log",
+          "ok": true,
+          "errors": [],
+          "count": 26
+        }
+      ]
+    },
+    "remaining_risks": [],
+    "evidence": {
+      "required": true,
+      "report": "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md",
+      "validation": "harness/evidence/validation/T-001-20261111182426-ccc7d681.json",
+      "missing": []
+    }
+  },
+  "task_marked_done": true
+}

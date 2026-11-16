@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "id": "T-005",
+  "title": "Backend và quy trình phát hành",
+  "status": "ready",
+  "priority": "high",
+  "objective": "Hoàn thiện API nghiệp vụ và phát hành batch từ dữ liệu nhập đến receipt hợp lệ.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-004"
+  ],
+  "preconditions": [
+    "Task T-004 đã hoàn thành hoặc có bằng chứng đủ để tiếp tục."
+  ],
+  "implementation_notes": [
+    "Xây NestJS API, Prisma và các module nghiệp vụ. Backend quản lý dữ liệu và quy trình, còn issuer wallet trực tiếp ký transaction."
+  ],
+  "checklist": [
+    "Tạo NestJS modules và Prisma schema.",
+    "Tạo API tổ chức, khóa học và học viên.",
+    "Tạo API nhập CSV/JSON có giới hạn kích thước.",
+    "Kiểm tra dữ liệu trùng và dữ liệu bắt buộc.",
+    "Tạo batch snapshot khi đóng băng.",
+    "Tích hợp credential-core.",
+    "Tạo API approve/freeze.",
+    "Tạo BlockchainGateway thật và mock gateway.",
+    "Lưu transaction intent và transaction hash.",
+    "Kiểm tra receipt, event và chain metadata.",
+    "Xử lý transaction thất bại hoặc người dùng từ chối ký.",
+    "Đảm bảo retry không tạo batch trùng.",
+    "Tạo API thu hồi với batchId và leaf.",
+    "Ghi audit log cho thao tác quan trọng."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Có thể tạo một batch, freeze, ký bằng ví issuer, chờ receipt, kiểm tra event và lưu trạng thái CONFIRMED. Nếu receipt không hợp lệ, batch không được phân phối.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [],
+  "validation_commands": [],
+  "deliverables": [
+    "Backend API chạy được.",
+    "Migration và seed data.",
+    "OpenAPI hoặc tài liệu endpoint.",
+    "Luồng phát hành batch end-to-end.",
+    "Luồng thu hồi credential."
+  ],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/05-backend-va-quy-trinh-phat-hanh.md",
+  "manual_validation_required": true,
+  "duration": "Tuần 3–5"
+}

@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "id": "T-024",
+  "title": "Chuyển thông báo notice-banner sang Toast Pop-up nổi góc trên phải",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Loại bỏ hai khối thông báo inline .notice-container / .workspace-notice-wrap trong Public Website và Internal Console của project/apps/web, thay bằng một Floating Toast Pop-up duy nhất nổi ở góc trên bên phải (.toast-popup-viewport, .toast-popup-card, z-index: 120), tự động đóng sau 4 giây, tạm dừng đếm ngược + thanh tiến trình khi hover chuột và vẫn có nút Đóng thủ công.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-024-toast-popup-notification.md",
+      "harness/tasks/ready/T-024-toast-popup-notification.json",
+      "harness/tasks/done/T-024-toast-popup-notification.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-019",
+    "T-021"
+  ],
+  "preconditions": [
+    "Giao diện frontend tại project/apps/web đã sạch dữ liệu mẫu (T-021).",
+    "Người dùng đã chốt thiết kế trong pha GRILL: Toast Pop-up nổi góc trên phải, tự đóng sau 4 giây, tạm dừng khi hover chuột và vẫn có nút Đóng."
+  ],
+  "implementation_notes": [
+    "Cập nhật NoticeBanner trong project/apps/web/src/App.tsx bổ sung id: number và state noticeHovered: boolean.",
+    "Thêm useEffect tự động setNotice(null) sau 4000ms khi notice !== null && !noticeHovered.",
+    "Loại bỏ 2 khối notice inline trong Public mode và Console mode, thay bằng một khối .toast-popup-viewport render dùng chung ở cuối .site-root.",
+    "Bổ sung CSS cho .toast-popup-viewport, .toast-popup-card, .toast-popup-head, .toast-popup-message, .toast-popup-progress, .toast-popup-progress.paused và keyframes tương ứng trong project/apps/web/src/styles.css.",
+    "Cập nhật project/apps/web/scripts/validate-web.mjs và harness/context/current-state.md."
+  ],
+  "checklist": [
+    "Cập nhật App.tsx thêm id cho NoticeBanner, timer 4s + pause-on-hover và render Toast Pop-up dùng chung.",
+    "Cập nhật styles.css thêm kiểu dáng Floating Toast Pop-up, animation vào và thanh tiến trình 4s.",
+    "Cập nhật scripts/validate-web.mjs và harness/context/current-state.md.",
+    "Chạy build-web, syntax-check, validate-web, git diff --check và harness doctor."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Không còn render .notice-banner inline dưới header ở cả chế độ Public Website và Internal Console.",
+      "verification": "Kiểm tra project/apps/web/src/App.tsx và npm.cmd run build."
+    },
+    {
+      "id": "AC-2",
+      "description": "Một Toast Pop-up dùng chung (.toast-popup-viewport / .toast-popup-card) nổi ở góc trên phải với z-index: 120, giữ nguyên semantic tone và nút Đóng ✕.",
+      "verification": "Kiểm tra project/apps/web/src/App.tsx, src/styles.css và scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-3",
+      "description": "Toast Pop-up tự động đóng sau 4000ms và tạm dừng cả timer lẫn animation thanh tiến trình khi di chuột vào.",
+      "verification": "Kiểm tra logic useEffect + onMouseEnter/onMouseLeave trong App.tsx và .toast-popup-progress.paused trong styles.css."
+    },
+    {
+      "id": "AC-4",
+      "description": "npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs và git diff --check đều PASS.",
+      "verification": "Chạy toàn bộ validation_commands trong harness."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/src/App.tsx chuyển notice thành Toast Pop-up nổi góc trên phải có auto-dismiss 4s và pause-on-hover.",
+    "project/apps/web/src/styles.css định nghĩa .toast-popup-viewport, .toast-popup-card và animation thanh tiến trình.",
+    "project/apps/web/scripts/validate-web.mjs kiểm tra sự hiện diện của toast-popup-viewport và toast-popup-card.",
+    "harness/context/current-state.md bổ sung ghi chú hoàn thành T-024."
+  ],
+  "out_of_scope": [
+    "Thay đổi nghiệp vụ domain, storage, backend API hoặc smart contract.",
+    "Hàng đợi đa thông báo (multi-toast stack) hoặc notification center lịch sử."
+  ],
+  "risks": [
+    "Trên màn hình mobile hẹp, fixed toast ở góc trên phải cần co giãn theo calc(100vw - 32px) để không tràn viewport."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T13:11:37.237Z"
+}

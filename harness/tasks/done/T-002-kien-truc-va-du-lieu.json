@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "T-002",
+  "title": "Kiến trúc, dữ liệu và trạng thái nghiệp vụ",
+  "status": "done",
+  "priority": "high",
+  "objective": "Thiết kế modular monolith và các hợp đồng dữ liệu để có thể phát triển blockchain sau mà không phải viết lại hệ thống.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001"
+  ],
+  "preconditions": [
+    "Task T-001 đã hoàn thành hoặc có bằng chứng đủ để tiếp tục."
+  ],
+  "implementation_notes": [
+    "Thiết kế các module web, API, worker, cơ sở dữ liệu và object storage. Phần blockchain được che sau một interface để giai đoạn đầu có thể dùng mock adapter."
+  ],
+  "checklist": [
+    "Vẽ sơ đồ module và luồng dữ liệu.",
+    "Thiết kế schema cho issuer, wallet, course, learner, batch và credential.",
+    "Thiết kế quan hệ giữa credential, leaf, batch và PDF.",
+    "Thiết kế audit log và quyền truy cập.",
+    "Thiết kế trạng thái batch và transaction.",
+    "Tạo migration PostgreSQL ban đầu.",
+    "Tách dữ liệu on-chain và off-chain.",
+    "Tạo interface BlockchainGateway.",
+    "Tạo mock BlockchainGateway cho phát triển sớm.",
+    "Thiết kế cấu hình tin cậy gồm chain ID, contract address và RPC.",
+    "Quy định idempotency key cho các thao tác phát hành/thu hồi."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Có thể chạy backend với database rỗng, tạo một batch nháp và chuyển trạng thái qua các bước mà chưa cần smart contract thật. Khi thay mock bằng EVM adapter, API không phải thay đổi.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "task-schema",
+      "command": "node harness/runner/harness.mjs validate-task harness/tasks/ready/T-002-kien-truc-va-du-lieu.json --json"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Sơ đồ kiến trúc.",
+    "ERD hoặc schema Prisma.",
+    "State machine nghiệp vụ.",
+    "API contract ban đầu.",
+    "Interface blockchain và mock adapter.",
+    "Quy tắc bảo vệ dữ liệu cá nhân."
+  ],
+  "out_of_scope": [],
+  "risks": [
+    "Dùng một cột 'issued = true' thay cho trạng thái transaction chi tiết.",
+    "Đưa private key vào backend hoặc file .env dùng chung.",
+    "Lưu PDF hoặc thông tin cá nhân trong event/blockchain."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/02-kien-truc-va-du-lieu.md",
+  "manual_validation_required": false,
+  "duration": "Tuần 1–2",
+  "completed_at": "2026-11-11T18:36:21.942Z"
+}

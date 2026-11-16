@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "id": "T-021",
+  "title": "Loại bỏ toàn bộ dữ liệu mẫu, mock, fallback và thành phần giả lập trong Frontend",
+  "status": "done",
+  "priority": "high",
+  "objective": "Dọn dẹp toàn bộ dữ liệu khởi tạo mẫu (organizations, wallets, courses, learners, batches, credentials, events), các nút bấm giả lập kịch bản, các trường thừa syncLegacyMirrors (issuer, batch), giá trị điền sẵn trong state của form và các fallback tự chế số block / hash file lỗi trong project/apps/web để số liệu hoàn toàn trung thực khi kết nối Backend.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/use-cases.md",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-021-remove-frontend-mock-fallback-data.md",
+      "harness/tasks/ready/T-021-remove-frontend-mock-fallback-data.json",
+      "harness/tasks/done/T-021-remove-frontend-mock-fallback-data.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-016",
+    "T-017",
+    "T-018",
+    "T-019",
+    "T-020"
+  ],
+  "preconditions": [
+    "Giao diện chuẩn DESIGN.md đã hoàn thành tại project/apps/web (T-019).",
+    "Người dùng đã xác nhận phương án khởi tạo rỗng 100%, xóa toàn bộ nút giả lập kịch bản và xóa các fallback ảo."
+  ],
+  "implementation_notes": [
+    "Làm sạch createInitialState() trong src/domain.ts: toàn bộ mảng dữ liệu nghiệp vụ khởi tạo rỗng ([]), xóa syncLegacyMirrors và 2 trường legacy issuer/batch, bỏ fallback số block #14820 giả.",
+    "Cập nhật src/storage.ts: nâng STORAGE_KEY lên certchain.product.state.v2, tự động xóa khóa v1 cũ chứa dữ liệu mẫu và bỏ fallback tự chế hash file khi lỗi đọc file.",
+    "Cập nhật src/App.tsx và src/styles.css: xóa các nút Khôi phục dữ liệu mẫu, Mẫu PDF gốc/bị sửa, Kịch bản kiểm định nhanh, chip chọn mẫu; xóa giá trị mặc định điền sẵn trong state của các form; bổ sung Empty State rõ ràng cho các bảng và Cổng Xác thực khi chưa tra cứu.",
+    "Cập nhật scripts/validate-web.mjs để kiểm tra tự động việc không còn dữ liệu mẫu hay nút giả lập."
+  ],
+  "checklist": [
+    "Dọn sạch dữ liệu mẫu và fallback trong project/apps/web/src/domain.ts.",
+    "Dọn sạch fallback băm file và dữ liệu mẫu cũ trong project/apps/web/src/storage.ts.",
+    "Dọn sạch các nút giả lập, giá trị điền sẵn trong form và bổ sung Empty State trong project/apps/web/src/App.tsx và src/styles.css.",
+    "Cập nhật scripts/validate-web.mjs, README.md và harness/context/current-state.md."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "createInitialState() khởi tạo rỗng 100% cho toàn bộ danh sách nghiệp vụ (organizations, wallets, courses, learners, batches, credentials, events đều là []), không còn syncLegacyMirrors hay fallback số block #14820.",
+      "verification": "Kiểm tra src/domain.ts, src/storage.ts và chạy scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "Giao diện không còn các nút giả lập kịch bản (Khôi phục dữ liệu mẫu, Mẫu PDF gốc/bị sửa, Kịch bản kiểm định nhanh, chip mẫu), Cổng Xác thực ở trạng thái chờ tra cứu khi mở lên và các bảng có Empty State chuẩn khi rỗng.",
+      "verification": "Kiểm tra src/App.tsx và chạy scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-3",
+      "description": "TypeScript, Vite production build, clean-code scan và git diff --check đều đạt.",
+      "verification": "Chạy npm.cmd run build, node scripts/validate-web.mjs và git diff --check."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/src/domain.ts đã loại bỏ toàn bộ seed/mock/fallback.",
+    "project/apps/web/src/storage.ts đã loại bỏ fallback hash file ảo và dọn khóa v1 cũ.",
+    "project/apps/web/src/App.tsx và src/styles.css không còn nút giả lập và có Empty State chuẩn.",
+    "project/apps/web/scripts/validate-web.mjs kiểm tra chống tái xuất hiện dữ liệu mẫu."
+  ],
+  "out_of_scope": [
+    "Triển khai Backend API hoặc Smart Contract (thuộc T-003..T-011).",
+    "Commit hoặc push lên remote repository."
+  ],
+  "risks": [
+    "Khi danh sách tổ chức/lô/chứng chỉ rỗng, các màn hình Console và Public cần xử lý null-safe tuyệt đối và có Empty State hướng dẫn tạo dữ liệu."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T09:31:42.988Z"
+}

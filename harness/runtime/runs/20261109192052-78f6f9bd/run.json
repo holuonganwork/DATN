@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "run_id": "20261109192052-78f6f9bd",
+  "task_id": "T-012",
+  "task_file": "harness/tasks/done/T-012-harness-operationalization.json",
+  "status": "passed",
+  "phase": "finalize",
+  "created_at": "2026-11-09T19:20:52.335Z",
+  "updated_at": "2026-11-09T19:21:00.066Z",
+  "cwd": "F:\\DATN",
+  "hostname": "meowmeow",
+  "node_version": "v22.12.0",
+  "repo_root": "F:\\DATN",
+  "event_log": "harness/runtime/runs/20261109192052-78f6f9bd/events.jsonl",
+  "summary_file": "harness/runtime/runs/20261109192052-78f6f9bd/summary.json",
+  "last_sequence": 21,
+  "git_before": {
+    "head": "ad9c0a648addb06b7f9d279faba39c6a10403b09",
+    "changed_files": [
+      "AGENTS.md"
+    ]
+  },
+  "workspace_before": {
+    "harness/AGENTS.md": "980:1794251543655.0215",
+    "harness/config/commands.yaml": "288:1794251230998.54",
+    "harness/config/policies.yaml": "465:1794251229169.5107",
+    "harness/config/project.yaml": "328:1794251227378.6497",
+    "harness/context/architecture.md": "1006:1794167326804.1897",
+    "harness/context/conventions.md": "918:1794167326805.1887",
+    "harness/context/current-state.md": "932:1794251545527.1729",
+    "harness/context/decisions/0001-technology-stack.md": "1045:1794167326807.4294",
+    "harness/context/decisions/0002-blockchain-scope.md": "1218:1794167326807.9712",
+    "harness/context/project-brief.md": "5023:1794245129041.8743",
+    "harness/context/scope.md": "4385:1794245128074.5117",
+    "harness/evidence/README.md": "630:1794251212417.28",
+    "harness/evidence/task-reports/T-012-20261109191200-c1bb195f.md": "1471:1794251567174.4048",
+    "harness/evidence/task-reports/T-012-20261109191403-78e81f20.md": "1521:1794251671099.881",
+    "harness/evidence/task-reports/T-012-20261109191604-a7aed15d.md": "1518:1794251836595.1416",
+    "harness/evidence/task-reports/T-012-20261109191813-2e67429f.md": "1545:1794251921077.135",
+    "harness/evidence/validation/T-012-20261109191200-c1bb195f.json": "831:1794251569094.3596",
+    "harness/evidence/validation/T-012-20261109191403-78e81f20.json": "558:1794251672927.1584",
+    "harness/evidence/validation/T-012-20261109191604-a7aed15d.json": "558:1794251838493.0461",
+    "harness/evidence/validation/T-012-20261109191813-2e67429f.json": "558:1794251923104.1997",
+    "harness/prompts/execution.md": "896:1794251206264.055",
+    "harness/prompts/repair.md": "606:1794251210487.2854",
+    "harness/prompts/review.md": "599:1794251208451.0686",
+    "harness/README.md": "4144:1794251199137.947",
+    "harness/runner/harness.cmd": "67:1794250735100.9155",
+    "harness/runner/harness.mjs": "33632:1794252037381.4802",
+    "harness/runner/resume.cmd": "74:1794250742288.5454",
+    "harness/runner/resume.sh": "130:1794250748930.2886",
+    "harness/runner/run-task.cmd": "71:1794250736813.3574",
+    "harness/runner/run-task.sh": "127:1794250743954.739",
+    "harness/runner/status.cmd": "74:1794250740096.732",
+    "harness/runner/status.sh": "130:1794250747306.7546",
+    "harness/runner/validate-task.cmd": "76:1794250738486.739",
+    "harness/runner/validate-task.sh": "132:1794250745687.6414",
+    "harness/schemas/log-event.schema.json": "845:1794250357173.3308",
+    "harness/schemas/task.schema.json": "3986:1794250903568.192",
+    "harness/state/active-task.json": "83:1794251901526.1106",
+    "harness/state/project-state.json": "123:1794251901528.1228",
+    "harness/tasks/done/T-012-harness-operationalization.json": "4192:1794252023803.0188",
+    "harness/tasks/inbox/01-khoi-dong-va-pham-vi.md": "2337:1794167326810.8406",
+    "harness/tasks/inbox/02-kien-truc-va-du-lieu.md": "2467:1794167326811.3794",
+    "harness/tasks/inbox/03-credential-core-va-merkle.md": "2128:1794167326811.9534",
+    "harness/tasks/inbox/04-smart-contract-va-mang-evm.md": "2226:1794167326812.6848",
+    "harness/tasks/inbox/05-backend-va-quy-trinh-phat-hanh.md": "2069:1794167326812.6848",
+    "harness/tasks/inbox/06-frontend-va-ket-noi-vi.md": "1726:1794167326813.585",
+    "harness/tasks/inbox/07-verifier-doc-lap.md": "2130:1794167326814.0923",
+    "harness/tasks/inbox/08-worker-indexer-va-phuc-hoi.md": "1762:1794167326814.0923",
+    "harness/tasks/inbox/09-pdf-cong-hoc-vien-va-chia-se.md": "1606:1794167326814.874",
+    "harness/tasks/inbox/10-kiem-thu-benchmark-va-quan-sat.md": "2025:1794167326814.874",
+    "harness/tasks/inbox/11-demo-bao-cao-va-ban-giao.md": "2660:1794167326816.6108",
+    "harness/tasks/README.md": "1068:1794251200799.7156",
+    "harness/tasks/ready/T-001-khoi-dong-va-pham-vi.json": "2971:1794250693462.6277",
+    "harness/tasks/ready/T-002-kien-truc-va-du-lieu.json": "3308:1794250693468.1555",
+    "harness/tasks/ready/T-003-credential-core-va-merkle.json": "2970:1794250693469.154",
+    "harness/tasks/ready/T-004-smart-contract-va-mang-evm.json": "3110:1794250693470.151",
+    "harness/tasks/ready/T-005-backend-va-quy-trinh-phat-hanh.json": "2989:1794250693475.6748",
+    "harness/tasks/ready/T-006-frontend-va-ket-noi-vi.json": "2781:1794250693476.6729",
+    "harness/tasks/ready/T-007-verifier-doc-lap.json": "2727:1794250693477.6814",
+    "harness/tasks/ready/T-008-worker-indexer-va-phuc-hoi.json": "2875:1794250693479.682",
+    "harness/tasks/ready/T-009-pdf-cong-hoc-vien-va-chia-se.json": "2760:1794250693480.6814",
+    "harness/tasks/ready/T-010-kiem-thu-benchmark-va-quan-sat.json": "2636:1794250693484.6802",
+    "harness/tasks/ready/T-011-demo-bao-cao-va-ban-giao.json": "1748:1794250693485.1865",
+    "harness/tasks/templates/task.json": "1046:1794251030354.2234",
+    "harness/tests/harness.test.mjs": "8275:1794251749536.994",
+    "harness/tools/convert-tasks.mjs": "4559:1794250687829.3691",
+    "harness/validators/log.cmd": "90:1794251415766.601",
+    "harness/validators/log.mjs": "1586:1794251390927.2024",
+    "harness/validators/log.sh": "183:1794251414155.5344",
+    "harness/validators/quality.cmd": "94:1794251274996.4397",
+    "harness/validators/quality.mjs": "758:1794250316759.683",
+    "harness/validators/quality.sh": "187:1794251261475.3381",
+    "harness/validators/scope.cmd": "92:1794251273116.5923",
+    "harness/validators/scope.mjs": "2303:1794250365055.0283",
+    "harness/validators/scope.sh": "185:1794251259863.9658",
+    "harness/validators/secrets.cmd": "94:1794251277106.1035",
+    "harness/validators/secrets.mjs": "1665:1794250314685.6145",
+    "harness/validators/secrets.sh": "187:1794251263109.4856",
+    "harness/validators/task.cmd": "91:1794251271465.97",
+    "harness/validators/task.mjs": "7402:1794250901910.7495",
+    "harness/validators/task.sh": "184:1794251258167.6938",
+    "AGENTS.md": "6006:1794252000283.897"
+  },
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "command-1",
+        "command": "node harness/runner/harness.mjs doctor",
+        "started_at": "2026-11-09T19:20:52.642Z",
+        "finished_at": "2026-11-09T19:20:52.831Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "{\n  \"ok\": true,\n  \"checked_at\": \"2026-11-09T19:20:52.807Z\",\n  \"root\": \"F:\\\\DATN\\\\harness\",\n  \"checks\": [\n    {\n      \"name\": \"directory:harness/runtime\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/runtime/runs\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/state\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/tasks\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/schemas\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"node_version\",\n      \"ok\": true,\n      \"value\": \"v22.12.0\"\n    },\n    {\n      \"name\": \"tasks:inbox\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:ready\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 11\n    },\n    {\n      \"name\": \"tasks:active\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:blocked\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:done\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 1\n    },\n    {\n      \"name\": \"task_count\",\n      \"ok\": true,\n      \"count\": 12,\n      \"expected_minimum\": 12\n    }\n  ]\n}\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/001-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 1,
+        "attempt": 0,
+        "name": "command-2",
+        "command": "node --test harness/tests/*.test.mjs",
+        "started_at": "2026-11-09T19:20:52.836Z",
+        "finished_at": "2026-11-09T19:20:55.690Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "TAP version 13\n# Subtest: task validator accepts the machine-readable task contract\nok 1 - task validator accepts the machine-readable task contract\n  ---\n  duration_ms: 1.802\n  ...\n# Subtest: scope and secret validators reject unsafe changes\nok 2 - scope and secret validators reject unsafe changes\n  ---\n  duration_ms: 1.4196\n  ...\n# Subtest: lifecycle writes ordered append-only events and summary\nok 3 - lifecycle writes ordered append-only events and summary\n  ---\n  duration_ms: 748.9931\n  ...\n# Subtest: resume continues a failed command from the persisted run log\nok 4 - resume continues a failed command from the persisted run log\n  ---\n  duration_ms: 1192.1643\n  ...\n# Subtest: createRun records start before execute is invoked\nok 5 - createRun records start before execute is invoked\n  ---\n  duration_ms: 291.6774\n  ...\n# Subtest: finalize reports ignored harness files from the workspace snapshot\nok 6 - finalize reports ignored harness files from the workspace snapshot\n  ---\n  duration_ms: 284.1335\n  ...\n# Subtest: runner blocks a task whose dependency is not done\nok 7 - runner blocks a task whose dependency is not done\n  ---\n  duration_ms: 20.9714\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2710.7166\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/002-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/002-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": []
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 12
+      }
+    ]
+  },
+  "completed_at": "2026-11-09T19:21:00.063Z",
+  "files_changed": [],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "summary": {
+    "run_id": "20261109192052-78f6f9bd",
+    "task_id": "T-012",
+    "status": "passed",
+    "started_at": "2026-11-09T19:20:52.335Z",
+    "completed_at": "2026-11-09T19:21:00.063Z",
+    "phase": "finalize",
+    "files_changed": [],
+    "internal_files_changed": [
+      "harness/state/active-task.json",
+      "harness/state/project-state.json"
+    ],
+    "execution": {
+      "ok": true,
+      "manual_required": false,
+      "commands": [
+        {
+          "kind": "execution",
+          "index": 0,
+          "attempt": 0,
+          "name": "command-1",
+          "command": "node harness/runner/harness.mjs doctor",
+          "started_at": "2026-11-09T19:20:52.642Z",
+          "finished_at": "2026-11-09T19:20:52.831Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "{\n  \"ok\": true,\n  \"checked_at\": \"2026-11-09T19:20:52.807Z\",\n  \"root\": \"F:\\\\DATN\\\\harness\",\n  \"checks\": [\n    {\n      \"name\": \"directory:harness/runtime\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/runtime/runs\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/state\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/tasks\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/schemas\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"node_version\",\n      \"ok\": true,\n      \"value\": \"v22.12.0\"\n    },\n    {\n      \"name\": \"tasks:inbox\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:ready\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 11\n    },\n    {\n      \"name\": \"tasks:active\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:blocked\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:done\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 1\n    },\n    {\n      \"name\": \"task_count\",\n      \"ok\": true,\n      \"count\": 12,\n      \"expected_minimum\": 12\n    }\n  ]\n}\n",
+          "stderr": "",
+          "stdout_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/001-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/001-execution-0.stderr.log"
+        },
+        {
+          "kind": "execution",
+          "index": 1,
+          "attempt": 0,
+          "name": "command-2",
+          "command": "node --test harness/tests/*.test.mjs",
+          "started_at": "2026-11-09T19:20:52.836Z",
+          "finished_at": "2026-11-09T19:20:55.690Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "TAP version 13\n# Subtest: task validator accepts the machine-readable task contract\nok 1 - task validator accepts the machine-readable task contract\n  ---\n  duration_ms: 1.802\n  ...\n# Subtest: scope and secret validators reject unsafe changes\nok 2 - scope and secret validators reject unsafe changes\n  ---\n  duration_ms: 1.4196\n  ...\n# Subtest: lifecycle writes ordered append-only events and summary\nok 3 - lifecycle writes ordered append-only events and summary\n  ---\n  duration_ms: 748.9931\n  ...\n# Subtest: resume continues a failed command from the persisted run log\nok 4 - resume continues a failed command from the persisted run log\n  ---\n  duration_ms: 1192.1643\n  ...\n# Subtest: createRun records start before execute is invoked\nok 5 - createRun records start before execute is invoked\n  ---\n  duration_ms: 291.6774\n  ...\n# Subtest: finalize reports ignored harness files from the workspace snapshot\nok 6 - finalize reports ignored harness files from the workspace snapshot\n  ---\n  duration_ms: 284.1335\n  ...\n# Subtest: runner blocks a task whose dependency is not done\nok 7 - runner blocks a task whose dependency is not done\n  ---\n  duration_ms: 20.9714\n  ...\n1..7\n# tests 7\n# suites 0\n# pass 7\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 2710.7166\n",
+          "stderr": "",
+          "stdout_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/002-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261109192052-78f6f9bd/commands/002-execution-0.stderr.log"
+        }
+      ]
+    },
+    "validation": {
+      "ok": true,
+      "manual_required": false,
+      "changed_files": [],
+      "checks": [
+        {
+          "name": "task_schema",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "scope",
+          "ok": true,
+          "errors": [],
+          "files": []
+        },
+        {
+          "name": "secrets",
+          "ok": true,
+          "findings": []
+        },
+        {
+          "name": "quality",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "commands",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "event_log",
+          "ok": true,
+          "errors": [],
+          "count": 12
+        }
+      ]
+    },
+    "remaining_risks": []
+  },
+  "task_marked_done": true
+}

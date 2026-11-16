@@ -1,0 +1,97 @@
+{
+  "run_id": "20261114091801-5ba7430b",
+  "task_id": "T-021",
+  "status": "passed",
+  "started_at": "2026-11-14T09:18:01.661Z",
+  "completed_at": "2026-11-14T09:31:42.988Z",
+  "phase": "finalize",
+  "files_changed": [
+    "harness/context/current-state.md",
+    "harness/evidence/task-reports/T-021-20261114091801-5ba7430b.md",
+    "harness/evidence/validation/T-021-20261114091801-5ba7430b.json",
+    "project/apps/web/README.md",
+    "project/apps/web/dist/assets/index-1z9JNmXD.css",
+    "project/apps/web/dist/assets/index-4931TFbB.js",
+    "project/apps/web/dist/assets/index-DSuPyTPX.css",
+    "project/apps/web/dist/assets/index-Ey3ChmcL.js",
+    "project/apps/web/dist/index.html",
+    "project/apps/web/scripts/validate-web.mjs",
+    "project/apps/web/src/App.tsx",
+    "project/apps/web/src/domain.ts",
+    "project/apps/web/src/storage.ts",
+    "project/apps/web/src/styles.css"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": []
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      "project/apps/web/README.md",
+      "project/apps/web/scripts/validate-web.mjs",
+      "project/apps/web/src/App.tsx",
+      "project/apps/web/src/domain.ts",
+      "project/apps/web/src/storage.ts",
+      "project/apps/web/src/styles.css"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          "project/apps/web/README.md",
+          "project/apps/web/scripts/validate-web.mjs",
+          "project/apps/web/src/App.tsx",
+          "project/apps/web/src/domain.ts",
+          "project/apps/web/src/storage.ts",
+          "project/apps/web/src/styles.css"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 52
+      }
+    ]
+  },
+  "remaining_risks": [],
+  "evidence": {
+    "required": true,
+    "report": "harness/evidence/task-reports/T-021-20261114091801-5ba7430b.md",
+    "validation": "harness/evidence/validation/T-021-20261114091801-5ba7430b.json",
+    "missing": []
+  }
+}

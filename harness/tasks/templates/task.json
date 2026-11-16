@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "T-000",
+  "title": "",
+  "status": "draft",
+  "priority": "medium",
+  "objective": "",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": ["project/"],
+    "harness_write_paths": ["harness/state/", "harness/evidence/", "harness/runtime/"],
+    "forbidden_paths": ["project/.env", "project/.env.*", "**/private-key*", "**/*secret*"]
+  },
+  "dependencies": [],
+  "preconditions": [],
+  "implementation_notes": [],
+  "checklist": [],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "",
+      "verification": ""
+    }
+  ],
+  "execution_commands": [],
+  "validation_commands": [],
+  "deliverables": [],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": ["files_changed", "commands_run", "validation_results", "remaining_risks"]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false
+}

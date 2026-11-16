@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "T-010",
+  "title": "Kiểm thử, benchmark và quan sát",
+  "status": "ready",
+  "priority": "medium",
+  "objective": "Tạo bằng chứng định lượng cho tính đúng, hiệu năng và khả năng phục hồi.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-009"
+  ],
+  "preconditions": [
+    "Task T-009 đã hoàn thành hoặc có bằng chứng đủ để tiếp tục."
+  ],
+  "implementation_notes": [],
+  "checklist": [
+    "Viết unit test cho credential-core.",
+    "Viết unit/fuzz/invariant test contract.",
+    "Viết API integration test.",
+    "Viết e2e test cho phát hành và xác minh.",
+    "Chạy mọi kịch bản sửa payload/PDF.",
+    "Kiểm thử sai proof, sai batch, sai registry và sai mạng.",
+    "Kiểm thử hết hạn và thu hồi.",
+    "Kiểm thử RPC timeout và API dừng.",
+    "Chạy benchmark ba phương án cùng điều kiện.",
+    "Lưu raw result và script tái chạy.",
+    "Ghi version code, chain, compiler và cấu hình benchmark.",
+    "Thiết lập log, metric và trace tối thiểu."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Mỗi kết luận trong báo cáo có test hoặc số đo đi kèm. Có thể tái chạy benchmark và giải thích được giới hạn của kết quả.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [],
+  "validation_commands": [],
+  "deliverables": [
+    "Test report.",
+    "Benchmark report và biểu đồ.",
+    "Raw data.",
+    "Kịch bản tái lập.",
+    "Danh sách lỗi còn tồn tại."
+  ],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/10-kiem-thu-benchmark-va-quan-sat.md",
+  "manual_validation_required": true,
+  "duration": "Tuần 9"
+}

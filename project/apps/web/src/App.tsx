@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import {
   addEntryToBatch,
   approveBatch,
@@ -47,6 +47,7 @@ type VerifierMode = "lookup" | "inspector";
 type ThemeMode = "light" | "dark";
 
 interface NoticeBanner {
+  id: number;
   tone: "success" | "warning" | "danger";
   message: string;
 }
@@ -214,6 +215,11 @@ export function App() {
   const [selectedOrgId, setSelectedOrgId] = useState<string>("");
   const [selectedBatchId, setSelectedBatchId] = useState<string>("");
   const [notice, setNotice] = useState<NoticeBanner | null>(null);
+  const [noticeHovered, setNoticeHovered] = useState<boolean>(false);
+  const noticeTimerMetaRef = useRef<{ id: number; remainingMs: number }>({
+    id: 0,
+    remainingMs: 4000,
+  });
   const [headerQuickCode, setHeaderQuickCode] = useState<string>("");
 
   // Verifier state (starts completely empty until user searches or uploads a file)
@@ -240,6 +246,35 @@ export function App() {
   useEffect(() => {
     saveWorkspaceState(state);
   }, [state]);
+
+  useEffect(() => {
+    if (!notice) {
+      return;
+    }
+    if (noticeTimerMetaRef.current.id !== notice.id) {
+      noticeTimerMetaRef.current = { id: notice.id, remainingMs: 4000 };
+    }
+    if (noticeHovered) {
+      return;
+    }
+
+    const activeId = notice.id;
+    const startedAt = Date.now();
+    const timer = window.setTimeout(() => {
+      setNotice((current) => (current?.id === activeId ? null : current));
+      setNoticeHovered(false);
+    }, noticeTimerMetaRef.current.remainingMs);
+
+    return () => {
+      window.clearTimeout(timer);
+      if (noticeTimerMetaRef.current.id === activeId) {
+        noticeTimerMetaRef.current.remainingMs = Math.max(
+          0,
+          noticeTimerMetaRef.current.remainingMs - (Date.now() - startedAt),
+        );
+      }
+    };
+  }, [notice, noticeHovered]);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -326,7 +361,12 @@ export function App() {
   }, [state, activePackage, submittedCode, uploadedFileHash]);
 
   function showNotice(tone: NoticeBanner["tone"], message: string) {
-    setNotice({ tone, message });
+    setNoticeHovered(false);
+    setNotice((prev) => ({
+      id: Math.max(Date.now(), (prev?.id ?? 0) + 1),
+      tone,
+      message,
+    }));
   }
 
   function toggleTheme() {
@@ -633,30 +673,6 @@ export function App() {
               </div>
             </div>
           </div>
-
-          {notice && (
-            <div className="site-container notice-container">
-              <div className={`notice-banner tone-${notice.tone}`}>
-                <div className="notice-content">
-                  <span className="notice-badge">
-                    {notice.tone === "success"
-                      ? "THÀNH CÔNG"
-                      : notice.tone === "warning"
-                        ? "CHÚ Ý"
-                        : "LỖI NGHIỆP VỤ"}
-                  </span>
-                  <span>{notice.message}</span>
-                </div>
-                <button
-                  type="button"
-                  className="notice-dismiss"
-                  onClick={() => setNotice(null)}
-                >
-                  Đóng ✕
-                </button>
-              </div>
-            </div>
-          )}
 
           <main className="site-main">
             <div className="site-container">
@@ -1129,30 +1145,6 @@ export function App() {
               </div>
             </header>
 
-            {notice && (
-              <div className="workspace-notice-wrap">
-                <div className={`notice-banner tone-${notice.tone}`}>
-                  <div className="notice-content">
-                    <span className="notice-badge">
-                      {notice.tone === "success"
-                        ? "THÀNH CÔNG"
-                        : notice.tone === "warning"
-                          ? "CHÚ Ý"
-                          : "LỖI NGHIỆP VỤ"}
-                    </span>
-                    <span>{notice.message}</span>
-                  </div>
-                  <button
-                    type="button"
-                    className="notice-dismiss"
-                    onClick={() => setNotice(null)}
-                  >
-                    Đóng ✕
-                  </button>
-                </div>
-              </div>
-            )}
-
             <main className="workspace-main">
               {(consolePage === "overview" ||
                 consolePage === "batches" ||
@@ -1582,6 +1574,46 @@ export function App() {
           </form>
         </div>
       )}
+
+      <div className="toast-popup-viewport" aria-live="polite" aria-atomic="true">
+        {notice && (
+          <div
+            key={notice.id}
+            role={notice.tone === "danger" ? "alert" : "status"}
+            className={`toast-popup-card tone-${notice.tone}`}
+            onMouseEnter={() => setNoticeHovered(true)}
+            onMouseLeave={() => setNoticeHovered(false)}
+          >
+            <div className="toast-popup-surface">
+              <div className="toast-popup-head">
+                <span className="notice-badge">
+                  {notice.tone === "success"
+                    ? "THÀNH CÔNG"
+                    : notice.tone === "warning"
+                      ? "CHÚ Ý"
+                      : "LỖI NGHIỆP VỤ"}
+                </span>
+                <button
+                  type="button"
+                  className="notice-dismiss"
+                  aria-label="Đóng thông báo"
+                  onClick={() => {
+                    setNotice(null);
+                    setNoticeHovered(false);
+                  }}
+                >
+                  Đóng ✕
+                </button>
+              </div>
+              <p className="toast-popup-message">{notice.message}</p>
+            </div>
+            <div
+              className={`toast-popup-progress${noticeHovered ? " paused" : ""}`}
+              aria-hidden="true"
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

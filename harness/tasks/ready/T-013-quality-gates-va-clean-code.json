@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "id": "T-013",
+  "title": "Quality gates và clean code cho Agent",
+  "status": "done",
+  "priority": "high",
+  "objective": "Tăng khả năng kiểm soát chất lượng code do Agent viết bằng quy tắc rõ ràng, quality gate máy kiểm tra được và điều kiện hoàn thành bắt buộc.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md",
+    "harness/AGENTS.md",
+    "project/AGENTS.md"
+  ],
+  "target": {
+    "repository": "workspace",
+    "allowed_paths": [
+      "AGENTS.md",
+      "harness/AGENTS.md",
+      "harness/context/quality-gates.md",
+      "harness/context/current-state.md",
+      "harness/config/policies.yaml",
+      "harness/prompts/execution.md",
+      "harness/prompts/review.md",
+      "harness/prompts/repair.md",
+      "harness/runner/harness.mjs",
+      "harness/validators/task.mjs",
+      "harness/validators/quality.mjs",
+      "harness/schemas/task.schema.json",
+      "harness/tasks/inbox/13-quality-gates-va-clean-code.md",
+      "harness/tasks/ready/T-013-quality-gates-va-clean-code.json",
+      "harness/tests/harness.test.mjs",
+      "project/AGENTS.md",
+      "project/docs/quality-gates.md"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-012"
+  ],
+  "preconditions": [
+    "Harness T-012 đã hoàn thành.",
+    "Node.js 20 hoặc mới hơn có sẵn trong môi trường local.",
+    "Không cài framework sản phẩm khi package.json của project còn rỗng."
+  ],
+  "implementation_notes": [
+    "Quality profile là policy máy đọc được; command cụ thể của TypeScript/ESLint/Prettier sẽ được thêm vào task sản phẩm sau khi chốt stack.",
+    "Static scan chỉ tạo lỗi cho tín hiệu unsafe rõ ràng trong file code thay đổi; các metric phức tạp hơn vẫn thuộc review.",
+    "Giữ runtime log local và redact stdout/stderr theo quy tắc harness hiện tại."
+  ],
+  "checklist": [
+    "Bổ sung quy tắc clean code và boundary cho project.",
+    "Bổ sung quality profile vào schema và task template.",
+    "Kiểm tra validation command bắt buộc đối với task code.",
+    "Kiểm tra diff hygiene và các pattern debug/unsafe.",
+    "Chặn mark-done khi thiếu validation hoặc evidence.",
+    "Cập nhật prompt execution, review và repair.",
+    "Viết test regression cho các quality gate."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Task có quality profile và validation command bắt buộc; task tài liệu có thể khai báo manual review rõ ràng.",
+      "verification": "Chạy task schema validator và test quality profile với fixture code, docs và harness."
+    },
+    {
+      "id": "AC-2",
+      "description": "Runner không đánh dấu task done nếu execution hoặc validation chưa đạt hoặc thiếu task report và validation evidence.",
+      "verification": "Chạy test finalize với run thiếu validation và run thiếu evidence; cả hai phải bị chặn."
+    },
+    {
+      "id": "AC-3",
+      "description": "Validator phát hiện được debug statement, @ts-ignore, as any và catch rỗng trong file code thay đổi.",
+      "verification": "Chạy unit test static quality scan với fixture TypeScript cố ý chứa các pattern trên."
+    },
+    {
+      "id": "AC-4",
+      "description": "Agent có hướng dẫn làm việc theo kế hoạch, quality loop, self-review và evidence.",
+      "verification": "Đối chiếu prompt và quality-gates context với checklist của task."
+    },
+    {
+      "id": "AC-5",
+      "description": "Doctor, test harness và lifecycle của task T-013 đều đạt.",
+      "verification": "Chạy các execution_commands và validation_commands của task."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "doctor",
+      "command": "node harness/runner/harness.mjs doctor"
+    },
+    {
+      "name": "harness-tests",
+      "command": "node --test harness/tests/*.test.mjs"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "doctor",
+      "command": "node harness/runner/harness.mjs doctor"
+    },
+    {
+      "name": "harness-tests",
+      "command": "node --test harness/tests/*.test.mjs"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Coding contract của project.",
+    "Quality profile và clean-code validator.",
+    "Runner gate cho validation và evidence.",
+    "Prompt execution/review/repair cập nhật.",
+    "Test regression và evidence task."
+  ],
+  "out_of_scope": [
+    "Cài framework TypeScript, ESLint, Prettier hoặc Husky khi stack project chưa được chốt.",
+    "Triển khai tính năng nghiệp vụ trong project.",
+    "Commit, push hoặc triển khai production."
+  ],
+  "risks": [
+    "Static scan không thay thế lint, typecheck, test và review kiến trúc.",
+    "Các task sản phẩm hiện tại vẫn cần được bổ sung validation_commands sau khi khởi tạo codebase."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "harness",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "source_document": "harness/tasks/inbox/13-quality-gates-va-clean-code.md",
+  "manual_validation_required": false,
+  "duration": "Một phiên triển khai harness",
+  "completed_at": "2026-11-11T02:26:39.815Z"
+}

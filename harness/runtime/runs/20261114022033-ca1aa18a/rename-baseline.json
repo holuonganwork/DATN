@@ -1,0 +1,46 @@
+[
+    {
+        "path":  ".gitignore",
+        "hash":  "790E3169BC19B046FE55BA1DA6D13B976C28363C8C00462A2195FE5FAF260910"
+    },
+    {
+        "path":  "index.html",
+        "hash":  "4A385899644E967E999AC4CCED486143CF393616FE02FE846687D9EE8D3C63CC"
+    },
+    {
+        "path":  "package.json",
+        "hash":  "F50D0886098DAF02C024E32A8A50EB79E00F618188A41545EA227FA4C9642EF9"
+    },
+    {
+        "path":  "README.md",
+        "hash":  "62B89ED3FB331B00128A6B9D62B74450E510DCD02CA364F785AB8F6E477B91A2"
+    },
+    {
+        "path":  "tsconfig.json",
+        "hash":  "44EFC7C82FD458EAA9D7945D2680D9FEDD53944FF8FA4650B2797D599ACF0B74"
+    },
+    {
+        "path":  "vite.config.ts",
+        "hash":  "4F9FBBDBC10BF58253A12EB98C949427D351C61ADE1ED8250A3C9705EF0B50BA"
+    },
+    {
+        "path":  "scripts/validate-demo.mjs",
+        "hash":  "C65DE21378BABB8F83ACAEABC6C9D70FE6F598A5058666920DF0010F8B512D36"
+    },
+    {
+        "path":  "src/App.tsx",
+        "hash":  "2483FC50861D32463E5CB2DFEF02F881EDE8982A622CEB20FFFB79208DDD32F8"
+    },
+    {
+        "path":  "src/domain.ts",
+        "hash":  "E06096D5F8A68FD24706AFC8854CA132883F713044BEF39CFB4103042880FE4F"
+    },
+    {
+        "path":  "src/main.tsx",
+        "hash":  "CCBEFE7BE6C69706A1BB01C4C3F20492EB002435AF6BA7E5A6D45F7C6AA3A140"
+    },
+    {
+        "path":  "src/styles.css",
+        "hash":  "05886A93812DDCE821DBCA59092FD58DB273FBAE244EFC1B178683842C056409"
+    }
+]

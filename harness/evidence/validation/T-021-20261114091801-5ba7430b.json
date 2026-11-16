@@ -1,0 +1,61 @@
+{
+  "run_id": "20261114091801-5ba7430b",
+  "task_id": "T-021",
+  "ok": true,
+  "manual_required": false,
+  "changed_files": [
+    "project/apps/web/README.md",
+    "project/apps/web/scripts/validate-web.mjs",
+    "project/apps/web/src/App.tsx",
+    "project/apps/web/src/domain.ts",
+    "project/apps/web/src/storage.ts",
+    "project/apps/web/src/styles.css",
+    "harness/context/current-state.md"
+  ],
+  "checks": [
+    {
+      "name": "task_schema",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "scope",
+      "ok": true,
+      "errors": [],
+      "files": [
+        "project/apps/web/README.md",
+        "project/apps/web/scripts/validate-web.mjs",
+        "project/apps/web/src/App.tsx",
+        "project/apps/web/src/domain.ts",
+        "project/apps/web/src/storage.ts",
+        "project/apps/web/src/styles.css",
+        "harness/context/current-state.md"
+      ]
+    },
+    {
+      "name": "secrets",
+      "ok": true,
+      "findings": []
+    },
+    {
+      "name": "quality",
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "findings": []
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "event_log",
+      "ok": true,
+      "errors": [],
+      "count": 32
+    }
+  ]
+}

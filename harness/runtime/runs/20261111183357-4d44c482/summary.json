@@ -1,0 +1,73 @@
+{
+  "run_id": "20261111183357-4d44c482",
+  "task_id": "T-002",
+  "status": "passed",
+  "started_at": "2026-11-11T18:33:57.443Z",
+  "completed_at": "2026-11-11T18:36:21.942Z",
+  "phase": "finalize",
+  "files_changed": [
+    "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+    "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": []
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": []
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 47
+      }
+    ]
+  },
+  "remaining_risks": [],
+  "evidence": {
+    "required": true,
+    "report": "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+    "validation": "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+    "missing": []
+  }
+}

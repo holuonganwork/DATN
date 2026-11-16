@@ -1,0 +1,313 @@
+{
+  "schema_version": 1,
+  "run_id": "20261114130759-e4ccc858",
+  "task_id": "T-024",
+  "task_file": "harness/tasks/ready/T-024-toast-popup-notification.json",
+  "status": "passed",
+  "phase": "finalize",
+  "created_at": "2026-11-14T13:07:59.048Z",
+  "updated_at": "2026-11-14T13:11:37.241Z",
+  "cwd": "F:\\DATN",
+  "hostname": "meowmeow",
+  "node_version": "v22.12.0",
+  "repo_root": "F:\\DATN",
+  "event_log": "harness/runtime/runs/20261114130759-e4ccc858/events.jsonl",
+  "summary_file": "harness/runtime/runs/20261114130759-e4ccc858/summary.json",
+  "last_sequence": 28,
+  "git_before": {
+    "head": "f0efce16e265fff45c204b70c5a343523aeaf3c7",
+    "changed_files": []
+  },
+  "workspace_before": {
+    "project/apps/web/.gitignore": "249:1794644138185.1155",
+    "project/apps/web/DESIGN.md": "6146:1794649658168.5918",
+    "project/apps/web/dist/assets/index-CFJ3JK_I.css": "40673:1794649641461.6177",
+    "project/apps/web/dist/assets/index-DtkQOeAF.js": "269207:1794649641461.6177",
+    "project/apps/web/dist/index.html": "896:1794649641465.6384",
+    "project/apps/web/dist/logo.png": "58444:1794626817310.701",
+    "project/apps/web/index.html": "798:1794627050134.8538",
+    "project/apps/web/package-lock.json": "55870:1794623537407.2183",
+    "project/apps/web/package.json": "463:1794623537356.5867",
+    "project/apps/web/public/logo.png": "58444:1794626817310.701",
+    "project/apps/web/README.md": "3389:1794648579915.074",
+    "project/apps/web/scripts/validate-web.mjs": "3240:1794649658169.6562",
+    "project/apps/web/src/App.tsx": "174800:1794649658172.3179",
+    "project/apps/web/src/domain.ts": "55530:1794648129745.1516",
+    "project/apps/web/src/main.tsx": "232:1794423476794.7822",
+    "project/apps/web/src/storage.ts": "2840:1794648150565.9248",
+    "project/apps/web/src/styles.css": "50088:1794649658174.0217",
+    "project/apps/web/tsconfig.json": "507:1794423470812.943",
+    "project/apps/web/vite.config.ts": "169:1794423472289.77",
+    "harness/context/current-state.md": "6168:1794652852176.4817",
+    "harness/tasks/inbox/T-024-toast-popup-notification.md": "2081:1794661663180.6875",
+    "harness/tasks/ready/T-024-toast-popup-notification.json": "6353:1794661664678.519",
+    "harness/state/active-task.json": "83:1794653068494.1565",
+    "harness/state/project-state.json": "229:1794653068498.1768",
+    "harness/evidence/README.md": "630:1794251212417.28",
+    "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md": "1179:1794421944795.393",
+    "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md": "1292:1794422176002.6304",
+    "harness/evidence/task-reports/T-012-20261109191200-c1bb195f.md": "1471:1794251567174.4048",
+    "harness/evidence/task-reports/T-012-20261109191403-78e81f20.md": "1521:1794251671099.881",
+    "harness/evidence/task-reports/T-012-20261109191604-a7aed15d.md": "1518:1794251836595.1416",
+    "harness/evidence/task-reports/T-012-20261109191813-2e67429f.md": "1545:1794251921077.135",
+    "harness/evidence/task-reports/T-012-20261109192052-78f6f9bd.md": "1566:1794252079147.3262",
+    "harness/evidence/task-reports/T-013-20261111015739-c5a33bd7.md": "1377:1794363066584.729",
+    "harness/evidence/task-reports/T-013-20261111022414-87924690.md": "625:1794363980235.3281",
+    "harness/evidence/task-reports/T-014-20261111171146-3d6868c2.md": "973:1794417193888.0615",
+    "harness/evidence/task-reports/T-015-20261111190107-c9f60c3f.md": "1333:1794423773114.15",
+    "harness/evidence/task-reports/T-016-20261114022033-ca1aa18a.md": "2268:1794623015978.4973",
+    "harness/evidence/task-reports/T-017-20261114023638-6beb3be6.md": "2619:1794624057329.2798",
+    "harness/evidence/task-reports/T-018-20261114030618-ff3063d4.md": "4040:1794626423690.2822",
+    "harness/evidence/task-reports/T-019-20261114033012-ce00b4e2.md": "3661:1794629169660.171",
+    "harness/evidence/task-reports/T-020-20261114081513-9be40b56.md": "2205:1794644177418.4417",
+    "harness/evidence/task-reports/T-021-20261114091801-5ba7430b.md": "4073:1794648643772.3513",
+    "harness/evidence/task-reports/T-023-20261114101458-2d01c942.md": "4486:1794653050085.4978",
+    "harness/evidence/validation/T-001-20261111182426-ccc7d681.json": "641:1794421946914.5415",
+    "harness/evidence/validation/T-002-20261111183357-4d44c482.json": "523:1794422177246.0845",
+    "harness/evidence/validation/T-012-20261109191200-c1bb195f.json": "831:1794251569094.3596",
+    "harness/evidence/validation/T-012-20261109191403-78e81f20.json": "558:1794251672927.1584",
+    "harness/evidence/validation/T-012-20261109191604-a7aed15d.json": "558:1794251838493.0461",
+    "harness/evidence/validation/T-012-20261109191813-2e67429f.json": "558:1794251923104.1997",
+    "harness/evidence/validation/T-012-20261109192052-78f6f9bd.json": "558:1794252080635.4348",
+    "harness/evidence/validation/T-013-20261111015739-c5a33bd7.json": "518:1794363068838.919",
+    "harness/evidence/validation/T-013-20261111022414-87924690.json": "393:1794363982493.462",
+    "harness/evidence/validation/T-014-20261111171146-3d6868c2.json": "429:1794417196344.765",
+    "harness/evidence/validation/T-015-20261111190107-c9f60c3f.json": "718:1794423774515.898",
+    "harness/evidence/validation/T-016-20261114022033-ca1aa18a.json": "5275:1794623019010.5503",
+    "harness/evidence/validation/T-017-20261114023638-6beb3be6.json": "4158:1794624065879.4417",
+    "harness/evidence/validation/T-018-20261114030618-ff3063d4.json": "2521:1794626425077.7346",
+    "harness/evidence/validation/T-019-20261114033012-ce00b4e2.json": "2566:1794629171617.6174",
+    "harness/evidence/validation/T-020-20261114081513-9be40b56.json": "1604:1794644178438.3281",
+    "harness/evidence/validation/T-021-20261114091801-5ba7430b.json": "1316:1794648690862.525",
+    "harness/evidence/validation/T-023-20261114101458-2d01c942.json": "7255:1794653048769.199"
+  },
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "build-web",
+        "command": "npm.cmd run build",
+        "started_at": "2026-11-14T13:10:21.020Z",
+        "finished_at": "2026-11-14T13:10:39.113Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "\n> certificate-web@0.1.0 build\n> tsc --noEmit && vite build\n\n\u001b[36mvite v8.3.8 \u001b[32mbuilding client environment for production...\u001b[36m\u001b[39m\ntransforming...\n✓ 17 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.89 kB │ gzip:  0.50 kB\ndist/assets/index-ClnPAtVd.css   37.59 kB │ gzip:  6.65 kB\ndist/assets/index-DvHiR3y9.js   269.53 kB │ gzip: 74.34 kB\n\n\u001b[32m✓ built in 1.17s\u001b[39m\n",
+        "stderr": "\u001b[2m8:10:37 PM\u001b[22m \u001b[33m\u001b[1m[vite]\u001b[22m\u001b[39m \u001b[33mwarning: `esbuild` option was specified by \"vite:react-babel\" plugin. This option is deprecated, please use `oxc` instead.\u001b[39m\n`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.\n[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown\n",
+        "stdout_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/001-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 1,
+        "attempt": 0,
+        "name": "validate-web",
+        "command": "node scripts/validate-web.mjs",
+        "started_at": "2026-11-14T13:10:39.159Z",
+        "finished_at": "2026-11-14T13:10:39.784Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "Web product structure valid: 12 files, DESIGN.md + logo.png verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/002-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/002-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      "project/apps/web/scripts/validate-web.mjs",
+      "project/apps/web/src/App.tsx",
+      "project/apps/web/src/styles.css"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          "project/apps/web/scripts/validate-web.mjs",
+          "project/apps/web/src/App.tsx",
+          "project/apps/web/src/styles.css"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 19
+      }
+    ]
+  },
+  "completed_at": "2026-11-14T13:11:37.237Z",
+  "files_changed": [
+    "harness/context/current-state.md",
+    "harness/evidence/task-reports/T-024-20261114130759-e4ccc858.md",
+    "harness/evidence/validation/T-024-20261114130759-e4ccc858.json",
+    "project/apps/web/dist/assets/index-CFJ3JK_I.css",
+    "project/apps/web/dist/assets/index-ClnPAtVd.css",
+    "project/apps/web/dist/assets/index-DtkQOeAF.js",
+    "project/apps/web/dist/assets/index-DvHiR3y9.js",
+    "project/apps/web/dist/index.html",
+    "project/apps/web/scripts/validate-web.mjs",
+    "project/apps/web/src/App.tsx",
+    "project/apps/web/src/styles.css"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "summary": {
+    "run_id": "20261114130759-e4ccc858",
+    "task_id": "T-024",
+    "status": "passed",
+    "started_at": "2026-11-14T13:07:59.048Z",
+    "completed_at": "2026-11-14T13:11:37.237Z",
+    "phase": "finalize",
+    "files_changed": [
+      "harness/context/current-state.md",
+      "harness/evidence/task-reports/T-024-20261114130759-e4ccc858.md",
+      "harness/evidence/validation/T-024-20261114130759-e4ccc858.json",
+      "project/apps/web/dist/assets/index-CFJ3JK_I.css",
+      "project/apps/web/dist/assets/index-ClnPAtVd.css",
+      "project/apps/web/dist/assets/index-DtkQOeAF.js",
+      "project/apps/web/dist/assets/index-DvHiR3y9.js",
+      "project/apps/web/dist/index.html",
+      "project/apps/web/scripts/validate-web.mjs",
+      "project/apps/web/src/App.tsx",
+      "project/apps/web/src/styles.css"
+    ],
+    "internal_files_changed": [
+      "harness/state/active-task.json",
+      "harness/state/project-state.json"
+    ],
+    "execution": {
+      "ok": true,
+      "manual_required": false,
+      "commands": [
+        {
+          "kind": "execution",
+          "index": 0,
+          "attempt": 0,
+          "name": "build-web",
+          "command": "npm.cmd run build",
+          "started_at": "2026-11-14T13:10:21.020Z",
+          "finished_at": "2026-11-14T13:10:39.113Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "\n> certificate-web@0.1.0 build\n> tsc --noEmit && vite build\n\n\u001b[36mvite v8.3.8 \u001b[32mbuilding client environment for production...\u001b[36m\u001b[39m\ntransforming...\n✓ 17 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.89 kB │ gzip:  0.50 kB\ndist/assets/index-ClnPAtVd.css   37.59 kB │ gzip:  6.65 kB\ndist/assets/index-DvHiR3y9.js   269.53 kB │ gzip: 74.34 kB\n\n\u001b[32m✓ built in 1.17s\u001b[39m\n",
+          "stderr": "\u001b[2m8:10:37 PM\u001b[22m \u001b[33m\u001b[1m[vite]\u001b[22m\u001b[39m \u001b[33mwarning: `esbuild` option was specified by \"vite:react-babel\" plugin. This option is deprecated, please use `oxc` instead.\u001b[39m\n`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.\n[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown\n",
+          "stdout_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/001-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/001-execution-0.stderr.log"
+        },
+        {
+          "kind": "execution",
+          "index": 1,
+          "attempt": 0,
+          "name": "validate-web",
+          "command": "node scripts/validate-web.mjs",
+          "started_at": "2026-11-14T13:10:39.159Z",
+          "finished_at": "2026-11-14T13:10:39.784Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "Web product structure valid: 12 files, DESIGN.md + logo.png verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n",
+          "stderr": "",
+          "stdout_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/002-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261114130759-e4ccc858/commands/002-execution-0.stderr.log"
+        }
+      ]
+    },
+    "validation": {
+      "ok": true,
+      "manual_required": false,
+      "changed_files": [
+        "project/apps/web/scripts/validate-web.mjs",
+        "project/apps/web/src/App.tsx",
+        "project/apps/web/src/styles.css"
+      ],
+      "checks": [
+        {
+          "name": "task_schema",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "scope",
+          "ok": true,
+          "errors": [],
+          "files": [
+            "project/apps/web/scripts/validate-web.mjs",
+            "project/apps/web/src/App.tsx",
+            "project/apps/web/src/styles.css"
+          ]
+        },
+        {
+          "name": "secrets",
+          "ok": true,
+          "findings": []
+        },
+        {
+          "name": "quality",
+          "ok": true,
+          "errors": [],
+          "warnings": [],
+          "findings": []
+        },
+        {
+          "name": "commands",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "event_log",
+          "ok": true,
+          "errors": [],
+          "count": 19
+        }
+      ]
+    },
+    "remaining_risks": [],
+    "evidence": {
+      "required": true,
+      "report": "harness/evidence/task-reports/T-024-20261114130759-e4ccc858.md",
+      "validation": "harness/evidence/validation/T-024-20261114130759-e4ccc858.json",
+      "missing": []
+    }
+  },
+  "task_marked_done": true
+}

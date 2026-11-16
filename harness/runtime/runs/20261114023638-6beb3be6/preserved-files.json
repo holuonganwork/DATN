@@ -1,0 +1,18 @@
+[
+    {
+        "path":  "project/apps/web/package.json",
+        "sha256":  "A664BC03DBA36A6B067FF348A84A6CB2D84E2E41A4542936B51E4ED9FF35B211"
+    },
+    {
+        "path":  "project/apps/web/package-lock.json",
+        "sha256":  "BE9CA1098D4D086EBE24189005CA37AA48FB53C09147207EABD661B6411D297F"
+    },
+    {
+        "path":  "project/apps/web/vite.config.ts",
+        "sha256":  "4F9FBBDBC10BF58253A12EB98C949427D351C61ADE1ED8250A3C9705EF0B50BA"
+    },
+    {
+        "path":  "project/apps/web/src/styles.css",
+        "sha256":  "05886A93812DDCE821DBCA59092FD58DB273FBAE244EFC1B178683842C056409"
+    }
+]

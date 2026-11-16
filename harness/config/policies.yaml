@@ -1,0 +1,35 @@
+runtime:
+  local_only: true
+  retain_command_output: true
+  max_output_bytes_per_stream: 8192
+  max_retries: 2
+  exclude_from_workspace_snapshot:
+    - harness/runtime
+    - node_modules
+scope:
+  default_harness_write_paths:
+    - harness/state
+    - harness/runtime
+    - harness/evidence
+secrets:
+  reject_sensitive_filenames: true
+  redact_command_output: true
+  private_key_markers: true
+completion:
+  require_validation: true
+  require_evidence_for_done: true
+quality:
+  profiles:
+    - docs
+    - code
+    - harness
+  require_validation_commands_for:
+    - code
+    - harness
+  require_quality_review_event: true
+  require_diff_check: true
+  blocking_signals:
+    - debug_statement
+    - ts_ignore
+    - unsafe_any
+    - empty_catch

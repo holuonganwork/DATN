@@ -1,0 +1,25 @@
+{
+  "task_id": "T-015",
+  "run_id": "20261111190107-c9f60c3f",
+  "status": "needs_review",
+  "checks": {
+    "task_schema": true,
+    "scope": true,
+    "secrets": true,
+    "quality": true,
+    "commands": true,
+    "event_log": true,
+    "diff_check": true,
+    "static_demo_check": true
+  },
+  "commands": [
+    "node scripts/validate-demo.mjs",
+    "node harness/runner/harness.mjs validate 20261111190107-c9f60c3f",
+    "npm.cmd install --offline (blocked: ENOTCACHED)"
+  ],
+  "files_outside_workspace": false,
+  "remaining_risks": [
+    "Chưa chạy được Vite build/dev vì npm registry và npm cache không khả dụng.",
+    "Chưa walkthrough UI bằng browser trong môi trường hiện tại."
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "run_id": "20261114023638-6beb3be6",
+  "task_id": "T-017",
+  "status": "passed",
+  "started_at": "2026-11-14T02:36:38.544Z",
+  "completed_at": "2026-11-14T02:41:07.219Z",
+  "phase": "finalize",
+  "files_changed": [
+    "harness/context/current-state.md",
+    "harness/evidence/task-reports/T-017-20261114023638-6beb3be6.md",
+    "harness/evidence/validation/T-017-20261114023638-6beb3be6.json",
+    "harness/tasks/inbox/T-017-fix-postcss-json.json",
+    "project/package.json"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "build-web",
+        "command": "npm.cmd run build",
+        "started_at": "2026-11-14T02:39:14.270Z",
+        "finished_at": "2026-11-14T02:39:18.428Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "\n> certificate-web@0.1.0 build\n> tsc --noEmit && vite build\n\nvite v8.3.8 building client environment for production...\ntransforming...\n✓ 16 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.46 kB │ gzip:  0.30 kB\ndist/assets/index-D48iziTK.css   10.52 kB │ gzip:  3.13 kB\ndist/assets/index-UfU296L7.js   154.35 kB │ gzip: 50.03 kB\n\n✓ built in 662ms\n",
+        "stderr": "9:39:17 AM [vite] warning: `esbuild` option was specified by \"vite:react-babel\" plugin. This option is deprecated, please use `oxc` instead.\n`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.\n[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown\n",
+        "stdout_file": "harness/runtime/runs/20261114023638-6beb3be6/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261114023638-6beb3be6/commands/001-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      "project/package.json"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          "project/package.json"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 13
+      }
+    ]
+  },
+  "remaining_risks": [],
+  "evidence": {
+    "required": true,
+    "report": "harness/evidence/task-reports/T-017-20261114023638-6beb3be6.md",
+    "validation": "harness/evidence/validation/T-017-20261114023638-6beb3be6.json",
+    "missing": []
+  }
+}

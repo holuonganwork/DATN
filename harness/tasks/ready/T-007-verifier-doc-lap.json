@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "id": "T-007",
+  "title": "Verifier độc lập",
+  "status": "ready",
+  "priority": "medium",
+  "objective": "Cho phép bên xác minh kiểm tra gói chứng chỉ qua RPC mà không phụ thuộc vào trạng thái API nội bộ.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-006"
+  ],
+  "preconditions": [
+    "Task T-006 đã hoàn thành hoặc có bằng chứng đủ để tiếp tục."
+  ],
+  "implementation_notes": [],
+  "checklist": [
+    "Tạo verifier-sdk dùng credential-core.",
+    "Tạo CLI nhận file JSON và tùy chọn PDF.",
+    "Tạo verifier-web độc lập.",
+    "Cho verifier đọc RPC trực tiếp.",
+    "Kiểm tra trusted chain và registry.",
+    "Kiểm tra issuer, batch, root và proof.",
+    "Kiểm tra expiresAt và revoked.",
+    "Kiểm tra hash PDF.",
+    "Hiển thị báo cáo từng bước.",
+    "Kiểm thử JSON đổi thứ tự thuộc tính.",
+    "Kiểm thử tên tiếng Việt.",
+    "Kiểm thử proof sai, batch khác, sai mạng và RPC timeout.",
+    "Kiểm thử khi API backend dừng nhưng RPC còn hoạt động."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "CLI xác minh được một gói hợp lệ chỉ bằng JSON, cấu hình tin cậy và RPC; phát hiện được sửa payload/PDF; trả INCOMPLETE khi không đọc được trạng thái bắt buộc.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [],
+  "validation_commands": [],
+  "deliverables": [
+    "verifier-sdk.",
+    "verifier-cli.",
+    "verifier-web hoặc trang xác minh tách biệt.",
+    "Schema kết quả xác minh.",
+    "Bộ fixture hợp lệ và không hợp lệ."
+  ],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/07-verifier-doc-lap.md",
+  "manual_validation_required": true,
+  "duration": "Tuần 5–7"
+}

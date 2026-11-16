@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "run_id": "20261111183357-4d44c482",
+  "task_id": "T-002",
+  "task_file": "harness/tasks/ready/T-002-kien-truc-va-du-lieu.json",
+  "status": "passed",
+  "phase": "finalize",
+  "created_at": "2026-11-11T18:33:57.443Z",
+  "updated_at": "2026-11-11T18:38:30.838Z",
+  "cwd": "F:\\DATN",
+  "hostname": "meowmeow",
+  "node_version": "v22.12.0",
+  "repo_root": "F:\\DATN",
+  "event_log": "harness/runtime/runs/20261111183357-4d44c482/events.jsonl",
+  "summary_file": "harness/runtime/runs/20261111183357-4d44c482/summary.json",
+  "last_sequence": 57,
+  "git_before": {
+    "head": "ad9c0a648addb06b7f9d279faba39c6a10403b09",
+    "changed_files": [
+      "AGENTS.md",
+      "project/AGENTS.md",
+      "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md",
+      "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md",
+      "project/docs/adr/0003-offchain-personal-data.md",
+      "project/docs/api-contract.md",
+      "project/docs/architecture.md",
+      "project/docs/data-model.md",
+      "project/docs/glossary.md",
+      "project/docs/quality-gates.md",
+      "project/docs/use-cases.md"
+    ]
+  },
+  "workspace_before": {
+    "project/.env.example": "0:1794165290112.21",
+    "project/.gitignore": "0:1794245526813.0554",
+    "project/AGENTS.md": "1284:1794362147969.9348",
+    "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md": "1175:1794421794051.1047",
+    "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md": "1313:1794421841485.3315",
+    "project/docs/adr/0003-offchain-personal-data.md": "1231:1794421796026.036",
+    "project/docs/api-contract.md": "3962:1794421789316.6062",
+    "project/docs/architecture.md": "5737:1794421786857.2996",
+    "project/docs/data-model.md": "7768:1794421833368.0725",
+    "project/docs/De_tai_02.pptx": "21097550:1793441593792.1907",
+    "project/docs/De_tai_02_Bao_cao_hoan_chinh.pptx": "19496612:1793391476538.6414",
+    "project/docs/glossary.md": "2689:1794421836394.7466",
+    "project/docs/quality-gates.md": "1521:1794362146483.6733",
+    "project/docs/requirements.md": "17133:1794167326817.1204",
+    "project/docs/use-cases.md": "8434:1794421829385.616",
+    "project/package.json": "0:1794165290112.21",
+    "project/README.md": "292:1794167355267.592",
+    "harness/state/active-task.json": "83:1794421954398.9243",
+    "harness/state/project-state.json": "123:1794421954405.2012",
+    "harness/evidence/README.md": "630:1794251212417.28",
+    "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md": "1179:1794421944795.393",
+    "harness/evidence/task-reports/T-012-20261109191200-c1bb195f.md": "1471:1794251567174.4048",
+    "harness/evidence/task-reports/T-012-20261109191403-78e81f20.md": "1521:1794251671099.881",
+    "harness/evidence/task-reports/T-012-20261109191604-a7aed15d.md": "1518:1794251836595.1416",
+    "harness/evidence/task-reports/T-012-20261109191813-2e67429f.md": "1545:1794251921077.135",
+    "harness/evidence/task-reports/T-012-20261109192052-78f6f9bd.md": "1566:1794252079147.3262",
+    "harness/evidence/task-reports/T-013-20261111015739-c5a33bd7.md": "1377:1794363066584.729",
+    "harness/evidence/task-reports/T-013-20261111022414-87924690.md": "625:1794363980235.3281",
+    "harness/evidence/task-reports/T-014-20261111171146-3d6868c2.md": "973:1794417193888.0615",
+    "harness/evidence/validation/T-001-20261111182426-ccc7d681.json": "641:1794421946914.5415",
+    "harness/evidence/validation/T-012-20261109191200-c1bb195f.json": "831:1794251569094.3596",
+    "harness/evidence/validation/T-012-20261109191403-78e81f20.json": "558:1794251672927.1584",
+    "harness/evidence/validation/T-012-20261109191604-a7aed15d.json": "558:1794251838493.0461",
+    "harness/evidence/validation/T-012-20261109191813-2e67429f.json": "558:1794251923104.1997",
+    "harness/evidence/validation/T-012-20261109192052-78f6f9bd.json": "558:1794252080635.4348",
+    "harness/evidence/validation/T-013-20261111015739-c5a33bd7.json": "518:1794363068838.919",
+    "harness/evidence/validation/T-013-20261111022414-87924690.json": "393:1794363982493.462",
+    "harness/evidence/validation/T-014-20261111171146-3d6868c2.json": "429:1794417196344.765"
+  },
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": []
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": []
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 47
+      }
+    ]
+  },
+  "completed_at": "2026-11-11T18:36:21.942Z",
+  "files_changed": [
+    "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+    "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "summary": {
+    "run_id": "20261111183357-4d44c482",
+    "task_id": "T-002",
+    "status": "passed",
+    "started_at": "2026-11-11T18:33:57.443Z",
+    "completed_at": "2026-11-11T18:36:21.942Z",
+    "phase": "finalize",
+    "files_changed": [
+      "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+      "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+      "project/docs/architecture.md",
+      "project/docs/data-model.md"
+    ],
+    "internal_files_changed": [
+      "harness/state/active-task.json",
+      "harness/state/project-state.json"
+    ],
+    "execution": {
+      "ok": true,
+      "manual_required": false,
+      "commands": []
+    },
+    "validation": {
+      "ok": true,
+      "manual_required": false,
+      "changed_files": [],
+      "checks": [
+        {
+          "name": "task_schema",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "scope",
+          "ok": true,
+          "errors": [],
+          "files": []
+        },
+        {
+          "name": "secrets",
+          "ok": true,
+          "findings": []
+        },
+        {
+          "name": "quality",
+          "ok": true,
+          "errors": [],
+          "warnings": [],
+          "findings": []
+        },
+        {
+          "name": "commands",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "event_log",
+          "ok": true,
+          "errors": [],
+          "count": 47
+        }
+      ]
+    },
+    "remaining_risks": [],
+    "evidence": {
+      "required": true,
+      "report": "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md",
+      "validation": "harness/evidence/validation/T-002-20261111183357-4d44c482.json",
+      "missing": []
+    }
+  },
+  "task_marked_done": true
+}

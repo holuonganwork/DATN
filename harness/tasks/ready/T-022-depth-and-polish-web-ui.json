@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "id": "T-022",
+  "title": "Nâng cấp chiều sâu thị giác (Frosted Glass, Stacked Shadow, Hero Micro-grid, Polarity-flipped Band)",
+  "status": "ready",
+  "priority": "medium",
+  "objective": "Nâng cấp chiều sâu thị giác cho giao diện project/apps/web theo phong cách Architectural Monochrome: Frosted Glass cho .site-header và .workspace-topbar, Stacked Shadow kiểu Vercel cho các card nổi bật, Architectural Micro-grid mờ dần ở viền bên trong .hero-banner, Polarity-flipped Band cho khối Quy trình Xác thực Độc lập (3 bước) (#09090b ở Light Mode, #18181b + viền #3f3f46 ở Dark Mode), và cập nhật đồng bộ project/apps/web/DESIGN.md.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-022-depth-and-polish-web-ui.md",
+      "harness/tasks/ready/T-022-depth-and-polish-web-ui.json",
+      "harness/tasks/done/T-022-depth-and-polish-web-ui.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-016",
+    "T-017",
+    "T-018",
+    "T-019",
+    "T-021"
+  ],
+  "preconditions": [
+    "Giao diện sản phẩm chuẩn DESIGN.md (T-019) và sạch dữ liệu mẫu (T-021) đã sẵn sàng tại project/apps/web.",
+    "Người dùng đã chốt các quyết định thiết kế trong pha GRILL (Polarity Band cho khối 3 bước, Dark Mode #18181b + #3f3f46, Architectural Grid trong .hero-banner, Frosted Glass cho cả Public Header và Console Topbar, cập nhật DESIGN.md)."
+  ],
+  "implementation_notes": [
+    "Thêm --bg-header-glass, --hero-grid-line, --shadow-card-elevated, --shadow-card-hover và các biến cục bộ cho .polarity-band trong project/apps/web/src/styles.css.",
+    "Áp dụng frosted glass (backdrop-filter: blur(12px)) cho .site-header và .workspace-topbar với @supports fallback.",
+    "Thêm .hero-banner::before vẽ lưới vuông 28px x 28px kèm radial-gradient mask để mờ dần ra viền, giữ .hero-banner > * ở z-index: 1.",
+    "Thêm className polarity-band cho khối Quy trình Xác thực Độc lập (3 bước) trong project/apps/web/src/App.tsx và hoàn thiện style Light/Dark Mode tương thích pill, code, button.",
+    "Cập nhật project/apps/web/DESIGN.md, scripts/validate-web.mjs và harness/context/current-state.md."
+  ],
+  "checklist": [
+    "Cập nhật token và style chiều sâu trong project/apps/web/src/styles.css.",
+    "Gắn class polarity-band cho khối Quy trình Xác thực Độc lập trong project/apps/web/src/App.tsx.",
+    "Cập nhật project/apps/web/DESIGN.md với token và quy tắc Depth/Elevation/Polarity Band mới.",
+    "Cập nhật scripts/validate-web.mjs và harness/context/current-state.md, chạy build & validation."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": ".site-header và .workspace-topbar sử dụng Frosted Glass (backdrop-filter: blur(12px), --bg-header-glass) với fallback an toàn ở cả Light và Dark Mode.",
+      "verification": "Kiểm tra src/styles.css và chạy scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "Các card nổi bật sử dụng Stacked Shadow (--shadow-card, --shadow-card-elevated, --shadow-card-hover) và .hero-banner có lớp Architectural Micro-grid mờ dần ở viền.",
+      "verification": "Kiểm tra src/styles.css và chạy scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-3",
+      "description": "Khối Quy trình Xác thực Độc lập (3 bước) dùng .polarity-band đảo cực tối (#09090b) ở Light Mode và nổi khối (#18181b, viền #3f3f46) ở Dark Mode, giữ độ tương phản chuẩn cho text, status-pill, inline code và button.",
+      "verification": "Kiểm tra src/App.tsx, src/styles.css và chạy npm.cmd run build."
+    },
+    {
+      "id": "AC-4",
+      "description": "project/apps/web/DESIGN.md được cập nhật đồng bộ; build-web, syntax-check, validate-web và git diff --check đều PASS.",
+      "verification": "Chạy npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs và git diff --check."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/src/styles.css đã bổ sung Frosted Glass, Stacked Shadow, Architectural Micro-grid và Polarity-flipped Band.",
+    "project/apps/web/src/App.tsx đã áp dụng polarity-band cho khối Quy trình Xác thực Độc lập (3 bước).",
+    "project/apps/web/DESIGN.md đã đồng bộ các token và quy tắc chiều sâu thị giác mới.",
+    "project/apps/web/scripts/validate-web.mjs và harness/context/current-state.md được cập nhật."
+  ],
+  "out_of_scope": [
+    "Thay đổi nghiệp vụ domain, storage, API hoặc smart contract.",
+    "Thay đổi chữ/nhãn điều hướng, QR SVG hoặc @media print ngoài phạm vi 4 mục Depth & Polish."
+  ],
+  "risks": [
+    "Các thành phần status-pill và btn-secondary bên trong .polarity-band cần override biến cục bộ ở Light Mode để tránh nền trắng chói trên bề mặt tối #09090b."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false
+}

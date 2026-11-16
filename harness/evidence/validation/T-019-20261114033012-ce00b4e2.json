@@ -1,0 +1,85 @@
+{
+  "task_id": "T-019",
+  "run_id": "20261114033012-ce00b4e2",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "task_schema",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "scope",
+      "ok": true,
+      "errors": [],
+      "files": [
+        "project/apps/web/public/logo.png",
+        "project/apps/web/DESIGN.md",
+        "project/apps/web/index.html",
+        "project/apps/web/src/App.tsx",
+        "project/apps/web/src/styles.css",
+        "project/apps/web/scripts/validate-web.mjs",
+        "project/apps/web/README.md",
+        "harness/context/current-state.md"
+      ]
+    },
+    {
+      "name": "secrets",
+      "ok": true,
+      "findings": []
+    },
+    {
+      "name": "quality",
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "findings": []
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "event_log",
+      "ok": true,
+      "errors": [],
+      "count": 43
+    }
+  ],
+  "commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "exit_code": 0,
+      "stdout_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/001-validation-0.stdout.log",
+      "stderr_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/001-validation-0.stderr.log"
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "exit_code": 0,
+      "stdout_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/002-validation-0.stdout.log",
+      "stderr_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/002-validation-0.stderr.log"
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "exit_code": 0,
+      "stdout_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/003-validation-0.stdout.log",
+      "stderr_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/003-validation-0.stderr.log"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "stdout_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/004-validation-0.stdout.log",
+      "stderr_file": "harness/runtime/runs/20261114033012-ce00b4e2/commands/004-validation-0.stderr.log"
+    }
+  ],
+  "remaining_risks": [
+    "Dữ liệu hiện được lưu trữ qua localStorage (certchain.product.state.v1) trên trình duyệt; sẽ nối với REST API /v1 và smart contract thật ở các task backend tiếp theo."
+  ]
+}

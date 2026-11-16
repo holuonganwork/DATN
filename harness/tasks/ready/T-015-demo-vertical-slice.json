@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "T-015",
+  "title": "Prototype vertical slice không database",
+  "status": "ready",
+  "priority": "high",
+  "objective": "Dựng một demo React/TypeScript chạy local để kiểm tra trải nghiệm phát hành, xác minh và thu hồi chứng chỉ trước khi triển khai database.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md",
+    "project/docs/use-cases.md",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": ["T-002"],
+  "preconditions": ["T-002 đã chốt use case và boundary kiến trúc."],
+  "implementation_notes": [
+    "Ứng dụng nằm trong project/apps/web (đổi tên theo T-016), dùng React/TypeScript/Vite, state in-memory và mock blockchain gateway. Không kết nối database, API hoặc ví thật."
+  ],
+  "checklist": [
+    "Tạo scaffold React/TypeScript/Vite.",
+    "Hiển thị state machine batch và audit log.",
+    "Mô phỏng publish và receipt/event.",
+    "Xác minh credential hợp lệ và dữ liệu bị sửa.",
+    "Thu hồi credential và hiển thị kết quả verifier.",
+    "Ghi rõ giới hạn prototype và cách chạy."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Người dùng chạy app local, đi qua publish mock, xác minh credential hợp lệ, bật tình huống dữ liệu bị sửa và thu hồi credential; mỗi thao tác cập nhật trạng thái và audit log trên UI.",
+      "verification": "Chạy build/typecheck, kiểm tra scope/secrets và walkthrough thủ công trên giao diện."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "static-web-check",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "static-web-check",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "React/TypeScript demo app.",
+    "Mock state machine và verifier.",
+    "README hướng dẫn chạy và giới hạn prototype."
+  ],
+  "out_of_scope": [
+    "Database, API thật, smart contract, RPC, private key, auth production và PDF upload."
+  ],
+  "risks": [
+    "Người dùng có thể nhầm mock hash/receipt với bằng chứng blockchain thật nếu không hiển thị cảnh báo rõ ràng."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": ["files_changed", "commands_run", "validation_results", "remaining_risks"]
+  },
+  "source_document": "harness/tasks/inbox/15-demo-vertical-slice.md",
+  "manual_validation_required": true,
+  "duration": "Prototype"
+}
