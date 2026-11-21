@@ -44,15 +44,12 @@ type SurfaceMode = "public" | "auth-gate" | "console";
 type PublicPage = "home" | "verifier" | "directory" | "standards";
 type ConsolePage = "overview" | "batches" | "credentials" | "catalog" | "admin" | "events";
 type VerifierMode = "lookup" | "inspector";
-type ThemeMode = "light" | "dark";
 
 interface NoticeBanner {
   id: number;
   tone: "success" | "warning" | "danger";
   message: string;
 }
-
-const THEME_STORAGE_KEY = "certchain.ui.theme.v1";
 
 const publicPageLabels: Record<PublicPage, string> = {
   home: "Trang chủ",
@@ -178,17 +175,6 @@ function formatDateTime(iso?: string | null): string {
   return iso.replace("T", " ").slice(0, 16);
 }
 
-function loadInitialTheme(): ThemeMode {
-  if (typeof window === "undefined") return "light";
-  try {
-    const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
-    if (saved === "dark" || saved === "light") return saved;
-  } catch {
-    return "light";
-  }
-  return "light";
-}
-
 export function BrandLogo({ size = 36 }: { size?: number }) {
   return (
     <span className="brand-logo-frame" style={{ width: size, height: size }}>
@@ -205,7 +191,6 @@ export function BrandLogo({ size = 36 }: { size?: number }) {
 
 export function App() {
   const [state, setState] = useState<AppState>(() => loadWorkspaceState());
-  const [theme, setTheme] = useState<ThemeMode>(() => loadInitialTheme());
 
   const [surfaceMode, setSurfaceMode] = useState<SurfaceMode>("public");
   const [publicPage, setPublicPage] = useState<PublicPage>("home");
@@ -275,17 +260,6 @@ export function App() {
       }
     };
   }, [notice, noticeHovered]);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    try {
-      window.localStorage.setItem(THEME_STORAGE_KEY, theme);
-    } catch (error) {
-      if (error instanceof Error) {
-        return;
-      }
-    }
-  }, [theme]);
 
   const primaryChain = TRUSTED_CHAINS[0];
 
@@ -367,10 +341,6 @@ export function App() {
       tone,
       message,
     }));
-  }
-
-  function toggleTheme() {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
   }
 
   function getOrganizationName(orgId: string): string {
@@ -616,19 +586,6 @@ export function App() {
                     Tra cứu
                   </button>
                 </form>
-
-                <button
-                  type="button"
-                  className="theme-toggle-btn"
-                  onClick={toggleTheme}
-                  title={
-                    theme === "light"
-                      ? "Chuyển sang giao diện Tối"
-                      : "Chuyển sang giao diện Sáng"
-                  }
-                >
-                  {theme === "light" ? "◐ Tối" : "☀ Sáng"}
-                </button>
 
                 <button
                   type="button"
@@ -897,16 +854,6 @@ export function App() {
                       <span>Hợp đồng Registry</span>
                       <code>{shortHash(primaryChain.registryAddress, 10, 8)}</code>
                     </div>
-                    <div className="footer-kv">
-                      <span>Giao diện</span>
-                      <button
-                        type="button"
-                        className="footer-inline-btn"
-                        onClick={toggleTheme}
-                      >
-                        {theme === "light" ? "Chế độ Sáng" : "Chế độ Tối"}
-                      </button>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -931,8 +878,6 @@ export function App() {
           state={state}
           selectedRole={role}
           selectedOrgId={selectedOrgId}
-          theme={theme}
-          onToggleTheme={toggleTheme}
           onSelectRole={setRole}
           onSelectOrgId={setSelectedOrgId}
           onContinue={(chosenRole, chosenOrgId) =>
@@ -1138,10 +1083,6 @@ export function App() {
                     Xác thực ↗
                   </button>
                 </form>
-
-                <button type="button" className="theme-toggle-btn" onClick={toggleTheme}>
-                  {theme === "light" ? "◐ Tối" : "☀ Sáng"}
-                </button>
               </div>
             </header>
 
@@ -2572,8 +2513,6 @@ interface RoleSwitcherGateViewProps {
   state: AppState;
   selectedRole: UserRole;
   selectedOrgId: string;
-  theme: ThemeMode;
-  onToggleTheme: () => void;
   onSelectRole: (role: UserRole) => void;
   onSelectOrgId: (orgId: string) => void;
   onContinue: (role: UserRole, orgId?: string) => void;
@@ -2584,8 +2523,6 @@ function RoleSwitcherGateView({
   state,
   selectedRole,
   selectedOrgId,
-  theme,
-  onToggleTheme,
   onSelectRole,
   onSelectOrgId,
   onContinue,
@@ -2622,9 +2559,6 @@ function RoleSwitcherGateView({
           </button>
 
           <div className="button-row">
-            <button type="button" className="theme-toggle-btn" onClick={onToggleTheme}>
-              {theme === "light" ? "◐ Tối" : "☀ Sáng"}
-            </button>
             <button type="button" className="btn-secondary btn-sm" onClick={onBackToPublic}>
               ← Quay lại Website Công khai
             </button>
