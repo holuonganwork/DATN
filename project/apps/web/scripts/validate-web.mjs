@@ -41,10 +41,12 @@ const runtimeSource = ["src/App.tsx", "src/domain.ts", "src/storage.ts"]
 const source = ["src/App.tsx", "src/domain.ts", "src/storage.ts", "src/main.tsx", "DESIGN.md"]
   .map((file) => fs.readFileSync(path.join(webRoot, file), "utf8"))
   .join("\n");
+const cssSource = fs.readFileSync(path.join(webRoot, "src/styles.css"), "utf8");
 
 const requiredMarkers = [
   "/logo.png",
   "VoltAgent/awesome-design-md",
+  "ACADEMIC AZURE DESIGN · CERTCHAIN",
   "site-header",
   "site-nav",
   "site-footer",
@@ -74,6 +76,21 @@ const requiredMarkers = [
 for (const marker of requiredMarkers) {
   if (!source.includes(marker)) {
     throw new Error(`Missing product behavior marker: ${marker}`);
+  }
+}
+
+const requiredThemeTokens = [
+  "#0284c7",
+  "#075985",
+  "#082f49",
+  "#06131f",
+  "--brand-deep",
+  "--brand-sidebar-bg",
+];
+
+for (const token of requiredThemeTokens) {
+  if (!cssSource.includes(token)) {
+    throw new Error(`Missing Bright Marine Azure theme token in styles.css: ${token}`);
   }
 }
 
