@@ -916,7 +916,7 @@ export function App() {
                   © 2026 CertChain Registry — Đồ án Tốt nghiệp: Hệ thống phát hành và xác thực
                   chứng chỉ đào tạo tích hợp Blockchain.
                 </span>
-                <span>Thiết kế theo chuẩn DESIGN.md (Vercel / Geist Architectural)</span>
+                <span>Thiết kế theo chuẩn DESIGN.md (Academic Azure · Bright Marine)</span>
               </div>
             </div>
           </footer>
@@ -1662,7 +1662,7 @@ function PublicHomeView({
       <section className="hero-banner">
         <div className="hero-main-col">
           <div className="hero-badge-row">
-            <span className="hero-protocol-pill">VERCEL / GEIST ARCHITECTURAL DESIGN</span>
+            <span className="hero-protocol-pill">ACADEMIC AZURE DESIGN · CERTCHAIN</span>
             <span className="hero-chain-pill">EVM REGISTRY · RFC 8785 JCS</span>
           </div>
 
