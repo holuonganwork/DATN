@@ -82,8 +82,8 @@ for (const marker of requiredMarkers) {
 const requiredThemeTokens = [
   "#0284c7",
   "#075985",
-  "#082f49",
-  "#06131f",
+  "#f0f9ff",
+  "#bae6fd",
   "--brand-deep",
   "--brand-sidebar-bg",
   "--radius-pill",
@@ -94,6 +94,14 @@ for (const token of requiredThemeTokens) {
   if (!cssSource.includes(token)) {
     throw new Error(`Missing Bright Marine Azure theme token in styles.css: ${token}`);
   }
+}
+
+if (
+  cssSource.includes('[data-theme="dark"]') ||
+  appSource.includes("toggleTheme") ||
+  appSource.includes("theme-toggle-btn")
+) {
+  throw new Error("Dark mode markers must not exist in light-only web UI");
 }
 
 const forbiddenMockAndPrototypeMarkers = [

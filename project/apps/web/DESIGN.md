@@ -1,45 +1,48 @@
 # DESIGN.md — CertChain Academic Azure Design System
-> Inspired by [`VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) (Academic Azure · Bright Marine 1D Specification)
+> Inspired by [`VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) (Academic Azure · Bright Marine 1D Light-Only Specification)
 
 ## 1. Brand Identity & Visual Direction
 - **Brand Mark**: Isometric Triple-Arch Monolith (`/logo.png`). Three nested isometric arches with crisp white top/left planes and solid black inner/right shadow planes, framed inside `.brand-logo-frame`.
-- **Aesthetic Philosophy**: **Academic Azure & Cryptographic Precision (1D — Bright Marine Azure)**.
-  - Educational trust and readability: cool ice-slate surfaces (`#F8FAFC` / `#FFFFFF`) paired with Bright Marine Azure (`#0284C7` / `#075985`) in Light Mode; Deep Ocean Night (`#06131F` / `#0C2236`) with luminous Azure highlights (`#38BDF8`) in Dark Mode.
-  - Deep Marine Navy Internal Sidebar (`#082F49` Light / `#081C2E` Dark) to clearly separate governance navigation from data workspaces.
+- **Aesthetic Philosophy**: **Academic Azure & Cryptographic Precision (1D — Bright Marine Azure, Light Mode Only)**.
+  - Educational trust and readability: cool ice-slate surfaces (`#F8FAFC` / `#FFFFFF`) paired with Bright Marine Azure (`#0284C7` / `#075985`).
+  - **Soft Ice-Azure Internal Sidebar (`#F0F9FF`, border `#BAE6FD`, active pill `#0284C7`)**: airily separates console navigation from crisp white data workspaces without heavy dark panels.
   - Frosted glass sticky navigation headers (`backdrop-filter: blur(12px)`), subtle Azure Hero micro-grid (`28px × 28px`), and double-hairline Azure frame on `.certificate-sheet`.
   - Semantic verification colors remain strictly reserved for cryptographic verification states (`VALID`, `REVOKED`, `INDETERMINATE`, `PENDING_CHAIN`) so they never clash with the Ocean Blue brand palette.
 
-## 2. Color Tokens (Light & Dark Mode)
+## 2. Color Tokens (Light Mode)
 
-| Token | Light Mode (Default) | Dark Mode (`[data-theme="dark"]`) | Purpose |
-| :--- | :--- | :--- | :--- |
-| `--bg-canvas` | `#F8FAFC` | `#06131F` | Main page background |
-| `--bg-surface` | `#FFFFFF` | `#0C2236` | Card, table, header, footer, modal surface |
-| `--bg-subtle` | `#F1F5F9` | `#12304B` | Secondary blocks, code cells, hover states |
-| `--bg-elevated` | `#FFFFFF` | `#163A5A` | Floating cards, toast surfaces |
-| `--bg-header-glass` | `rgba(255, 255, 255, 0.92)` | `rgba(12, 34, 54, 0.9)` | Frosted sticky header & console topbar |
-| `--bg-inverse` | `#0284C7` | `#0284C7` | Primary buttons, active nav pills |
-| `--bg-inverse-hover` | `#0369A1` | `#0EA5E9` | Primary button hover state |
-| `--brand-deep` | `#075985` | `#7DD3FC` | Top `.system-bar`, KPI numerals, certificate recipient |
-| `--brand-tint` | `#E0F2FE` | `rgba(14, 165, 233, 0.16)` | Hero protocol badge, soft marine highlights |
-| `--brand-tint-border` | `#7DD3FC` | `rgba(56, 189, 248, 0.38)` | Hero border, certificate inner hairline |
-| `--brand-sidebar-bg` | `#082F49` | `#081C2E` | Fixed Console Sidebar background |
-| `--text-primary` | `#0F172A` | `#F8FAFC` | Headings, primary data, active navigation |
-| `--text-secondary` | `#475569` | `#94A3B8` | Body copy, descriptions, table labels |
-| `--text-muted` | `#64748B` | `#7B93B0` | Eyebrows, captions, timestamps, hashes |
-| `--text-inverse` | `#FFFFFF` | `#FFFFFF` | Text inside primary Azure buttons |
-| `--border` | `#E2E8F0` | `#164266` | Standard 1px structural dividers |
-| `--border-strong` | `#0284C7` | `#38BDF8` | Active focus rings & certificate sheet outer border |
-| `--status-info-bg` | `#E0F2FE` | `rgba(14, 165, 233, 0.16)` | Technical / process info badges |
-| `--status-info-fg` | `#0369A1` | `#38BDF8` | Technical / process info text |
-| `--status-valid-bg` | `#ECFDF5` | `rgba(16, 185, 129, 0.14)` | Verified / Active / Confirmed background |
-| `--status-valid-fg` | `#047857` | `#34D399` | Verified / Active / Confirmed text |
-| `--status-warn-bg` | `#FFFBEB` | `rgba(245, 158, 11, 0.14)` | Pending / Draft / Indeterminate background |
-| `--status-warn-fg` | `#B45309` | `#FBBF24` | Pending / Draft / Indeterminate text |
-| `--status-danger-bg` | `#FEF2F2` | `rgba(239, 68, 68, 0.14)` | Revoked / Invalid / Tampered background |
-| `--status-danger-fg` | `#B91C1C` | `#F87171` | Revoked / Invalid / Tampered text |
-| `--radius-pill` | `9999px` | `9999px` | Full pill geometry token for status pills & buttons |
-| `--radius-btn` | `var(--radius-pill)` | `var(--radius-pill)` | Action buttons, nav pills, segmented tabs, paired search bars |
+| Token | Value | Purpose |
+| :--- | :--- | :--- |
+| `--bg-canvas` | `#F8FAFC` | Main page background |
+| `--bg-surface` | `#FFFFFF` | Card, table, header, footer, modal surface |
+| `--bg-subtle` | `#F1F5F9` | Secondary blocks, code cells, hover states |
+| `--bg-elevated` | `#FFFFFF` | Floating cards, toast surfaces |
+| `--bg-header-glass` | `rgba(255, 255, 255, 0.92)` | Frosted sticky header & console topbar |
+| `--bg-inverse` | `#0284C7` | Primary buttons, active nav pills |
+| `--bg-inverse-hover` | `#0369A1` | Primary button hover state |
+| `--brand-deep` | `#075985` | Top `.system-bar`, sidebar labels, KPI numerals, certificate recipient |
+| `--brand-tint` | `#E0F2FE` | Hero protocol badge, soft marine highlights |
+| `--brand-tint-border` | `#7DD3FC` | Hero border, certificate inner hairline |
+| `--brand-sidebar-bg` | `#F0F9FF` | Fixed Console Sidebar soft ice-azure background |
+| `--brand-sidebar-border` | `#BAE6FD` | Console Sidebar border & card dividers |
+| `--brand-sidebar-active` | `#0284C7` | Active Console Sidebar navigation pill background |
+| `--brand-sidebar-active-border` | `#0369A1` | Active Console Sidebar navigation pill border |
+| `--text-primary` | `#0F172A` | Headings, primary data, active navigation |
+| `--text-secondary` | `#475569` | Body copy, descriptions, table labels |
+| `--text-muted` | `#64748B` | Eyebrows, captions, timestamps, hashes |
+| `--text-inverse` | `#FFFFFF` | Text inside primary Azure buttons |
+| `--border` | `#E2E8F0` | Standard 1px structural dividers |
+| `--border-strong` | `#0284C7` | Active focus rings & certificate sheet outer border |
+| `--status-info-bg` | `#E0F2FE` | Technical / process info badges |
+| `--status-info-fg` | `#0369A1` | Technical / process info text |
+| `--status-valid-bg` | `#ECFDF5` | Verified / Active / Confirmed background |
+| `--status-valid-fg` | `#047857` | Verified / Active / Confirmed text |
+| `--status-warn-bg` | `#FFFBEB` | Pending / Draft / Indeterminate background |
+| `--status-warn-fg` | `#B45309` | Pending / Draft / Indeterminate text |
+| `--status-danger-bg` | `#FEF2F2` | Revoked / Invalid / Tampered background |
+| `--status-danger-fg` | `#B91C1C` | Revoked / Invalid / Tampered text |
+| `--radius-pill` | `9999px` | Full pill geometry token for status pills & buttons |
+| `--radius-btn` | `var(--radius-pill)` | Action buttons, nav pills, segmented tabs, paired search bars |
 
 ## 2.1. Shape & Interactive Control Geometry
 - **Pill Controls (`--radius-btn: 9999px`)**: Applied uniformly to all action buttons (`.btn-primary`, `.btn-secondary`, `.btn-danger`, `.btn-danger-outline`, `.btn-ghost` across default/`sm`/`xs` sizes), utility triggers (`.theme-toggle-btn`, `.file-upload-btn`, `.session-switch-btn`, `.notice-dismiss`, `.footer-inline-btn`, `.system-reset-btn`, `.sample-code-chip`), navigation/tabs (`.nav-item`, `.sidebar-link`, `.segmented-tabs`, `.seg-btn`), and paired lookup search bars (`.header-search-form`, `.hero-input-wrap`, `.search-bar input`).
@@ -67,7 +70,7 @@
      - `Xác thực Chứng chỉ` (`verifier`)
      - `Danh bạ Đơn vị Đào tạo` (`directory`)
      - `Chuẩn Kỹ thuật & Mật mã` (`standards`)
-   - **Header Actions**: Quick certificate lookup input, Light/Dark mode toggle button, and primary CTA `"Cổng Quản lý / Đăng nhập →"`.
+   - **Header Actions**: Quick certificate lookup input and primary CTA `"Cổng Quản lý / Đăng nhập →"`.
 3. **Standard 4-Column Website Footer (`<footer class="site-footer">`)**:
    - Column 1: Brand mark (`/logo.png`), mission statement, and protocol version.
    - Column 2: Public Website Sitemap links.
@@ -85,7 +88,7 @@
 
 ### Mode C: Internal Management Console (`surfaceMode = "console"`)
 1. **Fixed Left Sidebar (`<aside class="app-sidebar">`)**:
-   - Top brand header (`/logo.png` + `CertChain Console`).
+   - Soft Ice-Azure sidebar (`#F0F9FF`, border `#BAE6FD`) with top brand header (`/logo.png` + `CertChain Console`).
    - Active Session Card (current Role badge, active Organization switcher, `"Đổi vai trò"` action).
    - **Vận hành Đơn vị (Issuer Workspace)**:
      - `Tổng quan Đơn vị` (`overview`)
@@ -97,5 +100,5 @@
      - `Nhật ký Kiểm toán (Audit Trail)` (`events`)
    - Bottom Sidebar Footer: Active EVM wallet status + `"← Về Website Công khai"` button.
 2. **Main Console Workspace (`<div class="app-workspace">`)**:
-   - **Top Workspace Header (`.workspace-topbar`)**: Breadcrumb, quick certificate search, sample data reset, Light/Dark toggle, and `"Mở Cổng Xác thực Công khai"` shortcut.
+   - **Top Workspace Header (`.workspace-topbar`)**: Breadcrumb, quick certificate search, and `"Xác thực ↗"` shortcut.
    - **Semantic Data Tables (`<table class="data-table">`)** & **6-Step Merkle Batch Pipeline**.
