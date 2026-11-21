@@ -86,6 +86,8 @@ const requiredThemeTokens = [
   "#06131f",
   "--brand-deep",
   "--brand-sidebar-bg",
+  "--radius-pill",
+  "--radius-btn",
 ];
 
 for (const token of requiredThemeTokens) {

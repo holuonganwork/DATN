@@ -38,6 +38,13 @@
 | `--status-warn-fg` | `#B45309` | `#FBBF24` | Pending / Draft / Indeterminate text |
 | `--status-danger-bg` | `#FEF2F2` | `rgba(239, 68, 68, 0.14)` | Revoked / Invalid / Tampered background |
 | `--status-danger-fg` | `#B91C1C` | `#F87171` | Revoked / Invalid / Tampered text |
+| `--radius-pill` | `9999px` | `9999px` | Full pill geometry token for status pills & buttons |
+| `--radius-btn` | `var(--radius-pill)` | `var(--radius-pill)` | Action buttons, nav pills, segmented tabs, paired search bars |
+
+## 2.1. Shape & Interactive Control Geometry
+- **Pill Controls (`--radius-btn: 9999px`)**: Applied uniformly to all action buttons (`.btn-primary`, `.btn-secondary`, `.btn-danger`, `.btn-danger-outline`, `.btn-ghost` across default/`sm`/`xs` sizes), utility triggers (`.theme-toggle-btn`, `.file-upload-btn`, `.session-switch-btn`, `.notice-dismiss`, `.footer-inline-btn`, `.system-reset-btn`, `.sample-code-chip`), navigation/tabs (`.nav-item`, `.sidebar-link`, `.segmented-tabs`, `.seg-btn`), and paired lookup search bars (`.header-search-form`, `.hero-input-wrap`, `.search-bar input`).
+- **Balanced Pill Padding & Accessibility**: Horizontal padding scales proportionally with control height (`18px` default, `14px` `.btn-sm`, `11px` `.btn-xs`, `24px` `.hero-submit-btn`) while preserving a single-row `.site-header` at `1440px`. Keyboard focus renders a rounded Azure focus ring (`2px solid var(--border-strong)`, `outline-offset: 2px`) via `:focus-visible`.
+- **Card & Form Surface Hierarchy**: Multi-line selectable cards (`.role-select-card`, `.batch-item`, `.cred-chip`) remain at `8px`, structural cards/panels/modals at `10px`–`12px`, standard form inputs/selects/textareas at `6px`–`8px`, and static technical metadata badges at `4px`.
 
 ## 3. Typography Scale
 - **Primary Sans (`--font-sans`)**: `'Inter'`, `-apple-system`, `BlinkMacSystemFont`, `'Segoe UI'`, sans-serif.
