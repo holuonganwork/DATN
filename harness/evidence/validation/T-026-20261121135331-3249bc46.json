@@ -1,0 +1,63 @@
+{
+  "run_id": "20261121135331-3249bc46",
+  "task_id": "T-026",
+  "ok": true,
+  "manual_required": false,
+  "changed_files": [
+    "harness/context/current-state.md",
+    "harness/state/active-task.json",
+    "harness/state/project-state.json",
+    "project/apps/web/DESIGN.md",
+    "project/apps/web/scripts/validate-web.mjs",
+    "project/apps/web/src/styles.css",
+    "harness/runtime/runs/20261121135331-3249bc46/events.jsonl",
+    "harness/runtime/runs/20261121135331-3249bc46/run.json"
+  ],
+  "checks": [
+    {
+      "name": "task_schema",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "scope",
+      "ok": true,
+      "errors": [],
+      "files": [
+        "harness/context/current-state.md",
+        "harness/state/active-task.json",
+        "harness/state/project-state.json",
+        "project/apps/web/DESIGN.md",
+        "project/apps/web/scripts/validate-web.mjs",
+        "project/apps/web/src/styles.css",
+        "harness/runtime/runs/20261121135331-3249bc46/events.jsonl",
+        "harness/runtime/runs/20261121135331-3249bc46/run.json"
+      ]
+    },
+    {
+      "name": "secrets",
+      "ok": true,
+      "findings": []
+    },
+    {
+      "name": "quality",
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "findings": []
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "event_log",
+      "ok": true,
+      "errors": [],
+      "count": 24
+    }
+  ]
+}
