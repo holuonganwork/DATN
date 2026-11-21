@@ -46,6 +46,9 @@
 
   --shadow-card: 0 2px 6px rgba(7, 89, 133, 0.06);
   --shadow-modal: 0 24px 48px rgba(8, 47, 73, 0.22);
+
+  --radius-pill: 9999px;
+  --radius-btn: var(--radius-pill);
 }
 
 [data-theme="dark"] {
@@ -124,6 +127,12 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   color: inherit;
+}
+
+button:focus-visible,
+.file-upload-btn:focus-within {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
 }
 
 .site-root {
@@ -258,14 +267,15 @@ textarea {
 
 .system-reset-btn {
   height: 24px;
-  padding: 0 8px;
-  border-radius: 4px;
+  padding: 0 11px;
+  border-radius: var(--radius-btn);
   border: 1px solid rgba(255, 255, 255, 0.25);
   background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.14s ease;
 }
 
 .system-reset-btn:hover {
@@ -353,8 +363,8 @@ textarea {
   align-items: center;
   gap: 6px;
   height: 36px;
-  padding: 0 10px;
-  border-radius: 6px;
+  padding: 0 11px;
+  border-radius: var(--radius-btn);
   border: 1px solid transparent;
   background: transparent;
   color: var(--text-secondary);
@@ -382,7 +392,7 @@ textarea {
   min-width: 18px;
   height: 18px;
   padding: 0 5px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
@@ -404,15 +414,20 @@ textarea {
   display: flex;
   align-items: center;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius-btn);
   background: var(--bg-subtle);
   overflow: hidden;
+  transition: border-color 0.14s ease;
+}
+
+.header-search-form:focus-within {
+  border-color: var(--border-strong);
 }
 
 .header-search-input {
-  width: 145px;
+  width: 140px;
   height: 32px;
-  padding: 0 10px;
+  padding: 0 8px 0 13px;
   border: none;
   background: transparent;
   font-size: 12px;
@@ -421,7 +436,7 @@ textarea {
 
 .header-search-btn {
   height: 32px;
-  padding: 0 10px;
+  padding: 0 12px 0 10px;
   border: none;
   border-left: 1px solid var(--border);
   background: var(--bg-surface);
@@ -429,6 +444,7 @@ textarea {
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.14s ease;
 }
 
 .header-search-btn:hover {
@@ -436,25 +452,30 @@ textarea {
   color: var(--text-inverse);
 }
 
+.header-search-btn:focus-visible {
+  outline-offset: -2px;
+}
+
 .theme-toggle-btn {
   height: 34px;
-  padding: 0 10px;
-  border-radius: 6px;
+  padding: 0 12px;
+  border-radius: var(--radius-btn);
   border: 1px solid var(--border);
   background: var(--bg-surface);
   color: var(--text-primary);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.14s ease;
 }
 
 .theme-toggle-btn:hover {
   border-color: var(--border-strong);
 }
 
-.header-portal-cta {
+.btn-primary.header-portal-cta {
   height: 34px;
-  padding: 0 12px;
+  padding: 0 14px;
   font-size: 12.5px;
 }
 
@@ -598,8 +619,8 @@ textarea {
 .notice-dismiss {
   border: none;
   background: transparent;
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-btn);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -898,14 +919,17 @@ textarea {
 }
 
 .session-switch-btn {
-  padding: 2px 7px;
-  border-radius: 4px;
+  padding: 3px 9px;
+  border-radius: var(--radius-btn);
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(255, 255, 255, 0.1);
   color: #f0f9ff;
   font-size: 11px;
   font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
   cursor: pointer;
+  transition: all 0.14s ease;
 }
 
 .session-switch-btn:hover {
@@ -988,8 +1012,8 @@ textarea {
   align-items: center;
   justify-content: space-between;
   height: 36px;
-  padding: 0 10px;
-  border-radius: 6px;
+  padding: 0 14px;
+  border-radius: var(--radius-btn);
   border: 1px solid transparent;
   background: transparent;
   color: #cbd5e1;
@@ -997,6 +1021,7 @@ textarea {
   font-weight: 500;
   cursor: pointer;
   text-align: left;
+  transition: all 0.14s ease;
 }
 
 .sidebar-link:hover {
@@ -1080,6 +1105,10 @@ textarea {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+.workspace-topbar .header-search-input {
+  width: 196px;
 }
 
 .workspace-main {
@@ -1187,13 +1216,18 @@ textarea {
   display: flex;
   align-items: center;
   border: 1px solid var(--border-strong);
-  border-radius: 8px;
+  border-radius: var(--radius-btn);
   background: var(--bg-canvas);
   overflow: hidden;
+  transition: box-shadow 0.14s ease;
+}
+
+.hero-input-wrap:focus-within {
+  box-shadow: 0 0 0 3px var(--brand-tint);
 }
 
 .hero-input-prefix {
-  padding: 0 12px;
+  padding: 0 14px 0 18px;
   height: 100%;
   display: inline-flex;
   align-items: center;
@@ -1208,7 +1242,7 @@ textarea {
 .hero-input-wrap input {
   flex: 1;
   height: 44px;
-  padding: 0 14px;
+  padding: 0 16px 0 14px;
   border: none;
   background: transparent;
   font-family: var(--font-mono);
@@ -1217,9 +1251,9 @@ textarea {
   outline: none;
 }
 
-.hero-submit-btn {
+.btn-primary.hero-submit-btn {
   height: 46px;
-  padding: 0 22px;
+  padding: 0 24px;
   font-size: 14px;
 }
 
@@ -1236,12 +1270,13 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 10px;
-  border-radius: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-btn);
   border: 1px solid var(--border);
   background: var(--bg-subtle);
   cursor: pointer;
   font-size: 12px;
+  transition: all 0.14s ease;
 }
 
 .sample-code-chip:hover {
@@ -1613,8 +1648,8 @@ textarea {
   justify-content: center;
   gap: 6px;
   height: 36px;
-  padding: 0 14px;
-  border-radius: 6px;
+  padding: 0 18px;
+  border-radius: var(--radius-btn);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -1649,10 +1684,24 @@ textarea {
   color: #ffffff;
 }
 
+.btn-danger:hover {
+  border-color: #b91c1c;
+  background: #b91c1c;
+}
+
 .btn-danger-outline {
   border: 1px solid var(--status-danger-border);
   background: var(--status-danger-bg);
   color: var(--status-danger-fg);
+}
+
+.btn-danger-outline:hover {
+  border-color: var(--status-danger-fg);
+  background: rgba(239, 68, 68, 0.14);
+}
+
+[data-theme="dark"] .btn-danger-outline:hover {
+  background: rgba(239, 68, 68, 0.24);
 }
 
 .btn-ghost {
@@ -1668,13 +1717,13 @@ textarea {
 
 .btn-sm {
   height: 32px;
-  padding: 0 12px;
+  padding: 0 14px;
   font-size: 12px;
 }
 
 .btn-xs {
   height: 28px;
-  padding: 0 9px;
+  padding: 0 11px;
   font-size: 11.5px;
 }
 
@@ -1692,21 +1741,22 @@ textarea {
 .segmented-tabs {
   display: inline-flex;
   padding: 3px;
-  border-radius: 8px;
+  border-radius: var(--radius-btn);
   border: 1px solid var(--border);
   background: var(--bg-subtle);
 }
 
 .seg-btn {
   height: 30px;
-  padding: 0 12px;
+  padding: 0 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: var(--radius-btn);
   background: transparent;
   color: var(--text-secondary);
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.14s ease;
 }
 
 .seg-btn.active {
@@ -1780,7 +1830,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
@@ -1831,11 +1881,17 @@ textarea {
 .search-bar input {
   flex: 1;
   height: 38px;
-  padding: 0 12px;
-  border-radius: 6px;
+  padding: 0 16px;
+  border-radius: var(--radius-btn);
   border: 1px solid var(--border);
   background: var(--bg-canvas);
   font-family: var(--font-mono);
+  transition: border-color 0.14s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--border-strong);
 }
 
 .field-caption {
@@ -1931,13 +1987,19 @@ textarea {
   align-items: center;
   justify-content: center;
   height: 32px;
-  padding: 0 12px;
-  border-radius: 6px;
+  padding: 0 14px;
+  border-radius: var(--radius-btn);
   border: 1px solid var(--border);
   background: var(--bg-surface);
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.file-upload-btn:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
 }
 
 .file-upload-btn input {
@@ -2522,12 +2584,18 @@ textarea {
 }
 
 .footer-inline-btn {
-  padding: 2px 6px;
-  border-radius: 4px;
+  padding: 3px 10px;
+  border-radius: var(--radius-btn);
   border: 1px solid var(--border);
   background: var(--bg-surface);
   font-size: 11px;
   cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.footer-inline-btn:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
 }
 
 .footer-bottom {
