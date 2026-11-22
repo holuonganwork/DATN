@@ -1,0 +1,57 @@
+{
+  "run_id": "20261122030729-1e6ee844",
+  "task_id": "T-029",
+  "ok": true,
+  "manual_required": false,
+  "changed_files": [
+    "harness/runtime/runs/20261122030729-1e6ee844/events.jsonl",
+    "harness/runtime/runs/20261122030729-1e6ee844/run.json",
+    "project/apps/web/src/App.tsx",
+    "project/apps/web/src/styles.css",
+    "project/apps/web/DESIGN.md",
+    "project/apps/web/README.md",
+    "project/apps/web/scripts/validate-web.mjs",
+    "harness/context/current-state.md"
+  ],
+  "checks": [
+    {
+      "name": "task_schema",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "scope",
+      "ok": true,
+      "errors": [],
+      "files": [
+        "harness/runtime/runs/20261122030729-1e6ee844/events.jsonl",
+        "harness/runtime/runs/20261122030729-1e6ee844/run.json"
+      ]
+    },
+    {
+      "name": "secrets",
+      "ok": true,
+      "findings": []
+    },
+    {
+      "name": "quality",
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "findings": []
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "event_log",
+      "ok": true,
+      "errors": [],
+      "count": 18
+    }
+  ]
+}

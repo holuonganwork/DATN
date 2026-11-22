@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "id": "T-028",
+  "title": "Nâng cấp Logo CertChain sang Phương án 1 (Azure 3-Layer Isometric Monolith SVG)",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Thay thế logo raster đen–trắng nền xám public/logo.png bằng vector 1:1 nền trong suốt public/logo.svg theo Phương án 1 (Azure 3-Layer Isometric Monolith: #075985 -> #0284C7 -> #38BDF8), gỡ khung hộp xám cứng của .brand-logo-frame, cập nhật favicon, DESIGN.md, README.md, scripts/validate-web.mjs và current-state.md.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-028-azure-3-layer-monolith-logo-svg.md",
+      "harness/tasks/ready/T-028-azure-3-layer-monolith-logo-svg.json",
+      "harness/tasks/done/T-028-azure-3-layer-monolith-logo-svg.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-019",
+    "T-025",
+    "T-026",
+    "T-027"
+  ],
+  "preconditions": [
+    "Giao diện web đã hoàn thiện chủ đề 1D Bright Marine Azure Light-only (T-027).",
+    "Người dùng đã chọn Phương án 1: Azure 3-Layer Isometric Monolith SVG nền trong suốt."
+  ],
+  "implementation_notes": [
+    "Tạo project/apps/web/public/logo.svg với viewBox=\"0 0 128 128\", nền trong suốt và 3 lớp vòm isometric đồng tâm theo bảng màu Academic Azure (#075985, #0284C7, #38BDF8, #FFFFFF/#E0F2FE), đồng thời xóa public/logo.png.",
+    "Cập nhật favicon trong index.html sang /logo.svg (type=\"image/svg+xml\"), đổi BrandLogo trong src/App.tsx sang /logo.svg và gỡ nền xám + viền cứng ở .brand-logo-frame trong src/styles.css.",
+    "Đồng bộ DESIGN.md, README.md, scripts/validate-web.mjs và harness/context/current-state.md."
+  ],
+  "checklist": [
+    "Tạo public/logo.svg và xóa public/logo.png.",
+    "Cập nhật index.html, src/App.tsx và src/styles.css.",
+    "Đồng bộ DESIGN.md, README.md, scripts/validate-web.mjs và harness/context/current-state.md.",
+    "Chạy build-web, syntax-check, validate-web, git diff --check, harness doctor và kiểm tra hiển thị trên trình duyệt."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Tồn tại project/apps/web/public/logo.svg (viewBox=\"0 0 128 128\", nền trong suốt, đủ 3 sắc xanh #075985, #0284C7, #38BDF8) và không còn public/logo.png.",
+      "verification": "Kiểm tra trực tiếp thư mục public/ và chạy node scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "index.html, BrandLogo trong src/App.tsx và .brand-logo-frame/.brand-logo-img trong src/styles.css dùng /logo.svg không viền hộp xám cứng.",
+      "verification": "Kiểm tra mã nguồn và ảnh chụp thực tế trên http://localhost:5173/."
+    },
+    {
+      "id": "AC-3",
+      "description": "DESIGN.md, README.md, scripts/validate-web.mjs và harness/context/current-state.md phản ánh chính xác logo vector mới.",
+      "verification": "Kiểm tra trực tiếp các file tương ứng."
+    },
+    {
+      "id": "AC-4",
+      "description": "npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs, git diff --check và harness doctor đều PASS.",
+      "verification": "Chạy toàn bộ validation_commands trong harness và harness doctor."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/public/logo.svg (mới) và xóa project/apps/web/public/logo.png.",
+    "project/apps/web/index.html trỏ favicon /logo.svg.",
+    "project/apps/web/src/App.tsx trỏ BrandLogo tới /logo.svg.",
+    "project/apps/web/src/styles.css gỡ hộp nền xám và viền cứng của .brand-logo-frame.",
+    "project/apps/web/DESIGN.md, README.md và scripts/validate-web.mjs đồng bộ /logo.svg.",
+    "harness/context/current-state.md ghi nhận hoàn thành T-028."
+  ],
+  "out_of_scope": [
+    "Thay đổi nghiệp vụ domain, storage dữ liệu chứng chỉ, backend API hoặc smart contract.",
+    "Thay đổi bố cục trang hoặc hệ thống màu sắc nút/thẻ đã chốt ở T-025..T-027."
+  ],
+  "risks": [
+    "Cần đảm bảo các mặt đỉnh trắng băng của khối isometric vẫn tách biệt rõ trên nền trắng #FFFFFF và nền Sidebar #F0F9FF nhờ nét viền azure sắc nét."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-22T03:01:23.660Z"
+}
