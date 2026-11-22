@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "id": "T-014",
+  "title": "Quy trình grill, plan và goal cho workspace DATN",
+  "status": "done",
+  "priority": "high",
+  "objective": "Bắt buộc mọi task Codex trong workspace DATN đi qua ba phase theo thứ tự grill → plan → goal trước khi sửa file.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/quality-gates.md",
+    "harness/AGENTS.md",
+    "project/AGENTS.md"
+  ],
+  "target": {
+    "repository": "workspace",
+    "allowed_paths": [
+      "AGENTS.md",
+      "harness/tasks/inbox/14-workflow-grill-plan-goal.md",
+      "harness/tasks/ready/T-014-workflow-grill-plan-goal.json",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/",
+      "C:/Users/",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-013"
+  ],
+  "preconditions": [
+    "T-013 quality gates đã hoàn thành.",
+    "Chỉ thay đổi workspace F:/DATN."
+  ],
+  "implementation_notes": [
+    "AGENTS.md là quy tắc workspace; nó không đăng ký thêm slash command vào runtime.",
+    "Fallback phải giữ nguyên thứ tự và mục đích của ba phase."
+  ],
+  "checklist": [
+    "Thêm grill phase trước mọi plan.",
+    "Thêm plan phase trước mọi file edit.",
+    "Thêm goal phase trước execution.",
+    "Thêm finalize và goal completion sau validation."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "AGENTS.md mô tả thứ tự bắt buộc grill → plan → goal → execute cho mọi task trong workspace.",
+      "verification": "Đọc AGENTS.md và đối chiếu checklist T-014."
+    },
+    {
+      "id": "AC-2",
+      "description": "AGENTS.md nêu fallback khi slash command chưa được runtime đăng ký.",
+      "verification": "Đối chiếu phần fallback với capability hiện tại của runtime."
+    },
+    {
+      "id": "AC-3",
+      "description": "Không có file nào ngoài workspace F:/DATN bị sửa.",
+      "verification": "Kiểm tra scope và git status."
+    },
+    {
+      "id": "AC-4",
+      "description": "Doctor, test harness và diff check đạt.",
+      "verification": "Chạy validation_commands của task."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "doctor",
+      "command": "node harness/runner/harness.mjs doctor"
+    },
+    {
+      "name": "harness-tests",
+      "command": "node --test harness/tests/*.test.mjs"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "doctor",
+      "command": "node harness/runner/harness.mjs doctor"
+    },
+    {
+      "name": "harness-tests",
+      "command": "node --test harness/tests/*.test.mjs"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Workspace workflow trong AGENTS.md.",
+    "Task report và validation evidence."
+  ],
+  "out_of_scope": [
+    "Sửa cấu hình global dưới C:/Users/anho2.",
+    "Đăng ký hoặc cài đặt slash command mới.",
+    "Sửa mã nguồn project."
+  ],
+  "risks": [
+    "Slash command có thể không tồn tại trong một số runtime; fallback bằng phase tương đương là bắt buộc.",
+    "Quy tắc trong AGENTS.md không tự biến phase thành hard gate nếu runtime bỏ qua file hướng dẫn."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "harness",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "source_document": "harness/tasks/inbox/14-workflow-grill-plan-goal.md",
+  "manual_validation_required": false,
+  "completed_at": "2026-11-11T17:13:29.239Z"
+}

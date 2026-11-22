@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "id": "T-026",
+  "title": "Bo tròn hệ thống nút dạng Pill (9999px) cho giao diện web",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Chuyển đổi hệ nút hành động, nút tiện ích, điều hướng/tab và 3 cụm thanh tìm kiếm gắn liền trong project/apps/web sang hình khối bo tròn viên thuốc (Pill — 9999px) qua CSS token --radius-pill / --radius-btn, bổ sung :focus-visible và :hover cho nút destructive/tiện ích, giữ Header 1 hàng ở 1440px và cập nhật đồng bộ DESIGN.md + validate-web.mjs.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-026-pill-rounded-buttons-web-ui.md",
+      "harness/tasks/ready/T-026-pill-rounded-buttons-web-ui.json",
+      "harness/tasks/done/T-026-pill-rounded-buttons-web-ui.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-019",
+    "T-021",
+    "T-024",
+    "T-025"
+  ],
+  "preconditions": [
+    "Giao diện frontend tại project/apps/web đã áp dụng chủ đề 1D Bright Marine Azure (T-025) và sạch dữ liệu mẫu (T-021).",
+    "Người dùng đã chốt đầy đủ 4 nhánh thiết kế trong pha GRILL: bo Pill (9999px) kèm căn nhẹ padding ngang; áp dụng cho nút hành động/tiện ích, Top Nav (.nav-item), tab (.segmented-tabs/.seg-btn) và Sidebar (.sidebar-link); đồng bộ Pill cho 3 cụm thanh tìm kiếm (.header-search-form, .hero-input-wrap, .search-bar input); giữ bo card/input cho thẻ nhiều dòng và form thường; chuẩn hóa CSS token, đồng bộ DESIGN.md + validate-web.mjs và bổ sung :focus-visible + :hover."
+  ],
+  "implementation_notes": [
+    "Khai báo --radius-pill: 9999px và --radius-btn: var(--radius-pill) trong :root của project/apps/web/src/styles.css.",
+    "Áp dụng var(--radius-btn) và căn padding ngang cho .btn-primary/.btn-secondary/.btn-danger/.btn-danger-outline/.btn-ghost (.btn-sm, .btn-xs, .hero-submit-btn, .header-portal-cta), các nút tiện ích (.theme-toggle-btn, .file-upload-btn, .session-switch-btn, .notice-dismiss, .footer-inline-btn, .system-reset-btn, .sample-code-chip), điều hướng/tab (.nav-item, .sidebar-link, .segmented-tabs, .seg-btn) và 3 cụm thanh tìm kiếm (.header-search-form, .hero-input-wrap, .search-bar input).",
+    "Bổ sung :focus-visible bo tròn và :hover cho .btn-danger, .btn-danger-outline, .file-upload-btn, .footer-inline-btn; giữ nguyên bố cục header 1 hàng tại 1440px.",
+    "Cập nhật project/apps/web/DESIGN.md, bổ sung kiểm tra token bo tròn trong project/apps/web/scripts/validate-web.mjs và cập nhật harness/context/current-state.md."
+  ],
+  "checklist": [
+    "Khai báo CSS tokens --radius-pill / --radius-btn và cập nhật bo tròn + padding + hover/focus trong src/styles.css.",
+    "Đồng bộ project/apps/web/DESIGN.md và mở rộng kiểm tra trong scripts/validate-web.mjs.",
+    "Kiểm chứng trực quan trên trình duyệt tại 1440px (Light & Dark Mode, Public Website & Internal Console).",
+    "Cập nhật harness/context/current-state.md và chạy toàn bộ validation + harness doctor."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Token --radius-pill và --radius-btn được khai báo trong src/styles.css và áp dụng nhất quán cho toàn bộ hệ nút hành động, nút tiện ích, điều hướng/tab và 3 cụm thanh tìm kiếm đã chốt; thẻ chọn nhiều dòng và form input thường giữ nguyên bo card/input.",
+      "verification": "Kiểm tra project/apps/web/src/styles.css và chạy node scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "Bổ sung :focus-visible bo tròn và :hover cho .btn-danger, .btn-danger-outline, .file-upload-btn, .footer-inline-btn hoạt động hài hòa ở cả Light Mode và Dark Mode; 3 màu trạng thái mật mã giữ nguyên.",
+      "verification": "Kiểm tra project/apps/web/src/styles.css và kiểm chứng trực quan trên trình duyệt."
+    },
+    {
+      "id": "AC-3",
+      "description": "Thanh .site-header duy trì bố cục 1 hàng tại 1440px cho cả Light Mode và Dark Mode sau khi tăng nhẹ padding ngang cho nút Pill.",
+      "verification": "Kiểm chứng trực quan trên bản chạy thực tế tại http://localhost:5173/ ở viewport 1440x900."
+    },
+    {
+      "id": "AC-4",
+      "description": "project/apps/web/DESIGN.md, scripts/validate-web.mjs và harness/context/current-state.md được cập nhật đồng bộ.",
+      "verification": "Kiểm tra nội dung file và chạy node scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-5",
+      "description": "npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs, git diff --check và harness doctor đều PASS.",
+      "verification": "Chạy toàn bộ validation_commands trong harness và harness doctor."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/src/styles.css cập nhật token --radius-pill / --radius-btn, hình khối Pill cho hệ nút/điều hướng/tab/3 thanh tìm kiếm và hoàn thiện :focus-visible + :hover.",
+    "project/apps/web/DESIGN.md bổ sung quy chuẩn bo tròn nút Pill và bảng token hình khối.",
+    "project/apps/web/scripts/validate-web.mjs bổ sung kiểm tra token bo tròn --radius-pill và --radius-btn.",
+    "harness/context/current-state.md bổ sung ghi chú hoàn thành T-026."
+  ],
+  "out_of_scope": [
+    "Thay đổi nghiệp vụ domain, storage, backend API hoặc smart contract.",
+    "Thay đổi bảng màu Academic Azure (T-025), 3 màu trạng thái mật mã hoặc cấu trúc định tuyến trong App.tsx."
+  ],
+  "risks": [
+    "Tăng padding ngang cho nút Pill trên header có thể làm .site-header-inner xuống 2 hàng tại 1440px nếu không cân chỉnh chặt khoảng cách."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-21T14:01:11.914Z"
+}

@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "id": "T-019",
+  "title": "Áp dụng chuẩn DESIGN.md (awesome-design-md), tích hợp logo thương hiệu và hoàn thiện giao diện website tiêu chuẩn",
+  "status": "done",
+  "priority": "high",
+  "objective": "Xây dựng project/apps/web/DESIGN.md theo chuẩn VoltAgent/awesome-design-md (Vercel/Geist Architectural), tích hợp logo người dùng cung cấp vào public/logo.png và tái thiết kế giao diện thành một trang web tiêu chuẩn hoàn chỉnh có Header, Navigation Bar, Trang chủ/Tổng quan, Bảng dữ liệu, Sidebar, Footer đa cột và Light/Dark mode.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/use-cases.md",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-019-awesome-design-md-standard-web-ui.json",
+      "harness/tasks/done/T-019-awesome-design-md-standard-web-ui.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-016",
+    "T-017",
+    "T-018"
+  ],
+  "preconditions": [
+    "Task T-018 đã hoàn thành phần domain logic và lưu trữ localStorage.",
+    "Người dùng đã cung cấp logo thương hiệu và yêu cầu áp dụng phong cách VoltAgent/awesome-design-md với bố cục trang web tiêu chuẩn."
+  ],
+  "implementation_notes": [
+    "Tạo file project/apps/web/DESIGN.md làm nguồn quy chiếu thiết kế theo mẫu VoltAgent/awesome-design-md.",
+    "Sao chép logo người dùng vào project/apps/web/public/logo.png và hiển thị nhất quán tại Header, Footer, Favicon và Phôi chứng chỉ.",
+    "Đảm bảo trang web có đầy đủ cấu trúc tiêu chuẩn: Top System Bar, Header & Navigation Bar, Breadcrumb, Trang chủ/Tổng quan (Hero + Quick Verify), các trang nghiệp vụ với Bảng dữ liệu chuẩn, Light/Dark mode và Footer 4 cột."
+  ],
+  "checklist": [
+    "Tạo project/apps/web/DESIGN.md theo chuẩn awesome-design-md.",
+    "Tích hợp logo người dùng vào project/apps/web/public/logo.png và index.html.",
+    "Tái thiết kế src/App.tsx và src/styles.css với đầy đủ Header, Navigation Bar, Trang chủ, Bảng dữ liệu, Footer và Light/Dark mode.",
+    "Cập nhật scripts/validate-web.mjs và chạy kiểm tra build/validation."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Có file project/apps/web/DESIGN.md đặc tả đầy đủ hệ thống thiết kế và file project/apps/web/public/logo.png được sử dụng trên giao diện.",
+      "verification": "Kiểm tra file tồn tại và chạy scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "Giao diện có cấu trúc trang web tiêu chuẩn gồm Header, Navigation Bar, Breadcrumb, Trang chủ (Hero + Quick Verify), các phân khu nghiệp vụ (Verifier, Batches, Credentials, Catalog, Admin, Audit trail), Bảng dữ liệu chuẩn, chế độ Sáng/Tối và Footer đa cột.",
+      "verification": "Kiểm tra mã nguồn src/App.tsx, src/styles.css và chạy scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-3",
+      "description": "TypeScript, Vite production build, clean-code scan và git diff --check đều đạt.",
+      "verification": "Chạy npm.cmd run build, node scripts/validate-web.mjs và git diff --check."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Tài liệu hệ thống thiết kế project/apps/web/DESIGN.md.",
+    "Logo thương hiệu tại project/apps/web/public/logo.png.",
+    "Giao diện trang web tiêu chuẩn tại project/apps/web/src/App.tsx và src/styles.css."
+  ],
+  "out_of_scope": [
+    "Triển khai backend NestJS hoặc smart contract mainnet.",
+    "Commit, push hoặc deploy ra môi trường ngoài."
+  ],
+  "risks": [
+    "Đảm bảo ảnh logo hiển thị sắc nét trên cả nền sáng (Light Mode) và nền tối (Dark Mode)."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T04:06:41.161Z"
+}

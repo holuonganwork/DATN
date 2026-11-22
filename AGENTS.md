@@ -1,16 +1,15 @@
 # Codex Agent Operating Instructions
 
-## 1. Mục đích
+## 1. Mục đích và ranh giới
 
 Workspace này dùng để phát triển đồ án tốt nghiệp:
 
 > Hệ thống phát hành và xác thực chứng chỉ đào tạo tích hợp blockchain.
 
-`harness/` là môi trường nội bộ giúp Codex Agent làm việc chính xác, có kiểm soát và có thể khôi phục. `harness/` không phải là chức năng của sản phẩm và không thuộc phạm vi đồ án cần nộp.
+- `harness/` là môi trường nội bộ giúp Agent làm việc chính xác, có kiểm soát và có thể khôi phục; không phải chức năng sản phẩm và không thuộc phạm vi đồ án cần nộp.
+- `project/` là mã nguồn thật của đồ án. Khi người dùng yêu cầu xây dựng sản phẩm, mặc định chỉ được sửa trong `project/`, trừ khi người dùng nói rõ cần sửa harness.
 
-`project/` là mã nguồn thật của đồ án. Khi người dùng yêu cầu xây dựng sản phẩm, mặc định chỉ được sửa trong `project/`, trừ khi người dùng nói rõ cần sửa harness.
-
-## 2. Thứ tự ưu tiên thông tin
+## 2. Thứ tự ưu tiên và skill bổ trợ
 
 Khi có mâu thuẫn, ưu tiên theo thứ tự:
 
@@ -20,94 +19,37 @@ Khi có mâu thuẫn, ưu tiên theo thứ tự:
 4. Tài liệu trong `harness/context/`.
 5. Suy luận của Agent.
 
-Không tự ý giải quyết mâu thuẫn bằng cách mở rộng phạm vi. Hãy ghi nhận vấn đề và chuyển task sang trạng thái `blocked` nếu không thể tiếp tục an toàn.
+Không tự ý giải quyết mâu thuẫn bằng cách mở rộng phạm vi; chuyển task sang trạng thái `blocked` nếu không thể tiếp tục an toàn.
 
-## 3. Quy trình bắt buộc cho mỗi prompt có yêu cầu thay đổi
+Skill bổ trợ trong `.agents/skills/` (như `ponytail`, `ponytail-review`, `ponytail-audit`, `ponytail-debt`) dùng để tối giản diff, tránh abstraction thừa và review sắc hơn trong quá trình thực hiện, nhưng **không được** bỏ qua thứ tự pha, `allowed_paths`, quality gates hoặc evidence bắt buộc trong file này.
 
-### Bước 1: Xác định task
+## 3. Quy trình bắt buộc cho mọi task
 
-- Nếu prompt có mã task, đọc file task tương ứng trong `harness/tasks/`.
-- Nếu prompt chưa có mã task, chuyển yêu cầu thành một task nháp trong `harness/tasks/inbox/` trước khi triển khai.
-- Nếu mục tiêu, phạm vi hoặc tiêu chí hoàn thành chưa đủ rõ, không tự đoán phần nghiệp vụ quan trọng; ghi rõ điểm bị chặn.
-
-### Bước 2: Đọc ngữ cảnh cần thiết
-
-Tối thiểu phải đọc:
+Mọi task (code, tài liệu, review, repair và thay đổi harness) phải đi qua đúng thứ tự:
 
 ```text
-harness/context/project-brief.md
-harness/context/scope.md
+GRILL → PLAN → GOAL → EXECUTE → VALIDATE → FINALIZE → GOAL COMPLETE
 ```
 
-Đọc thêm `architecture.md`, `conventions.md`, decision log hoặc tài liệu trong `project/docs/` khi task liên quan.
+Slash command là capability của runtime; nếu chưa được đăng ký, thực hiện phase fallback tương đương và **không** giả nhận slash command đã chạy.
 
-Nếu `project/AGENTS.md` đã được tạo, phải đọc file đó trước khi sửa mã nguồn trong `project/`. Nếu file chưa tồn tại, áp dụng các quy tắc trong file này và tài liệu task.
+1. **GRILL:** Gọi `$grill-me` nếu runtime đã đăng ký. Nếu chưa, kiểm tra các fact có thể tra cứu, đọc ngữ cảnh tối thiểu (`harness/context/project-brief.md`, `harness/context/scope.md`, `harness/context/current-state.md`, file task nếu có mã task, cộng `project/AGENTS.md` hoặc `harness/AGENTS.md`, `architecture.md`, `conventions.md`, decision log, `project/docs/` khi liên quan), kiểm tra `harness/state/` và `git status`. Lập design tree, hỏi toàn bộ câu hỏi ở frontier hiện tại và chờ quyết định; nếu mục tiêu/phạm vi chưa đủ rõ, không tự đoán phần nghiệp vụ quan trọng mà ghi rõ điểm bị chặn.
+2. **PLAN:** Gọi `/plan` nếu runtime đã đăng ký. Nếu chưa, ghi plan trực tiếp trong phiên làm việc gồm: mục tiêu, các file dự kiến sửa (`allowed_paths`), tiêu chí chấp nhận, quality gates, lệnh kiểm tra sẽ chạy và rủi ro/giả định chính. Nếu prompt chưa có mã task, tạo task nháp trong `harness/tasks/inbox/` (và task JSON trong `harness/tasks/ready/` khi chạy qua harness). Chưa chỉnh sửa mã nguồn hoặc tài liệu triển khai trước khi plan hoàn tất.
+3. **GOAL:** Gọi `/goal` nếu runtime đã đăng ký; nếu chưa, dùng native goal tool `create_goal` với objective trùng task; nếu runtime không hỗ trợ cả hai, ghi nhận mục tiêu minh bạch qua kế hoạch và event trong harness run. Goal phải có trước khi execution và được cập nhật thành `complete`, `blocked` hoặc `paused` ở cuối phiên.
+4. **EXECUTE:** Khởi tạo `run_id` trong `harness/runtime/runs/` bằng `node harness/runner/harness.mjs start <task-id>` (hoặc chạy trọn lifecycle bằng `node harness/runner/harness.mjs run <task-id>`). Khi bị gián đoạn, dùng `resume` thay vì dựng lại trạng thái từ trí nhớ. Chỉ sửa trong `allowed_paths`, không ghi đè thay đổi đang tồn tại của người dùng, không mở rộng tính năng ngoài scope, và không đổi công nghệ, kiến trúc hoặc schema lớn khi chưa ghi decision phù hợp. Chạy kiểm tra theo task (tối thiểu lint/typecheck/test/build tương ứng nếu task không khai báo); khi lỗi, đọc toàn bộ lỗi, sửa nguyên nhân trong scope và chạy lại tối đa **2 vòng tự động** trước khi báo `FAILED` hoặc `BLOCKED`. Ghi các event quan trọng, gồm `quality_reviewed` trước `validate`.
+5. **VALIDATE & FINALIZE:** Không tuyên bố task hoàn thành chỉ vì đã viết code; phải có kết quả validation đạt. Lưu báo cáo và bằng chứng vào `harness/state/`, `harness/evidence/task-reports/`, `harness/evidence/validation/`, chạy `finalize` và cập nhật goal hoàn tất (`GOAL COMPLETE`). Không đánh dấu task hoàn thành nếu thiếu goal, run log, validation hoặc evidence.
 
-### Bước 3: Kiểm tra trạng thái hiện tại
-
-- Đọc `harness/context/current-state.md` nếu file tồn tại.
-- Kiểm tra `harness/state/` nếu đã được khởi tạo.
-- Kiểm tra `git status` của `project/` trước khi sửa.
-- Không ghi đè thay đổi đang tồn tại mà chưa được người dùng yêu cầu xử lý.
-
-### Bước 4: Lập kế hoạch ngắn
-
-Trước khi sửa code, phải xác định:
-
-- mục tiêu của task;
-- các file dự kiến thay đổi;
-- tiêu chí chấp nhận;
-- lệnh kiểm tra sẽ chạy;
-- rủi ro hoặc giả định chính.
-
-### Bước 5: Triển khai có giới hạn
-
-- Chỉ sửa các đường dẫn nằm trong `allowed_paths` của task.
-- Không mở rộng sang tính năng khác chỉ vì thấy cần thiết.
-- Không thay đổi công nghệ, kiến trúc hoặc schema lớn nếu chưa ghi decision phù hợp.
-- Không dùng dữ liệu thật, secret thật, private key thật hoặc thông tin cá nhân thật.
-- Không triển khai lên production, push code hoặc gửi thông tin ra bên ngoài nếu người dùng chưa yêu cầu.
-
-### Bước 6: Tự kiểm tra
-
-Chạy các lệnh được khai báo trong task. Nếu task không khai báo, chọn các kiểm tra phù hợp với phần code đã sửa, tối thiểu gồm lint/typecheck/test hoặc build tương ứng.
-
-Không tuyên bố task hoàn thành chỉ dựa trên việc code đã được viết. Phải có kết quả kiểm tra.
-
-### Bước 7: Sửa lỗi có giới hạn
-
-Nếu kiểm tra thất bại:
-
-1. Đọc toàn bộ lỗi.
-2. Sửa nguyên nhân trong phạm vi task.
-3. Chạy lại kiểm tra.
-
-Không lặp vô hạn. Sau tối đa hai vòng sửa tự động, báo `FAILED` hoặc `BLOCKED` cùng nguyên nhân cụ thể.
-
-### Bước 8: Ghi nhận kết quả
-
-Sau mỗi task, cập nhật nếu các thư mục đã tồn tại:
-
-```text
-harness/state/
-harness/evidence/task-reports/
-harness/evidence/validation/
-```
-
-Báo cáo phải nêu file đã thay đổi, lệnh đã chạy, kết quả kiểm tra, giả định và vấn đề còn lại.
-
-## 4. Quy tắc về phạm vi sản phẩm
+## 4. Phạm vi sản phẩm
 
 Sản phẩm tập trung vào phát hành, xác thực, thu hồi và tra cứu trạng thái chứng chỉ đào tạo. Dữ liệu cá nhân và file chứng chỉ phải được lưu ngoài blockchain; blockchain chỉ lưu dữ liệu cần cho tính toàn vẹn, định danh và trạng thái xác thực.
 
 Không tự ý bổ sung multi-chain, mainnet, mobile wallet, AI, OCR, thanh toán, W3C Verifiable Credentials đầy đủ hoặc các tính năng SaaS lớn nếu task không yêu cầu.
 
-## 5. Quy tắc Git và file tạm
+## 5. Quy tắc Git, bảo mật và file tạm
 
-- Không commit, push, tạo release hoặc triển khai nếu người dùng chưa yêu cầu.
-- Không xóa thay đổi của người dùng.
-- Có thể dùng worktree hoặc branch tạm để cô lập task.
-- Không đưa token, secret, file `.env`, log nhạy cảm hoặc private key vào Git.
+- Không commit, push, tạo release, triển khai lên production hoặc gửi thông tin ra bên ngoài nếu người dùng chưa yêu cầu.
+- Không xóa thay đổi của người dùng; có thể dùng worktree hoặc branch tạm để cô lập task.
+- Không dùng hoặc đưa dữ liệu thật, secret thật, private key thật, thông tin cá nhân thật, token, file `.env` hoặc log nhạy cảm vào code hoặc Git.
 
 ## 6. Báo cáo cuối task
 
@@ -129,28 +71,3 @@ Files changed:
 Giả định hoặc rủi ro còn lại:
 - ...
 ```
-
-## 7. Bắt buộc ghi log harness
-
-- Mỗi lần Agent thực hiện thay đổi phải có một `run_id` trong `harness/runtime/runs/`.
-- Khởi tạo run bằng `node harness/runner/harness.mjs start <task-id>` hoặc chạy trọn lifecycle bằng `node harness/runner/harness.mjs run <task-id>`.
-- Khi tiến trình bị dừng, dùng `resume` thay vì tạo lại trạng thái từ trí nhớ.
-- Không đánh dấu task hoàn thành nếu run log, validation và evidence tương ứng chưa có.
-
-## 8. Workflow bắt buộc cho mọi task Codex trong workspace
-
-Mọi task Agent thực hiện trong workspace này phải đi qua đúng thứ tự sau trước khi triển khai:
-
-1. **GRILL** — gọi `$grill-me` nếu runtime đã đăng ký command. Nếu command chưa khả dụng, thực hiện phase tương đương bằng cách kiểm tra các fact có thể tra cứu, lập design tree, hỏi toàn bộ câu hỏi ở frontier hiện tại và chờ quyết định cần thiết. Không giả nhận rằng slash command đã chạy.
-2. **PLAN** — gọi `/plan` nếu runtime đã đăng ký command. Nếu chưa có, ghi plan trực tiếp trong phiên làm việc với mục tiêu, file dự kiến sửa, acceptance criteria, quality gates, lệnh kiểm tra và rủi ro. Chưa chỉnh sửa mã nguồn hoặc tài liệu triển khai trước khi plan hoàn tất.
-3. **GOAL** — gọi `/goal` nếu runtime đã đăng ký command; nếu chưa có, dùng native goal tool `create_goal` với objective trùng task. Goal phải tồn tại trước khi bắt đầu execution và được cập nhật thành `complete`, `blocked` hoặc `paused` ở cuối phiên theo trạng thái thực tế.
-4. **EXECUTE** — sau ba phase trên, khởi tạo hoặc tiếp tục harness run, triển khai trong `allowed_paths`, chạy quality gates và ghi event quan trọng.
-5. **FINALIZE** — chạy validation, lưu evidence, finalize harness run và cập nhật goal. Không báo hoàn thành khi goal, run log, validation hoặc evidence còn thiếu.
-
-Thứ tự chuẩn là:
-
-```text
-GRILL → PLAN → GOAL → EXECUTE → VALIDATE → FINALIZE → GOAL COMPLETE
-```
-
-Quy tắc này áp dụng cho task code, tài liệu, review, repair và thay đổi harness. Slash command là capability của runtime; phần fallback ở trên giữ nguyên mục đích và thứ tự khi capability đó chưa được đăng ký.

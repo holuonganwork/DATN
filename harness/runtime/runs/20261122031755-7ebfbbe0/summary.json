@@ -1,0 +1,162 @@
+{
+  "run_id": "20261122031755-7ebfbbe0",
+  "task_id": "T-030",
+  "status": "passed",
+  "started_at": "2026-11-22T03:17:55.581Z",
+  "completed_at": "2026-11-22T03:20:25.495Z",
+  "phase": "finalize",
+  "files_changed": [
+    ".gitignore",
+    "AGENTS.md",
+    "harness/AGENTS.md",
+    "harness/context/current-state.md",
+    "harness/context/quality-gates.md",
+    "harness/evidence/task-reports/T-030-20261122031755-7ebfbbe0.md",
+    "harness/evidence/validation/T-030-20261122031755-7ebfbbe0.json",
+    "harness/prompts/execution.md",
+    "harness/prompts/repair.md",
+    "harness/prompts/review.md",
+    "project/AGENTS.md",
+    "project/docs/quality-gates.md"
+  ],
+  "internal_files_changed": [
+    "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+    "harness/runtime/runs/20261122031755-7ebfbbe0/run.json",
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "doctor",
+        "command": "node harness/runner/harness.mjs doctor",
+        "started_at": "2026-11-22T03:19:36.506Z",
+        "finished_at": "2026-11-22T03:19:36.738Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "{\n  \"ok\": true,\n  \"checked_at\": \"2026-11-22T03:19:36.712Z\",\n  \"root\": \"f:\\\\DATN\\\\harness\",\n  \"checks\": [\n    {\n      \"name\": \"directory:harness/runtime\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/runtime/runs\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/state\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/tasks\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/schemas\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"node_version\",\n      \"ok\": true,\n      \"value\": \"v22.12.0\"\n    },\n    {\n      \"name\": \"tasks:inbox\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:ready\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 14\n    },\n    {\n      \"name\": \"tasks:active\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:blocked\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:done\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 16\n    },\n    {\n      \"name\": \"task_count\",\n      \"ok\": true,\n      \"count\": 30,\n      \"expected_minimum\": 12\n    }\n  ]\n}\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/001-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 1,
+        "attempt": 0,
+        "name": "harness-tests",
+        "command": "node --test harness/tests/*.test.mjs",
+        "started_at": "2026-11-22T03:19:36.745Z",
+        "finished_at": "2026-11-22T03:19:42.417Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "TAP version 13\n# Subtest: task validator accepts the machine-readable task contract\nok 1 - task validator accepts the machine-readable task contract\n  ---\n  duration_ms: 2.2792\n  ...\n# Subtest: quality profile requires validation commands for code and harness tasks\nok 2 - quality profile requires validation commands for code and harness tasks\n  ---\n  duration_ms: 0.6559\n  ...\n# Subtest: clean-code scan reports blocking patterns with line numbers\nok 3 - clean-code scan reports blocking patterns with line numbers\n  ---\n  duration_ms: 1.8478\n  ...\n# Subtest: quality validator blocks a code task without validation commands\nok 4 - quality validator blocks a code task without validation commands\n  ---\n  duration_ms: 0.4795\n  ...\n# Subtest: scope and secret validators reject unsafe changes\nok 5 - scope and secret validators reject unsafe changes\n  ---\n  duration_ms: 1.6627\n  ...\n# Subtest: lifecycle writes ordered append-only events and summary\nok 6 - lifecycle writes ordered append-only events and summary\n  ---\n  duration_ms: 1118.4021\n  ...\n# Subtest: resume continues a failed command from the persisted run log\nok 7 - resume continues a failed command from the persisted run log\n  ---\n  duration_ms: 1773.9941\n  ...\n# Subtest: createRun records start before execute is invoked\nok 8 - createRun records start before execute is invoked\n  ---\n  duration_ms: 454.2234\n  ...\n# Subtest: finalize refuses passed when execution or validation is missing\nok 9 - finalize refuses passed when execution or validation is missing\n  ---\n  duration_ms: 355.4363\n  ...\n# Subtest: mark-done refuses a passed run when evidence files are missing\nok 10 - mark-done refuses a passed run when evidence files are missing\n  ---\n  duration_ms: 1197.8139\n  ...\n# Subtest: finalize reports ignored harness files from the workspace snapshot\nok 11 - finalize reports ignored harness files from the workspace snapshot\n  ---\n  duration_ms: 424.1304\n  ...\n# Subtest: runner blocks a task whose dependency is not done\nok 12 - runner blocks a task whose dependency is not done\n  ---\n  duration_ms: 20.4328\n  ...\n1..12\n# tests 12\n# suites 0\n# pass 12\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 5520.9411\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/002-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/002-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 2,
+        "attempt": 0,
+        "name": "diff-check",
+        "command": "git diff --check",
+        "started_at": "2026-11-22T03:19:42.423Z",
+        "finished_at": "2026-11-22T03:19:42.612Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/context/quality-gates.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/execution.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/repair.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/review.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/state/active-task.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/state/project-state.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/docs/quality-gates.md', LF will be replaced by CRLF the next time Git touches it\n",
+        "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/003-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/003-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      ".gitignore",
+      "AGENTS.md",
+      "harness/AGENTS.md",
+      "harness/context/current-state.md",
+      "harness/context/quality-gates.md",
+      "harness/prompts/execution.md",
+      "harness/prompts/repair.md",
+      "harness/prompts/review.md",
+      "harness/state/active-task.json",
+      "harness/state/project-state.json",
+      "project/AGENTS.md",
+      "project/docs/quality-gates.md",
+      "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+      "harness/runtime/runs/20261122031755-7ebfbbe0/run.json"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          ".gitignore",
+          "AGENTS.md",
+          "harness/AGENTS.md",
+          "harness/context/current-state.md",
+          "harness/context/quality-gates.md",
+          "harness/prompts/execution.md",
+          "harness/prompts/repair.md",
+          "harness/prompts/review.md",
+          "harness/state/active-task.json",
+          "harness/state/project-state.json",
+          "project/AGENTS.md",
+          "project/docs/quality-gates.md",
+          "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+          "harness/runtime/runs/20261122031755-7ebfbbe0/run.json"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 18
+      }
+    ]
+  },
+  "remaining_risks": [],
+  "evidence": {
+    "required": true,
+    "report": "harness/evidence/task-reports/T-030-20261122031755-7ebfbbe0.md",
+    "validation": "harness/evidence/validation/T-030-20261122031755-7ebfbbe0.json",
+    "missing": []
+  }
+}

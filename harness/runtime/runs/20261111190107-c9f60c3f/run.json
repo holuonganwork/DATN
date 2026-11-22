@@ -1,0 +1,259 @@
+{
+  "schema_version": 1,
+  "run_id": "20261111190107-c9f60c3f",
+  "task_id": "T-015",
+  "task_file": "harness/tasks/ready/T-015-demo-vertical-slice.json",
+  "status": "needs_review",
+  "phase": "finalize",
+  "created_at": "2026-11-11T19:01:07.378Z",
+  "updated_at": "2026-11-11T19:02:58.871Z",
+  "cwd": "F:\\DATN",
+  "hostname": "meowmeow",
+  "node_version": "v22.12.0",
+  "repo_root": "F:\\DATN",
+  "event_log": "harness/runtime/runs/20261111190107-c9f60c3f/events.jsonl",
+  "summary_file": "harness/runtime/runs/20261111190107-c9f60c3f/summary.json",
+  "last_sequence": 19,
+  "git_before": {
+    "head": "48b354d8fa7a6a99f3b75b7d7b810fa6941ac8b0",
+    "changed_files": [
+      "project/README.md",
+      "project/apps/demo/.gitignore",
+      "project/apps/demo/README.md",
+      "project/apps/demo/index.html",
+      "project/apps/demo/package.json",
+      "project/apps/demo/src/App.tsx",
+      "project/apps/demo/src/domain.ts",
+      "project/apps/demo/src/main.tsx",
+      "project/apps/demo/src/styles.css",
+      "project/apps/demo/tsconfig.json",
+      "project/apps/demo/vite.config.ts"
+    ]
+  },
+  "workspace_before": {
+    "project/.env.example": "0:1794165290112.21",
+    "project/.gitignore": "0:1794245526813.0554",
+    "project/AGENTS.md": "1284:1794362147969.9348",
+    "project/apps/demo/.gitignore": "20:1794423662830.561",
+    "project/apps/demo/index.html": "366:1794423473535.1985",
+    "project/apps/demo/package.json": "465:1794423469820.1274",
+    "project/apps/demo/README.md": "876:1794423481888.5063",
+    "project/apps/demo/src/App.tsx": "12869:1794423479416.017",
+    "project/apps/demo/src/domain.ts": "6519:1794423478189.106",
+    "project/apps/demo/src/main.tsx": "232:1794423476794.7822",
+    "project/apps/demo/src/styles.css": "12198:1794423480508.1455",
+    "project/apps/demo/tsconfig.json": "507:1794423470812.943",
+    "project/apps/demo/vite.config.ts": "169:1794423472289.77",
+    "project/docs/adr/0001-mvp-batch-merkle-and-independent-verification.md": "1175:1794421794051.1047",
+    "project/docs/adr/0002-modular-monolith-and-blockchain-gateway.md": "1313:1794421841485.3315",
+    "project/docs/adr/0003-offchain-personal-data.md": "1231:1794421796026.036",
+    "project/docs/api-contract.md": "3962:1794421789316.6062",
+    "project/docs/architecture.md": "6102:1794422064405.693",
+    "project/docs/data-model.md": "8281:1794422065492.332",
+    "project/docs/De_tai_02.pptx": "21097550:1793441593792.1907",
+    "project/docs/De_tai_02_Bao_cao_hoan_chinh.pptx": "19496612:1793391476538.6414",
+    "project/docs/glossary.md": "2689:1794421836394.7466",
+    "project/docs/quality-gates.md": "1521:1794362146483.6733",
+    "project/docs/requirements.md": "17133:1794167326817.1204",
+    "project/docs/use-cases.md": "8434:1794421829385.616",
+    "project/package.json": "0:1794165290112.21",
+    "project/README.md": "744:1794423483307.4956",
+    "harness/state/active-task.json": "83:1794422258861.9585",
+    "harness/state/project-state.json": "151:1794422258862.961",
+    "harness/evidence/README.md": "630:1794251212417.28",
+    "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md": "1179:1794421944795.393",
+    "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md": "1292:1794422176002.6304",
+    "harness/evidence/task-reports/T-012-20261109191200-c1bb195f.md": "1471:1794251567174.4048",
+    "harness/evidence/task-reports/T-012-20261109191403-78e81f20.md": "1521:1794251671099.881",
+    "harness/evidence/task-reports/T-012-20261109191604-a7aed15d.md": "1518:1794251836595.1416",
+    "harness/evidence/task-reports/T-012-20261109191813-2e67429f.md": "1545:1794251921077.135",
+    "harness/evidence/task-reports/T-012-20261109192052-78f6f9bd.md": "1566:1794252079147.3262",
+    "harness/evidence/task-reports/T-013-20261111015739-c5a33bd7.md": "1377:1794363066584.729",
+    "harness/evidence/task-reports/T-013-20261111022414-87924690.md": "625:1794363980235.3281",
+    "harness/evidence/task-reports/T-014-20261111171146-3d6868c2.md": "973:1794417193888.0615",
+    "harness/evidence/validation/T-001-20261111182426-ccc7d681.json": "641:1794421946914.5415",
+    "harness/evidence/validation/T-002-20261111183357-4d44c482.json": "523:1794422177246.0845",
+    "harness/evidence/validation/T-012-20261109191200-c1bb195f.json": "831:1794251569094.3596",
+    "harness/evidence/validation/T-012-20261109191403-78e81f20.json": "558:1794251672927.1584",
+    "harness/evidence/validation/T-012-20261109191604-a7aed15d.json": "558:1794251838493.0461",
+    "harness/evidence/validation/T-012-20261109191813-2e67429f.json": "558:1794251923104.1997",
+    "harness/evidence/validation/T-012-20261109192052-78f6f9bd.json": "558:1794252080635.4348",
+    "harness/evidence/validation/T-013-20261111015739-c5a33bd7.json": "518:1794363068838.919",
+    "harness/evidence/validation/T-013-20261111022414-87924690.json": "393:1794363982493.462",
+    "harness/evidence/validation/T-014-20261111171146-3d6868c2.json": "429:1794417196344.765"
+  },
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "static-demo-check",
+        "command": "node scripts/validate-demo.mjs",
+        "started_at": "2026-11-11T19:01:50.706Z",
+        "finished_at": "2026-11-11T19:01:50.937Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "Demo structure valid: 9 files, mock state machine and verifier present.\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261111190107-c9f60c3f/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261111190107-c9f60c3f/commands/001-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": true,
+    "changed_files": [
+      "project/apps/demo/scripts/validate-demo.mjs"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          "project/apps/demo/scripts/validate-demo.mjs"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 10
+      }
+    ]
+  },
+  "completed_at": "2026-11-11T19:02:58.869Z",
+  "files_changed": [
+    "harness/evidence/task-reports/T-015-20261111190107-c9f60c3f.md",
+    "harness/evidence/validation/T-015-20261111190107-c9f60c3f.json",
+    "project/apps/demo/scripts/validate-demo.mjs"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "summary": {
+    "run_id": "20261111190107-c9f60c3f",
+    "task_id": "T-015",
+    "status": "needs_review",
+    "started_at": "2026-11-11T19:01:07.378Z",
+    "completed_at": "2026-11-11T19:02:58.869Z",
+    "phase": "finalize",
+    "files_changed": [
+      "harness/evidence/task-reports/T-015-20261111190107-c9f60c3f.md",
+      "harness/evidence/validation/T-015-20261111190107-c9f60c3f.json",
+      "project/apps/demo/scripts/validate-demo.mjs"
+    ],
+    "internal_files_changed": [
+      "harness/state/active-task.json",
+      "harness/state/project-state.json"
+    ],
+    "execution": {
+      "ok": true,
+      "manual_required": false,
+      "commands": [
+        {
+          "kind": "execution",
+          "index": 0,
+          "attempt": 0,
+          "name": "static-demo-check",
+          "command": "node scripts/validate-demo.mjs",
+          "started_at": "2026-11-11T19:01:50.706Z",
+          "finished_at": "2026-11-11T19:01:50.937Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "Demo structure valid: 9 files, mock state machine and verifier present.\n",
+          "stderr": "",
+          "stdout_file": "harness/runtime/runs/20261111190107-c9f60c3f/commands/001-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261111190107-c9f60c3f/commands/001-execution-0.stderr.log"
+        }
+      ]
+    },
+    "validation": {
+      "ok": true,
+      "manual_required": true,
+      "changed_files": [
+        "project/apps/demo/scripts/validate-demo.mjs"
+      ],
+      "checks": [
+        {
+          "name": "task_schema",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "scope",
+          "ok": true,
+          "errors": [],
+          "files": [
+            "project/apps/demo/scripts/validate-demo.mjs"
+          ]
+        },
+        {
+          "name": "secrets",
+          "ok": true,
+          "findings": []
+        },
+        {
+          "name": "quality",
+          "ok": true,
+          "errors": [],
+          "warnings": [],
+          "findings": []
+        },
+        {
+          "name": "commands",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "event_log",
+          "ok": true,
+          "errors": [],
+          "count": 10
+        }
+      ]
+    },
+    "remaining_risks": [
+      "Cần Agent/người dùng xác nhận acceptance criteria thủ công."
+    ],
+    "evidence": {
+      "required": true,
+      "report": "harness/evidence/task-reports/T-015-20261111190107-c9f60c3f.md",
+      "validation": "harness/evidence/validation/T-015-20261111190107-c9f60c3f.json",
+      "missing": []
+    }
+  }
+}

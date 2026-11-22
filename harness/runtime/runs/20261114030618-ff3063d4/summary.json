@@ -1,0 +1,121 @@
+{
+  "run_id": "20261114030618-ff3063d4",
+  "task_id": "T-018",
+  "status": "passed",
+  "started_at": "2026-11-14T03:06:18.886Z",
+  "completed_at": "2026-11-14T03:20:35.713Z",
+  "phase": "finalize",
+  "files_changed": [
+    "harness/context/current-state.md",
+    "harness/evidence/task-reports/T-018-20261114030618-ff3063d4.md",
+    "harness/evidence/validation/T-018-20261114030618-ff3063d4.json",
+    "project/apps/web/README.md",
+    "project/apps/web/dist/assets/index-D48iziTK.css",
+    "project/apps/web/dist/assets/index-LPNzEB18.css",
+    "project/apps/web/dist/assets/index-UfU296L7.js",
+    "project/apps/web/dist/assets/index-pxv5246n.js",
+    "project/apps/web/dist/index.html",
+    "project/apps/web/index.html",
+    "project/apps/web/scripts/validate-web.mjs",
+    "project/apps/web/src/App.tsx",
+    "project/apps/web/src/domain.ts",
+    "project/apps/web/src/storage.ts",
+    "project/apps/web/src/styles.css"
+  ],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "build-web",
+        "command": "npm.cmd run build",
+        "started_at": "2026-11-14T03:18:43.082Z",
+        "finished_at": "2026-11-14T03:18:56.935Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "\n> certificate-web@0.1.0 build\n> tsc --noEmit && vite build\n\n\u001b[36mvite v8.3.8 \u001b[32mbuilding client environment for production...\u001b[36m\u001b[39m\ntransforming...\n✓ 17 modules transformed.\nrendering chunks...\ncomputing gzip size...\ndist/index.html                   0.52 kB │ gzip:  0.36 kB\ndist/assets/index-LPNzEB18.css   19.22 kB │ gzip:  4.89 kB\ndist/assets/index-pxv5246n.js   236.18 kB │ gzip: 69.20 kB\n\n\u001b[32m✓ built in 2.48s\u001b[39m\n",
+        "stderr": "\u001b[2m10:18:54 AM\u001b[22m \u001b[33m\u001b[1m[vite]\u001b[22m\u001b[39m \u001b[33mwarning: `esbuild` option was specified by \"vite:react-babel\" plugin. This option is deprecated, please use `oxc` instead.\u001b[39m\n`optimizeDeps.rollupOptions` / `ssr.optimizeDeps.rollupOptions` is deprecated. Use `optimizeDeps.rolldownOptions` instead. Note that this option may be set by a plugin. Set VITE_DEPRECATION_TRACE=1 to see where it is called.\n[vite:react-babel] We recommend switching to `@vitejs/plugin-react-oxc` for improved performance. More information at https://vite.dev/rolldown\n",
+        "stdout_file": "harness/runtime/runs/20261114030618-ff3063d4/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261114030618-ff3063d4/commands/001-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 1,
+        "attempt": 0,
+        "name": "validate-web",
+        "command": "node scripts/validate-web.mjs",
+        "started_at": "2026-11-14T03:18:56.955Z",
+        "finished_at": "2026-11-14T03:18:57.578Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "Web product structure valid: 10 files, 3 portals (Verifier, Issuer, Admin), Audit trail and localStorage persistence present.\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261114030618-ff3063d4/commands/002-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261114030618-ff3063d4/commands/002-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      "project/apps/web/src/storage.ts"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          "project/apps/web/src/storage.ts"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 17
+      }
+    ]
+  },
+  "remaining_risks": [],
+  "evidence": {
+    "required": true,
+    "report": "harness/evidence/task-reports/T-018-20261114030618-ff3063d4.md",
+    "validation": "harness/evidence/validation/T-018-20261114030618-ff3063d4.json",
+    "missing": []
+  }
+}

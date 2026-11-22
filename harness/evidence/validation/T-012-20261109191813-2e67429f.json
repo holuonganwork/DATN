@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "task_id": "T-012",
+  "run_id": "20261109191813-2e67429f",
+  "status": "passed",
+  "event_count": 21,
+  "tests": {
+    "command": "node --test harness/tests/*.test.mjs",
+    "total": 7,
+    "passed": 7,
+    "failed": 0
+  },
+  "checks": {
+    "task_schema": "PASS",
+    "scope": "PASS",
+    "secrets": "PASS",
+    "quality": "PASS",
+    "commands": "PASS",
+    "event_log": "PASS"
+  },
+  "remaining_risks": [
+    "Agent phải được khởi chạy qua runner hoặc gọi lifecycle commands để bảo đảm có run log."
+  ]
+}

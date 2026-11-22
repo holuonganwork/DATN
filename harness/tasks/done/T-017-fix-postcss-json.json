@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "id": "T-017",
+  "title": "Sửa lỗi Vite/PostCSS đọc JSON không hợp lệ",
+  "status": "done",
+  "priority": "high",
+  "objective": "Sửa lỗi Vite không tải được cấu hình PostCSS do Unexpected end of JSON input và xác minh CSS cùng build của project/apps/web hoạt động.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/package.json",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-017-fix-postcss-json.json",
+      "harness/tasks/done/T-017-fix-postcss-json.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [],
+  "preconditions": [
+    "Ứng dụng có dependency Vite đã cài và lỗi CSS do người dùng báo."
+  ],
+  "implementation_notes": [
+    "Tái hiện tại CSS transform của Vite; chỉ sửa nguyên nhân cấu hình JSON, giữ nguyên dependency và giao diện hiện có."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Vite xử lý src/styles.css mà không còn lỗi tải cấu hình PostCSS/JSON.",
+      "verification": "Chạy CSS transform qua Vite trước và sau khi sửa."
+    },
+    {
+      "id": "AC-2",
+      "description": "TypeScript và production build của web app thành công.",
+      "verification": "npm.cmd run build trong project/apps/web."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "css-regression",
+      "command": "node harness/runtime/runs/20261114023638-6beb3be6/check-css.mjs"
+    },
+    {
+      "name": "dev-http-check",
+      "command": "node harness/runtime/runs/20261114023638-6beb3be6/check-dev.mjs",
+      "timeout_ms": 60000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Cấu hình JSON hợp lệ và bằng chứng tái hiện/khắc phục lỗi CSS."
+  ],
+  "out_of_scope": [
+    "Đổi dependency, chỉnh giao diện, thêm database hoặc triển khai."
+  ],
+  "risks": [
+    "Giữ nguyên các thay đổi package và package-lock người dùng đã tạo khi cài dependency."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T02:41:07.219Z"
+}

@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "id": "T-016",
+  "title": "Đổi thư mục ứng dụng demo thành web",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Đổi project/apps/demo thành project/apps/web và cập nhật tên package, hướng dẫn chạy cùng các đường dẫn kiểm tra liên quan, giữ nguyên hành vi ứng dụng.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/demo/",
+      "project/apps/web/",
+      "project/README.md",
+      "harness/tasks/ready/T-015-demo-vertical-slice.json",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-016-rename-web.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/",
+      "harness/tasks/done/T-016-rename-web.json"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [],
+  "preconditions": [
+    "apps/web trống và apps/demo chứa ứng dụng hiện tại."
+  ],
+  "implementation_notes": [
+    "Giữ nguyên src, cấu hình và dependency; chỉ đổi đường dẫn, tên package, tên script kiểm tra và tài liệu đang sử dụng. Không sửa evidence hoặc event lịch sử."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Toàn bộ file ứng dụng chuyển sang apps/web; src và cấu hình giữ nguyên nội dung, không còn apps/demo.",
+      "verification": "Đối chiếu SHA-256 trước/sau và danh sách file."
+    },
+    {
+      "id": "AC-2",
+      "description": "README, package và task T-015 dùng đường dẫn mới; script kiểm tra chạy tại apps/web.",
+      "verification": "Chạy static validation, syntax check, scope/secrets và kiểm tra liên kết/đường dẫn."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "rename-integrity",
+      "command": "node harness/runtime/runs/20261114022033-ca1aa18a/verify-rename.mjs"
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web"
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Ứng dụng tại project/apps/web và tài liệu/lệnh kiểm tra cập nhật."
+  ],
+  "out_of_scope": [
+    "Thay đổi UI, logic, database, cài dependency, deploy hoặc commit."
+  ],
+  "risks": [
+    "Thư mục web tồn tại sẵn; phải kiểm tra cả file ẩn trước khi chuyển."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T02:23:39.334Z"
+}

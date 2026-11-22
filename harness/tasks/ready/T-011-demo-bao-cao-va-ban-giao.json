@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "T-011",
+  "title": "Demo, báo cáo và bàn giao",
+  "status": "ready",
+  "priority": "medium",
+  "objective": "Đóng gói sản phẩm, bằng chứng và câu chuyện demo nhất quán với phạm vi đồ án.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-010"
+  ],
+  "preconditions": [
+    "Task T-010 đã hoàn thành hoặc có bằng chứng đủ để tiếp tục."
+  ],
+  "implementation_notes": [],
+  "checklist": [],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Hoàn thành toàn bộ checklist và bàn giao các đầu ra của task.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [],
+  "validation_commands": [],
+  "deliverables": [],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/11-demo-bao-cao-va-ban-giao.md",
+  "manual_validation_required": true,
+  "duration": "Tuần 10"
+}

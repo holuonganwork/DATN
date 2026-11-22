@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "id": "T-006",
+  "title": "Frontend và kết nối ví",
+  "status": "ready",
+  "priority": "medium",
+  "objective": "Cung cấp giao diện thao tác cho quản trị viên và đơn vị phát hành.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/architecture.md",
+    "harness/context/conventions.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/"
+    ],
+    "harness_write_paths": [
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-005"
+  ],
+  "preconditions": [
+    "Task T-005 đã hoàn thành hoặc có bằng chứng đủ để tiếp tục."
+  ],
+  "implementation_notes": [
+    "Xây Next.js, React, TypeScript và Tailwind. Giao diện hiển thị rõ trạng thái nghiệp vụ và trạng thái transaction, không che giấu lỗi blockchain."
+  ],
+  "checklist": [
+    "Tạo layout và navigation theo vai trò.",
+    "Hiển thị lỗi validation theo từng dòng dữ liệu.",
+    "Hiển thị preview trước khi freeze.",
+    "Vô hiệu hóa chỉnh sửa sau khi freeze.",
+    "Kết nối ví EVM.",
+    "Kiểm tra chain ID trước khi ký.",
+    "Hiển thị rõ chờ ký, đang xác nhận, thành công và thất bại.",
+    "Liên kết tới explorer cho transaction đã xác nhận.",
+    "Không hiển thị private key hoặc seed phrase.",
+    "Kiểm thử luồng người dùng bằng Playwright."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Issuer có thể tự nhập dữ liệu, xem lỗi, freeze batch, kết nối ví, ký transaction và thấy kết quả receipt mà không cần thao tác trực tiếp trong database.",
+      "verification": "Đối chiếu checklist, output, test và evidence trong harness/evidence/."
+    }
+  ],
+  "execution_commands": [],
+  "validation_commands": [],
+  "deliverables": [
+    "Web app cho admin và issuer.",
+    "Các trạng thái UI tương ứng với state machine backend.",
+    "Luồng kết nối ví và ký transaction.",
+    "Bộ e2e test chính."
+  ],
+  "out_of_scope": [],
+  "risks": [],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/06-frontend-va-ket-noi-vi.md",
+  "manual_validation_required": true,
+  "duration": "Tuần 5–6"
+}

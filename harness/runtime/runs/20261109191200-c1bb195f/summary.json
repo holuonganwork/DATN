@@ -1,0 +1,94 @@
+{
+  "run_id": "20261109191200-c1bb195f",
+  "task_id": "T-012",
+  "status": "passed",
+  "started_at": "2026-11-09T19:12:00.235Z",
+  "completed_at": "2026-11-09T19:12:07.426Z",
+  "phase": "finalize",
+  "files_changed": [],
+  "internal_files_changed": [
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "command-1",
+        "command": "node harness/runner/harness.mjs doctor",
+        "started_at": "2026-11-09T19:12:00.500Z",
+        "finished_at": "2026-11-09T19:12:00.743Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "{\n  \"ok\": true,\n  \"checked_at\": \"2026-11-09T19:12:00.717Z\",\n  \"root\": \"F:\\\\DATN\\\\harness\",\n  \"checks\": [\n    {\n      \"name\": \"directory:harness/runtime\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/runtime/runs\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/state\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/tasks\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/schemas\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"node_version\",\n      \"ok\": true,\n      \"value\": \"v22.12.0\"\n    },\n    {\n      \"name\": \"tasks:inbox\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:ready\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 11\n    },\n    {\n      \"name\": \"tasks:active\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 1\n    },\n    {\n      \"name\": \"tasks:blocked\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:done\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"task_count\",\n      \"ok\": true,\n      \"count\": 12,\n      \"expected_minimum\": 12\n    }\n  ]\n}\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261109191200-c1bb195f/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261109191200-c1bb195f/commands/001-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 1,
+        "attempt": 0,
+        "name": "command-2",
+        "command": "node --test harness/tests/*.test.mjs",
+        "started_at": "2026-11-09T19:12:00.753Z",
+        "finished_at": "2026-11-09T19:12:03.954Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "TAP version 13\n# Subtest: task validator accepts the machine-readable task contract\nok 1 - task validator accepts the machine-readable task contract\n  ---\n  duration_ms: 2.8742\n  ...\n# Subtest: scope and secret validators reject unsafe changes\nok 2 - scope and secret validators reject unsafe changes\n  ---\n  duration_ms: 2.4179\n  ...\n# Subtest: lifecycle writes ordered append-only events and summary\nok 3 - lifecycle writes ordered append-only events and summary\n  ---\n  duration_ms: 943.157\n  ...\n# Subtest: resume continues a failed command from the persisted run log\nok 4 - resume continues a failed command from the persisted run log\n  ---\n  duration_ms: 1335.3208\n  ...\n# Subtest: createRun records start before execute is invoked\nok 5 - createRun records start before execute is invoked\n  ---\n  duration_ms: 295.9153\n  ...\n# Subtest: finalize reports ignored harness files from the workspace snapshot\nok 6 - finalize reports ignored harness files from the workspace snapshot\n  ---\n  duration_ms: 283.8934\n  ...\n1..6\n# tests 6\n# suites 0\n# pass 6\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 3036.5259\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261109191200-c1bb195f/commands/002-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261109191200-c1bb195f/commands/002-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": []
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 12
+      }
+    ]
+  },
+  "remaining_risks": []
+}

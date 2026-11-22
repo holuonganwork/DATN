@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "local://harness/task.schema.json",
+  "title": "Local Harness Task",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "title",
+    "status",
+    "priority",
+    "objective",
+    "context_files",
+    "target",
+    "dependencies",
+    "preconditions",
+    "acceptance_criteria",
+    "execution_commands",
+    "validation_commands",
+    "deliverables",
+    "out_of_scope",
+    "risks",
+    "retry_policy",
+    "completion_report"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "id": { "type": "string", "pattern": "^T-[0-9]{3}$" },
+    "title": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["draft", "ready", "active", "done", "failed", "blocked"] },
+    "priority": { "enum": ["low", "medium", "high", "critical"] },
+    "objective": { "type": "string", "minLength": 1 },
+    "context_files": { "type": "array", "items": { "type": "string" } },
+    "target": {
+      "type": "object",
+      "required": ["repository", "allowed_paths"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "allowed_paths": { "type": "array", "items": { "type": "string" } },
+        "harness_write_paths": { "type": "array", "items": { "type": "string" } },
+        "forbidden_paths": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "dependencies": { "type": "array", "items": { "type": "string", "pattern": "^T-[0-9]{3}$" } },
+    "preconditions": { "type": "array", "items": { "type": "string" } },
+    "implementation_notes": { "type": "array", "items": { "type": "string" } },
+    "checklist": { "type": "array", "items": { "type": "string" } },
+    "acceptance_criteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "verification"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "verification": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": true
+      }
+    },
+    "execution_commands": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "object", "required": ["command"], "properties": { "command": { "type": "string" }, "name": { "type": "string" }, "cwd": { "type": "string" }, "env": { "type": "object" }, "timeout_ms": { "type": "integer", "minimum": 1 }, "continue_on_error": { "type": "boolean" } }, "additionalProperties": true }
+        ]
+      }
+    },
+    "validation_commands": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "object", "required": ["command"], "properties": { "command": { "type": "string" }, "name": { "type": "string" }, "cwd": { "type": "string" }, "env": { "type": "object" }, "timeout_ms": { "type": "integer", "minimum": 1 }, "continue_on_error": { "type": "boolean" } }, "additionalProperties": true }
+        ]
+      }
+    },
+    "deliverables": { "type": "array", "items": { "type": "string" } },
+    "out_of_scope": { "type": "array", "items": { "type": "string" } },
+    "risks": { "type": "array", "items": { "type": "string" } },
+    "retry_policy": {
+      "type": "object",
+      "required": ["max_retries"],
+      "properties": {
+        "max_retries": { "type": "integer", "minimum": 0, "maximum": 10 },
+        "retry_failed_commands": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    },
+    "completion_report": {
+      "type": "object",
+      "required": ["required"],
+      "properties": {
+        "required": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "source_document": { "type": "string" },
+    "manual_validation_required": { "type": "boolean" },
+    "quality_profile": { "enum": ["docs", "code", "harness"] },
+    "quality_gates": {
+      "type": "object",
+      "properties": {
+        "require_validation_commands": { "type": "boolean" },
+        "require_evidence": { "type": "boolean" },
+        "require_diff_check": { "type": "boolean" },
+        "require_quality_review_event": { "type": "boolean" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

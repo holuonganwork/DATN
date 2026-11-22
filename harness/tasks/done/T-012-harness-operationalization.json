@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "T-012",
+  "title": "Vận hành harness, logging và validation",
+  "status": "done",
+  "priority": "high",
+  "objective": "Xây dựng harness local có lifecycle start → execute → validate → finalize, log append-only theo từng event, status/resume dựa trên log, task schema máy đọc được và bộ validator/test cho chính harness.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/conventions.md",
+    "harness/AGENTS.md"
+  ],
+  "target": {
+    "repository": "harness",
+    "allowed_paths": [
+      "harness/",
+      "AGENTS.md"
+    ],
+    "forbidden_paths": [
+      "project/",
+      "*.env",
+      "*.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [],
+  "preconditions": [
+    "Node.js 20 hoặc mới hơn có sẵn trong môi trường local.",
+    "Harness được phép ghi dữ liệu runtime cục bộ vào harness/runtime/.",
+    "Không đưa log runtime hoặc secret vào mã nguồn sản phẩm."
+  ],
+  "implementation_notes": [
+    "Dùng Node.js built-in modules, không yêu cầu npm install cho runner.",
+    "Task machine-readable dùng JSON để runner đọc được trên Windows và môi trường POSIX.",
+    "Event log dùng JSONL append-only; summary/state là dữ liệu dẫn xuất có thể cập nhật atomic."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Runner thực hiện đủ lifecycle start, execute, validate và finalize.",
+      "verification": "Chạy test integration của harness và kiểm tra event log có đủ bốn phase."
+    },
+    {
+      "id": "AC-2",
+      "description": "Mỗi event được ghi append-only, có run_id, sequence, timestamp, phase và event_type.",
+      "verification": "Chạy test schema log và kiểm tra sequence tăng liên tục sau khi resume."
+    },
+    {
+      "id": "AC-3",
+      "description": "Status và resume đọc được trạng thái từ run log, không phụ thuộc vào bộ nhớ của tiến trình trước.",
+      "verification": "Tạo run chưa hoàn tất, chạy resume và kiểm tra phase còn thiếu được tiếp tục."
+    },
+    {
+      "id": "AC-4",
+      "description": "11 task triển khai có bản JSON máy đọc được và dependency/status thống nhất.",
+      "verification": "Chạy validator task trên harness/tasks/ready/ và kiểm tra không có duplicate id."
+    },
+    {
+      "id": "AC-5",
+      "description": "Validator kiểm tra schema task, scope, secret và kết quả command.",
+      "verification": "Chạy test validator với fixture hợp lệ và fixture cố ý sai."
+    },
+    {
+      "id": "AC-6",
+      "description": "Có test tự động cho log, lifecycle, resume và validator.",
+      "verification": "Chạy node --test harness/tests/*.test.mjs."
+    }
+  ],
+  "execution_commands": [
+    "node harness/runner/harness.mjs doctor",
+    "node --test harness/tests/*.test.mjs"
+  ],
+  "validation_commands": [
+    "node harness/runner/harness.mjs doctor",
+    "node --test harness/tests/*.test.mjs"
+  ],
+  "deliverables": [
+    "Runner Node.js và wrappers local.",
+    "Schema log, schema task và machine-readable tasks.",
+    "Validators và tests của harness.",
+    "Tài liệu vận hành và lifecycle."
+  ],
+  "out_of_scope": [
+    "Thay đổi logic sản phẩm trong project/.",
+    "Triển khai production hoặc gửi log ra bên ngoài.",
+    "Phụ thuộc dịch vụ cloud hoặc npm package bắt buộc."
+  ],
+  "risks": [
+    "Agent chỉ được log đầy đủ khi được khởi chạy qua runner hoặc tuân thủ lệnh start/finalize.",
+    "Runtime log có thể chứa dữ liệu nhạy cảm nếu command tự in secret; runner phải redact trước khi ghi."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "completed_at": "2026-11-09T19:21:00.063Z"
+}

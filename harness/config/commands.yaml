@@ -1,0 +1,7 @@
+node: node
+doctor: node harness/runner/harness.mjs doctor
+test: node --test harness/tests/*.test.mjs
+convert_tasks: node harness/tools/convert-tasks.mjs
+run: node harness/runner/harness.mjs run
+status: node harness/runner/harness.mjs status
+resume: node harness/runner/harness.mjs resume

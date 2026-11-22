@@ -1,0 +1,364 @@
+/* =========================================================================
+   PUBLIC VERIFIER PORTAL
+   ========================================================================= */
+
+.verifier-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.search-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  flex: 1;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border);
+  background: var(--bg-canvas);
+  font-family: var(--font-mono);
+  transition: border-color 0.14s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--border-strong);
+}
+
+.field-caption {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.credential-pill-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.cred-chip {
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-canvas);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cred-chip:hover {
+  border-color: var(--border-strong);
+}
+
+.cred-chip.active {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+}
+
+.cred-chip-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+.status-dot.valid {
+  background: #10b981;
+}
+.status-dot.danger {
+  background: #ef4444;
+}
+.status-dot.warn {
+  background: #f59e0b;
+}
+
+.divider-line {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+.upload-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.upload-box {
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px dashed var(--border);
+  background: var(--bg-canvas);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.upload-box h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.upload-box p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.file-upload-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.file-upload-btn:hover {
+  border-color: var(--border-strong);
+  background: var(--bg-subtle);
+}
+
+.file-upload-btn input {
+  display: none;
+}
+
+.uploaded-file-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--bg-subtle);
+  font-size: 11.5px;
+}
+
+.inspector-presets {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.json-editor {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-canvas);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.inline-error {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+  font-size: 12px;
+}
+
+.verdict-banner {
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.verdict-banner.tone-valid {
+  background: var(--status-valid-bg);
+  border-color: var(--status-valid-border);
+}
+
+.verdict-banner.tone-danger {
+  background: var(--status-danger-bg);
+  border-color: var(--status-danger-border);
+}
+
+.verdict-banner.tone-warn {
+  background: var(--status-warn-bg);
+  border-color: var(--status-warn-border);
+}
+
+.verdict-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.verdict-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.verdict-code {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.verdict-banner h2 {
+  margin: 0 0 6px;
+  font-size: 17px;
+}
+
+.verdict-banner p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.lineage-alert {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+}
+
+.verified-summary-card {
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-canvas);
+  margin-bottom: 16px;
+}
+
+.summary-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.summary-header h3 {
+  margin: 2px 0 0;
+  font-size: 16px;
+}
+
+.summary-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  font-size: 12.5px;
+}
+
+.summary-grid-3 span {
+  display: block;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.steps-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.verify-step-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.verify-step-item {
+  display: flex;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-canvas);
+}
+
+.step-num {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--bg-subtle);
+  flex-shrink: 0;
+}
+
+.verify-step-item.pass .step-num {
+  background: var(--status-valid-bg);
+  color: var(--status-valid-fg);
+}
+
+.verify-step-item.fail .step-num {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+}
+
+.step-body {
+  flex: 1;
+}
+
+.step-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.step-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.step-tag.pass {
+  background: var(--status-valid-bg);
+  color: var(--status-valid-fg);
+}
+
+.step-tag.fail {
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+}
+
+.step-body p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+

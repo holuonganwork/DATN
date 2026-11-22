@@ -1,0 +1,15 @@
+project_root: project
+harness_root: harness
+runtime_root: harness/runtime
+task_roots:
+  - harness/tasks/inbox
+  - harness/tasks/ready
+  - harness/tasks/active
+  - harness/tasks/blocked
+  - harness/tasks/done
+log:
+  schema_version: 1
+  event_format: jsonl
+  manifest_format: json
+  append_only_events: true
+  redact_output: true

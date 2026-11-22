@@ -103,6 +103,16 @@ Backend chỉ ghi nhận submission và chuyển sang `SUBMITTED`; worker phải
 
 Nếu RPC timeout hoặc thiếu trạng thái bắt buộc, `result` là `INDETERMINATE` và check tương ứng là `UNAVAILABLE`; API không trả `VALID`.
 
+## Phiên bản nghiệp vụ Off-Chain đã triển khai (`T-023`)
+
+Trong pha off-chain trước khi tích hợp smart contract (`T-005`), API tại `project/apps/api` giữ nguyên response/error envelope (`{ data, meta: { correlationId } }` và `{ error: { code, message, details }, meta }`), đồng thời:
+
+- Dùng JWT Bearer auth (`POST /v1/auth/login`, `GET /v1/auth/me`) cùng CRUD người dùng (`/v1/users`) cho `SYSTEM_ADMIN`.
+- Triển khai CRUD `/v1/issuers`, `/v1/public/issuers`, `/v1/courses`, `/v1/learners` (nhập từng bản ghi JSON, chưa gồm CSV import và upload PDF).
+- Chạy đầy đủ luồng Batch `DRAFT -> VALIDATED -> APPROVED -> FROZEN -> PENDING_CHAIN -> CONFIRMED / FAILED` thông qua cổng `IssuancePort` (`OffChainIssuanceAdapter`) tại `POST /v1/batches/{id}/publish` (yêu cầu header `Idempotency-Key`), khóa chỉnh sửa sau `FROZEN` với mã lỗi `BATCH_NOT_MUTABLE`.
+- Triển khai `GET /v1/credentials`, `GET /v1/credentials/{id}`, `GET /v1/credentials/{id}/package`, `POST /v1/credentials/{id}/revoke` (`Idempotency-Key`), `POST /v1/credentials/{id}/reissue` (`Idempotency-Key`), `GET /v1/public/credentials/{code}`, `POST /v1/verifications` và `GET /v1/audit`.
+- Ở `POST /v1/verifications` và `GET /v1/public/credentials/{code}`, hai check chưa kích hoạt ở chế độ off-chain (`on_chain_anchor` và `pdf_sha256`) trả về `status: "SKIPPED"` thay vì `PASS`/`FAIL`; các bước `schema`, `trusted_anchor`, `payload_digest`, `merkle_proof`, `issuer_record`, `revocation`, `expiry` được kiểm tra đầy đủ. Các endpoint `publish-intent`, `chain-submissions`, `wallets`, `revoke-intent` trong bảng MVP sẽ được bổ sung ở task tích hợp blockchain.
+
 ## API không được làm
 
 - Không nhận hoặc lưu private key issuer.

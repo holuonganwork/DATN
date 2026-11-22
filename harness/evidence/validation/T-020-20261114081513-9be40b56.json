@@ -1,0 +1,65 @@
+{
+  "task_id": "T-020",
+  "run_id": "20261114081513-9be40b56",
+  "status": "passed",
+  "checks": [
+    {
+      "name": "task_schema",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "scope",
+      "ok": true,
+      "errors": [],
+      "files": [
+        ".gitignore",
+        "project/.gitignore",
+        "project/apps/web/.gitignore",
+        "harness/context/current-state.md"
+      ]
+    },
+    {
+      "name": "secrets",
+      "ok": true,
+      "findings": []
+    },
+    {
+      "name": "quality",
+      "ok": true,
+      "errors": [],
+      "warnings": [],
+      "findings": []
+    },
+    {
+      "name": "commands",
+      "ok": true,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "name": "event_log",
+      "ok": true,
+      "errors": [],
+      "count": 10
+    }
+  ],
+  "commands": [
+    {
+      "name": "check-ignore",
+      "command": "git check-ignore -v harness node_modules package.json package-lock.json project/apps/web/node_modules project/apps/web/dist",
+      "exit_code": 0,
+      "stdout_file": "harness/runtime/runs/20261114081513-9be40b56/commands/001-validation-0.stdout.log",
+      "stderr_file": "harness/runtime/runs/20261114081513-9be40b56/commands/001-validation-0.stderr.log"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check",
+      "exit_code": 0,
+      "stdout_file": "harness/runtime/runs/20261114081513-9be40b56/commands/002-validation-0.stdout.log",
+      "stderr_file": "harness/runtime/runs/20261114081513-9be40b56/commands/002-validation-0.stderr.log"
+    }
+  ],
+  "remaining_risks": []
+}

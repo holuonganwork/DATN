@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "id": "T-029",
+  "title": "Xóa hoàn toàn thanh thông báo trên cùng (.system-bar) khỏi Website Công khai",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Gỡ bỏ hoàn toàn dải .system-bar ở đỉnh Website Công khai trong project/apps/web (src/App.tsx, src/styles.css) để mở đầu trực tiếp bằng thanh .site-header kính mờ trắng, giữ nguyên thông số EVM ở Footer/Standards/Sidebar và đồng bộ DESIGN.md, README.md, scripts/validate-web.mjs, current-state.md.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-029-remove-public-top-system-bar.md",
+      "harness/tasks/ready/T-029-remove-public-top-system-bar.json",
+      "harness/tasks/done/T-029-remove-public-top-system-bar.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-019",
+    "T-025",
+    "T-026",
+    "T-027",
+    "T-028"
+  ],
+  "preconditions": [
+    "Logo Azure 3-Layer Isometric Monolith SVG đã hoàn tất tích hợp ở T-028.",
+    "Người dùng xác nhận bỏ hẳn dòng thông báo trên cùng (.system-bar) ở đỉnh Website Công khai."
+  ],
+  "implementation_notes": [
+    "Xóa khối <div className=\"system-bar\">...</div> khỏi project/apps/web/src/App.tsx.",
+    "Xóa các selector .system-bar*, .mono-meta* và .system-reset-btn* khỏi project/apps/web/src/styles.css nhưng giữ lại .live-indicator, .live-dot và .system-divider đang dùng ở Console Sidebar và Breadcrumb bar.",
+    "Cập nhật project/apps/web/DESIGN.md, README.md, scripts/validate-web.mjs và harness/context/current-state.md."
+  ],
+  "checklist": [
+    "Xóa .system-bar trong src/App.tsx và CSS thừa trong src/styles.css.",
+    "Cập nhật DESIGN.md, README.md, scripts/validate-web.mjs và current-state.md.",
+    "Chạy build-web, syntax-check, validate-web, git diff --check, harness doctor và kiểm tra trình duyệt."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Không còn <div className=\"system-bar\"> trong src/App.tsx và các rule .system-bar*, .mono-meta*, .system-reset-btn* trong src/styles.css.",
+      "verification": "Kiểm tra tìm kiếm tĩnh và node scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "Giữ nguyên hiển thị Console Sidebar (.live-indicator, .live-dot), Breadcrumb bar (.system-divider) và Footer cột 4.",
+      "verification": "Kiểm tra ảnh chụp thực tế trên http://localhost:5173/."
+    },
+    {
+      "id": "AC-3",
+      "description": "DESIGN.md, README.md, scripts/validate-web.mjs và harness/context/current-state.md phản ánh chính xác việc gỡ .system-bar.",
+      "verification": "Kiểm tra trực tiếp các file tương ứng."
+    },
+    {
+      "id": "AC-4",
+      "description": "npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs, git diff --check và harness doctor đều PASS.",
+      "verification": "Chạy toàn bộ validation_commands trong harness và harness doctor."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/src/App.tsx bỏ hoàn toàn .system-bar ở đỉnh Website Công khai.",
+    "project/apps/web/src/styles.css dọn các rule .system-bar*, .mono-meta*, .system-reset-btn* và giữ selector dùng chung.",
+    "project/apps/web/DESIGN.md, README.md và scripts/validate-web.mjs đồng bộ cấu trúc không có .system-bar.",
+    "harness/context/current-state.md ghi nhận hoàn thành T-029."
+  ],
+  "out_of_scope": [
+    "Thay đổi nghiệp vụ domain, storage, backend API hoặc xóa state.rpcOnline khỏi model dữ liệu.",
+    "Xóa thông số EVM Registry ở Footer cột 4, trang Chuẩn Kỹ thuật hoặc Console Sidebar."
+  ],
+  "risks": [
+    "Xóa nhầm .live-indicator, .live-dot hoặc .system-divider có thể làm mất chấm xanh trạng thái ở Console Sidebar hoặc dấu phân cách ở Breadcrumb bar."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-22T03:09:07.476Z"
+}

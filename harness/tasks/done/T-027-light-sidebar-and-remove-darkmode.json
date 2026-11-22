@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "id": "T-027",
+  "title": "Làm sáng Sidebar Console (#F0F9FF) và xóa hoàn toàn Dark Mode",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Chuyển đổi thanh Sidebar Console (.app-sidebar) trong project/apps/web sang tông Soft Ice-Azure (#F0F9FF, viền #BAE6FD, chữ #075985, mục chọn #0284C7) đồng bộ với chủ đề 1D Bright Marine Azure, và loại bỏ hoàn toàn chế độ Dark Mode cùng các nút chuyển đổi Sáng/Tối khỏi giao diện, CSS, DESIGN.md và script kiểm tra.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-027-light-sidebar-and-remove-darkmode.md",
+      "harness/tasks/ready/T-027-light-sidebar-and-remove-darkmode.json",
+      "harness/tasks/done/T-027-light-sidebar-and-remove-darkmode.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-019",
+    "T-021",
+    "T-024",
+    "T-025",
+    "T-026"
+  ],
+  "preconditions": [
+    "Giao diện web đã áp dụng chủ đề 1D Bright Marine Azure (T-025) và nút bo tròn Pill (T-026).",
+    "Người dùng đã chốt thiết kế trong pha GRILL: làm sáng Sidebar sang xanh băng dịu #F0F9FF và xóa hoàn toàn Dark Mode."
+  ],
+  "implementation_notes": [
+    "Xóa ThemeMode, THEME_STORAGE_KEY, loadInitialTheme, state theme, toggleTheme, useEffect data-theme và 4 nút/mục chuyển đổi giao diện khỏi project/apps/web/src/App.tsx.",
+    "Đưa :root trong project/apps/web/src/styles.css về Light-only, đổi --brand-sidebar-bg thành #f0f9ff và --brand-sidebar-border thành #bae6fd, xóa toàn bộ [data-theme=\"dark\"], .theme-toggle-btn và .footer-inline-btn, đồng thời định kiểu lại .app-sidebar sáng dịu.",
+    "Cập nhật theme-color trong project/apps/web/index.html, đồng bộ project/apps/web/DESIGN.md, scripts/validate-web.mjs và harness/context/current-state.md."
+  ],
+  "checklist": [
+    "Xóa logic và nút chuyển Dark Mode trong src/App.tsx.",
+    "Làm sáng .app-sidebar và xóa toàn bộ CSS Dark Mode trong src/styles.css.",
+    "Cập nhật index.html, DESIGN.md, scripts/validate-web.mjs và current-state.md.",
+    "Chạy build-web, syntax-check, validate-web, git diff --check và harness doctor."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Sidebar Console (.app-sidebar) sử dụng nền xanh băng dịu #F0F9FF, viền #BAE6FD, chữ #075985 và mục đang chọn #0284C7 chữ trắng, giữ bo tròn Pill.",
+      "verification": "Kiểm tra src/styles.css, scripts/validate-web.mjs và chụp ảnh thực tế trên http://localhost:5173/."
+    },
+    {
+      "id": "AC-2",
+      "description": "Không còn ThemeMode, toggleTheme, nút chuyển Sáng/Tối hay bất kỳ CSS [data-theme=\"dark\"] nào trong project/apps/web.",
+      "verification": "Kiểm tra tìm kiếm tĩnh và node scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-3",
+      "description": "project/apps/web/DESIGN.md, index.html và harness/context/current-state.md phản ánh chính xác giao diện Light-only và Sidebar mới.",
+      "verification": "Kiểm tra trực tiếp các file tương ứng."
+    },
+    {
+      "id": "AC-4",
+      "description": "npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs, git diff --check và harness doctor đều PASS.",
+      "verification": "Chạy toàn bộ validation_commands trong harness và harness doctor."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/apps/web/src/App.tsx loại bỏ toàn bộ logic và UI điều khiển Dark Mode.",
+    "project/apps/web/src/styles.css cập nhật Sidebar Console sang #F0F9FF và xóa toàn bộ rule Dark Mode.",
+    "project/apps/web/index.html cập nhật theme-color #075985.",
+    "project/apps/web/DESIGN.md đồng bộ thiết kế Light-only và Soft Ice-Azure Sidebar.",
+    "project/apps/web/scripts/validate-web.mjs kiểm tra token #f0f9ff / #bae6fd và cấm còn sót Dark Mode.",
+    "harness/context/current-state.md ghi nhận hoàn thành T-027."
+  ],
+  "out_of_scope": [
+    "Thay đổi nghiệp vụ domain, storage dữ liệu chứng chỉ, backend API hoặc smart contract.",
+    "Thay đổi màu sắc nút hành động 1D Bright Marine Azure trên Website Công khai và Workspace."
+  ],
+  "risks": [
+    "Cần đảm bảo độ tương phản giữa nền Sidebar #F0F9FF với chữ #075985, badge số lượng và nút chọn đơn vị."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-21T14:14:34.269Z"
+}

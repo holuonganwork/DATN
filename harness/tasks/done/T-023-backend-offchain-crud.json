@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "id": "T-023",
+  "title": "Backend nghiệp vụ off-chain (NestJS + Prisma + PostgreSQL)",
+  "status": "done",
+  "priority": "high",
+  "objective": "Hoàn thiện Backend nghiệp vụ CRUD off-chain tại project/apps/api sử dụng NestJS, Prisma và PostgreSQL (Docker Compose), tách lớp phát hành qua IssuancePort và tính hash/Merkle thật trong module credential-core.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/api-contract.md",
+    "project/docs/data-model.md",
+    "project/docs/quality-gates.md",
+    "project/docs/use-cases.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/api/",
+      "project/infra/",
+      "project/docs/decisions/",
+      "project/docs/api-contract.md",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-023-backend-offchain-crud.md",
+      "harness/tasks/ready/T-023-backend-offchain-crud.json",
+      "harness/tasks/done/T-023-backend-offchain-crud.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-016",
+    "T-017",
+    "T-018",
+    "T-019",
+    "T-020",
+    "T-021"
+  ],
+  "preconditions": [
+    "Frontend tại project/apps/web đã sạch dữ liệu mẫu (T-021).",
+    "Người dùng đã chốt toàn bộ 13 quyết định trong pha GRILL và duyệt Implementation Plan cho T-023."
+  ],
+  "implementation_notes": [
+    "Tạo project/infra/docker-compose.yml chạy PostgreSQL 16 (port 5433) cùng init.sql tạo database certchain_test cho e2e.",
+    "Xây dựng project/apps/api bằng NestJS + Prisma + PostgreSQL với TypeScript strict, Swagger (/docs), response envelope { data, meta } và error code chuẩn hóa.",
+    "Cài đặt module thuần TypeScript credential-core (NFC + JCS RFC 8785 + keccak256 + @openzeppelin/merkle-tree + sinh mã CERT-XXXX-XXXX).",
+    "Tách nghiệp vụ phát hành và thu hồi qua IssuancePort với OffChainIssuanceAdapter; đảm bảo audit log, correlationId và Idempotency-Key cho publish/revoke/reissue."
+  ],
+  "checklist": [
+    "Tạo docker-compose.yml và init.sql cho Postgres dev & test.",
+    "Ghi ADR 0004-offchain-first-backend.md và cập nhật api-contract.md.",
+    "Khởi tạo project/apps/api với Prisma schema, migration và seed.",
+    "Triển khai credential-core (JCS, keccak256, Merkle tree/proof, credential code).",
+    "Triển khai Auth/JWT, RBAC, Org scope, CorrelationId, AuditLog và Idempotency.",
+    "Triển khai CRUD issuers, users, courses, learners, batches, credentials và verification công khai.",
+    "Viết unit test và e2e test trên PostgreSQL thật; chạy đủ quality gates."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Prisma schema, migration SQL đầu tiên và seed script chạy thành công trên PostgreSQL Docker (cổng 5433).",
+      "verification": "Chạy prisma migrate deploy, prisma db seed và kiểm tra kết nối qua GET /v1/health."
+    },
+    {
+      "id": "AC-2",
+      "description": "Đầy đủ luồng Auth/JWT, RBAC + organization scope, CRUD tổ chức/user/khóa học/học viên, Batch state machine (DRAFT -> VALIDATED -> APPROVED -> FROZEN -> PENDING_CHAIN -> CONFIRMED), IssuancePort off-chain, credential-core (JCS + keccak256 + StandardMerkleTree), thu hồi/cấp lại, xác thực công khai, audit log và idempotency.",
+      "verification": "Chạy toàn bộ unit test và e2e test Supertest với PostgreSQL thật (certchain_test)."
+    },
+    {
+      "id": "AC-3",
+      "description": "Các quality gate (format:check, lint, typecheck, test, test:e2e, build, git diff --check, validate-secrets) đều PASS.",
+      "verification": "Chạy các lệnh trong validation_commands và kiểm tra kết quả validate của harness."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-api",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/api",
+      "timeout_ms": 120000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "format-check",
+      "command": "npm.cmd run format:check",
+      "cwd": "project/apps/api",
+      "timeout_ms": 60000
+    },
+    {
+      "name": "lint-api",
+      "command": "npm.cmd run lint",
+      "cwd": "project/apps/api",
+      "timeout_ms": 60000
+    },
+    {
+      "name": "typecheck-api",
+      "command": "npm.cmd run typecheck",
+      "cwd": "project/apps/api",
+      "timeout_ms": 60000
+    },
+    {
+      "name": "unit-test-api",
+      "command": "npm.cmd run test",
+      "cwd": "project/apps/api",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "e2e-test-api",
+      "command": "npm.cmd run test:e2e",
+      "cwd": "project/apps/api",
+      "timeout_ms": 180000
+    },
+    {
+      "name": "build-api",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/api",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "project/infra/docker-compose.yml và project/infra/postgres/init.sql",
+    "project/apps/api/ với mã nguồn NestJS, Prisma schema, migration, seed, unit tests và e2e tests",
+    "project/docs/decisions/0004-offchain-first-backend.md và project/docs/api-contract.md cập nhật"
+  ],
+  "out_of_scope": [
+    "Smart contract, EVM RPC, ví issuer, blockchain indexer",
+    "Upload/sinh PDF, CSV import hàng loạt, chỉnh sửa Frontend project/apps/web"
+  ],
+  "risks": [
+    "Chứng chỉ phát hành off-chain gắn anchor registry giữ chỗ sẽ không xác thực lại được on-chain khi thay đổi địa chỉ contract thật.",
+    "CheckStatus bổ sung SKIPPED cho on_chain_anchor và pdf_sha256; Frontend cần đồng bộ kiểu này ở task kết nối."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "source_document": "harness/tasks/inbox/T-023-backend-offchain-crud.md",
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T10:44:28.474Z"
+}

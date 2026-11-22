@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "id": "T-018",
+  "title": "Nâng cấp ứng dụng web từ prototype thành UI sản phẩm hoàn chỉnh theo MVP",
+  "status": "done",
+  "priority": "high",
+  "objective": "Chuyển đổi project/apps/web từ màn hình demo prototype sang giao diện sản phẩm hoàn chỉnh phục vụ 3 phân khu (Public Verifier, Issuer Portal, System Admin) và Audit Trail theo đúng đặc tả MVP.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/use-cases.md",
+    "project/docs/architecture.md",
+    "project/docs/data-model.md",
+    "project/docs/api-contract.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-018-product-ui-complete.json",
+      "harness/tasks/done/T-018-product-ui-complete.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-016",
+    "T-017"
+  ],
+  "preconditions": [
+    "Các task T-001, T-002, T-016, T-017 đã hoàn thành.",
+    "Ứng dụng project/apps/web đã cài đặt dependency React/TypeScript/Vite."
+  ],
+  "implementation_notes": [
+    "Xây dựng đầy đủ 3 phân khu ứng dụng (Public Verifier, Issuer Portal, System Admin) và Audit Trail theo đúng đặc tả use-cases.md và data-model.md.",
+    "Lưu trữ bền vững phía client qua localStorage adapter có dữ liệu mẫu khởi tạo.",
+    "Chuyển chức năng kiểm thử dữ liệu sai lệch thành công cụ Payload & File Inspector trong Public Verifier, gỡ bỏ nút mô phỏng sửa khỏi bảng của Issuer."
+  ],
+  "checklist": [
+    "Nâng cấp domain model và nghiệp vụ trong src/domain.ts cho UC-01 đến UC-09.",
+    "Tạo tầng lưu trữ và tiện ích xuất/nhập gói JSON, băm SHA-256 PDF trong src/storage.ts.",
+    "Xây dựng giao diện sản phẩm hoàn chỉnh trong src/App.tsx và src/styles.css.",
+    "Cập nhật kịch bản kiểm tra tự động trong scripts/validate-web.mjs và tài liệu README.md."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Giao diện cung cấp đầy đủ 3 phân khu sản phẩm (Public Verifier, Issuer Portal, System Admin) và Audit Trail, không còn gắn nhãn prototype hay đặt nút mô phỏng sửa trong bảng vận hành của Issuer.",
+      "verification": "Kiểm tra mã nguồn, chạy scripts/validate-web.mjs và kiểm tra giao diện."
+    },
+    {
+      "id": "AC-2",
+      "description": "Thực hiện đầy đủ các luồng MVP: quản lý tổ chức và ủy quyền ví (UC-01), khóa học và học viên (UC-02), tạo/kiểm tra/duyệt/đóng băng/phát hành batch (UC-03..UC-05), xuất gói chứng chỉ JSON (UC-06), xác minh độc lập nhiều bước kèm Payload Inspector (UC-07), thu hồi có lý do (UC-08) và cấp lại chứng chỉ có truy vết (UC-09).",
+      "verification": "Chạy kiểm thử tự động các luồng domain trong scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-3",
+      "description": "TypeScript, Vite production build, clean-code scan và git diff --check đều vượt qua.",
+      "verification": "Chạy npm.cmd run build, node scripts/validate-web.mjs và git diff --check."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Giao diện sản phẩm hoàn chỉnh tại project/apps/web.",
+    "Domain logic, JCS/Merkle/package builder và localStorage adapter.",
+    "Bộ kiểm tra tự động validate-web.mjs và tài liệu cập nhật."
+  ],
+  "out_of_scope": [
+    "Triển khai backend NestJS/PostgreSQL hoặc smart contract mainnet.",
+    "Commit, push hoặc deploy ra môi trường ngoài."
+  ],
+  "risks": [
+    "Cần đảm bảo không sử dụng các từ khóa bị cấm bởi secret/quality scanner."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T03:20:35.713Z"
+}

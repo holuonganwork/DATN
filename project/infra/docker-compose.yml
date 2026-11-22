@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: certchain-postgres
+    restart: unless-stopped
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: certuser
+      POSTGRES_PASSWORD: certdb
+      POSTGRES_DB: certchain_dev
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - certchain_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U certuser -d certchain_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  certchain_pgdata:

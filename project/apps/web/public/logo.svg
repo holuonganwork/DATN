@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-label="CertChain Logo">
+  <title>CertChain — Azure 3-Layer Isometric Monolith</title>
+  <defs>
+    <linearGradient id="l3-top" x1="64" y1="8" x2="64" y2="41.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E0F2FE" />
+    </linearGradient>
+    <linearGradient id="l3-left" x1="15.5" y1="36" x2="25.2" y2="97.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0EA5E9" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="l3-right" x1="112.5" y1="36" x2="102.8" y2="97.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0369A1" />
+      <stop offset="100%" stop-color="#075985" />
+    </linearGradient>
+    <linearGradient id="l3-shadow" x1="64" y1="19.2" x2="25.2" y2="97.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#082F49" />
+      <stop offset="100%" stop-color="#0C4A6E" />
+    </linearGradient>
+    <linearGradient id="l3-recess" x1="64" y1="19.2" x2="102.8" y2="97.6" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#075985" />
+      <stop offset="100%" stop-color="#0369A1" />
+    </linearGradient>
+
+    <linearGradient id="l2-top" x1="64" y1="30.4" x2="64" y2="52.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E0F2FE" />
+    </linearGradient>
+    <linearGradient id="l2-left" x1="34.9" y1="47.2" x2="44.6" y2="108.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+    <linearGradient id="l2-right" x1="93.1" y1="47.2" x2="83.4" y2="108.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0284C7" />
+      <stop offset="100%" stop-color="#075985" />
+    </linearGradient>
+    <linearGradient id="l2-shadow" x1="64" y1="41.6" x2="44.6" y2="108.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0C4A6E" />
+      <stop offset="100%" stop-color="#075985" />
+    </linearGradient>
+    <linearGradient id="l2-recess" x1="64" y1="41.6" x2="83.4" y2="108.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0369A1" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+
+    <linearGradient id="l1-top" x1="64" y1="52.8" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E0F2FE" />
+    </linearGradient>
+    <linearGradient id="l1-left" x1="54.3" y1="58.4" x2="64" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7DD3FC" />
+      <stop offset="45%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0EA5E9" />
+    </linearGradient>
+    <linearGradient id="l1-right" x1="73.7" y1="58.4" x2="64" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0EA5E9" />
+      <stop offset="100%" stop-color="#0284C7" />
+    </linearGradient>
+  </defs>
+
+  <!-- Layer 3 (Outer Arch — EVM Smart Contract Registry) -->
+  <polygon points="64,19.2 25.2,41.6 25.2,97.6 64,75.2" fill="url(#l3-shadow)" stroke="#0C4A6E" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="64,19.2 102.8,41.6 102.8,97.6 64,75.2" fill="url(#l3-recess)" stroke="#0369A1" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="15.5,36 25.2,41.6 25.2,97.6 15.5,92" fill="url(#l3-left)" stroke="#0284C7" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="112.5,36 102.8,41.6 102.8,97.6 112.5,92" fill="url(#l3-right)" stroke="#075985" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="64,8 15.5,36 25.2,41.6 64,19.2 102.8,41.6 112.5,36" fill="url(#l3-top)" stroke="#075985" stroke-width="1.6" stroke-linejoin="round" />
+
+  <!-- Layer 2 (Middle Arch — Domain-Separated Merkle Tree) -->
+  <polygon points="64,41.6 44.6,52.8 44.6,108.8 64,97.6" fill="url(#l2-shadow)" stroke="#075985" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="64,41.6 83.4,52.8 83.4,108.8 64,97.6" fill="url(#l2-recess)" stroke="#0284C7" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="34.9,47.2 44.6,52.8 44.6,108.8 34.9,103.2" fill="url(#l2-left)" stroke="#0EA5E9" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="93.1,47.2 83.4,52.8 83.4,108.8 93.1,103.2" fill="url(#l2-right)" stroke="#0369A1" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="64,30.4 34.9,47.2 44.6,52.8 64,41.6 83.4,52.8 93.1,47.2" fill="url(#l2-top)" stroke="#0369A1" stroke-width="1.35" stroke-linejoin="round" />
+
+  <!-- Layer 1 (Core Pillar — Off-Chain Canonical Payload) -->
+  <polygon points="54.3,58.4 64,64 64,120 54.3,114.4" fill="url(#l1-left)" stroke="#38BDF8" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="73.7,58.4 64,64 64,120 73.7,114.4" fill="url(#l1-right)" stroke="#0284C7" stroke-width="0.4" stroke-linejoin="round" />
+  <polygon points="64,52.8 54.3,58.4 64,64 73.7,58.4" fill="url(#l1-top)" stroke="#0284C7" stroke-width="1.15" stroke-linejoin="round" />
+</svg>

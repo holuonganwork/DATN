@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "id": "T-020",
+  "title": "Cập nhật hệ thống .gitignore cho toàn bộ workspace và mã nguồn sản phẩm",
+  "status": "done",
+  "priority": "high",
+  "objective": "Cập nhật .gitignore ở thư mục gốc, project/.gitignore và project/apps/web/.gitignore để loại bỏ node_modules, build artifacts, .venv, các công cụ ngoài ở thư mục gốc (/package.json, /package-lock.json, /harness) và bảo vệ tuyệt đối các file nhạy cảm (.env, private keys, secrets).",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      ".gitignore",
+      "project/.gitignore",
+      "project/apps/web/.gitignore",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-020-update-gitignore.json",
+      "harness/tasks/done/T-020-update-gitignore.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-016",
+    "T-017",
+    "T-018",
+    "T-019"
+  ],
+  "preconditions": [
+    "Người dùng yêu cầu cập nhật .gitignore và đã xác nhận cập nhật cả 3 file (.gitignore gốc, project/.gitignore, project/apps/web/.gitignore) kèm ignore /package.json và /package-lock.json ở thư mục gốc."
+  ],
+  "implementation_notes": [
+    "Giữ nguyên /harness trong .gitignore gốc và bổ sung /package.json, /package-lock.json, node_modules/, .venv/, .env*, khóa bí mật và file tạm.",
+    "Thiết lập bộ quy tắc đầy đủ cho project/.gitignore (Node/TypeScript, Vite, Hardhat/Foundry, .venv, .env*, secrets, logs, OS/IDE).",
+    "Cập nhật project/apps/web/.gitignore cho ứng dụng Vite/React/TypeScript."
+  ],
+  "checklist": [
+    "Cập nhật .gitignore ở thư mục gốc.",
+    "Cập nhật project/.gitignore.",
+    "Cập nhật project/apps/web/.gitignore.",
+    "Cập nhật harness/context/current-state.md và kiểm tra bằng git check-ignore."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Cả 3 file .gitignore (.gitignore gốc, project/.gitignore, project/apps/web/.gitignore) có đầy đủ quy tắc ignore cho dependencies, build outputs, .venv, secrets/.env và công cụ ngoài ở thư mục gốc.",
+      "verification": "Chạy git check-ignore -v cho các đường dẫn mục tiêu."
+    },
+    {
+      "id": "AC-2",
+      "description": "git status không còn liệt kê node_modules/, /package.json hay /package-lock.json ở thư mục gốc và git diff --check đạt.",
+      "verification": "Chạy git status --short và git diff --check."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "check-ignore",
+      "command": "git check-ignore -v harness node_modules package.json package-lock.json project/apps/web/node_modules project/apps/web/dist"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "check-ignore",
+      "command": "git check-ignore -v harness node_modules package.json package-lock.json project/apps/web/node_modules project/apps/web/dist"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "File .gitignore gốc đã cập nhật.",
+    "File project/.gitignore hoàn chỉnh.",
+    "File project/apps/web/.gitignore hoàn chỉnh."
+  ],
+  "out_of_scope": [
+    "Thay đổi mã nguồn ứng dụng hoặc commit/push Git."
+  ],
+  "risks": [
+    "Cần dùng mẫu /package.json và /package-lock.json có dấu gạch chéo đầu ở .gitignore gốc để chỉ ignore ở thư mục gốc mà không ảnh hưởng tới project/package.json hay project/apps/web/package.json."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "docs",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": false
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-14T08:16:28.925Z"
+}

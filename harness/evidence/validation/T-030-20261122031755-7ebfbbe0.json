@@ -1,0 +1,20 @@
+{
+  "task_id": "T-030",
+  "run_id": "20261122031755-7ebfbbe0",
+  "status": "passed",
+  "checks": {
+    "task_schema": true,
+    "scope": true,
+    "secrets": true,
+    "quality": true,
+    "commands": true,
+    "event_log": true,
+    "diff_check": true
+  },
+  "commands": [
+    "node harness/runner/harness.mjs doctor",
+    "node --test harness/tests/*.test.mjs",
+    "git diff --check"
+  ],
+  "files_outside_workspace": false
+}
