@@ -1,0 +1,422 @@
+/* =========================================================================
+   BRAND LOGO FRAME (AZURE 3-LAYER ISOMETRIC MONOLITH)
+   ========================================================================= */
+
+.brand-logo-frame {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.brand-logo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(7, 89, 133, 0.14));
+}
+
+/* =========================================================================
+   MODE 1: PUBLIC WEBSITE STICKY HEADER & STATUS INDICATORS
+   ========================================================================= */
+
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--status-valid-fg);
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.system-divider {
+  width: 1px;
+  height: 12px;
+  background: var(--border);
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg-header-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-header-inner {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.brand-home-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.brand-title-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.brand-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-name {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.brand-version-pill {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.brand-subtitle {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 11px;
+  border-radius: var(--radius-btn);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.nav-item:hover {
+  color: var(--text-primary);
+  background: var(--bg-subtle);
+}
+
+.nav-item.active {
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+  font-weight: 600;
+}
+
+.nav-counter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(128, 128, 128, 0.16);
+}
+
+.nav-item.active .nav-counter {
+  background: rgba(255, 255, 255, 0.22);
+  color: inherit;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-search-form {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+  background: var(--bg-subtle);
+  overflow: hidden;
+  transition: border-color 0.14s ease;
+}
+
+.header-search-form:focus-within {
+  border-color: var(--border-strong);
+}
+
+.header-search-input {
+  width: 140px;
+  height: 32px;
+  padding: 0 8px 0 13px;
+  border: none;
+  background: transparent;
+  font-size: 12px;
+  outline: none;
+}
+
+.header-search-btn {
+  height: 32px;
+  padding: 0 12px 0 10px;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.header-search-btn:hover {
+  background: var(--bg-inverse);
+  color: var(--text-inverse);
+}
+
+.header-search-btn:focus-visible {
+  outline-offset: -2px;
+}
+
+.btn-primary.header-portal-cta {
+  height: 34px;
+  padding: 0 14px;
+  font-size: 12.5px;
+}
+
+/* =========================================================================
+   BREADCRUMB BAR & BANNERS
+   ========================================================================= */
+
+.breadcrumb-bar {
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.breadcrumb-inner {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.breadcrumb-trail {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.breadcrumb-link:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+}
+
+.breadcrumb-current {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.breadcrumb-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.toast-popup-viewport {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 120;
+  width: min(420px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast-popup-card {
+  position: relative;
+  overflow: hidden;
+  pointer-events: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-modal);
+  animation: toastPopupSlideIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-popup-surface {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 13px 15px 15px;
+}
+
+.toast-popup-card.tone-success {
+  border-color: var(--status-valid-border);
+  color: var(--status-valid-fg);
+}
+
+.toast-popup-card.tone-success .toast-popup-surface {
+  background: var(--status-valid-bg);
+}
+
+.toast-popup-card.tone-warning {
+  border-color: var(--status-warn-border);
+  color: var(--status-warn-fg);
+}
+
+.toast-popup-card.tone-warning .toast-popup-surface {
+  background: var(--status-warn-bg);
+}
+
+.toast-popup-card.tone-danger {
+  border-color: var(--status-danger-border);
+  color: var(--status-danger-fg);
+}
+
+.toast-popup-card.tone-danger .toast-popup-surface {
+  background: var(--status-danger-bg);
+}
+
+.toast-popup-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.toast-popup-message {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: inherit;
+  word-break: break-word;
+}
+
+.notice-badge {
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.notice-dismiss {
+  border: none;
+  background: transparent;
+  padding: 3px 10px;
+  border-radius: var(--radius-btn);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: inherit;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.notice-dismiss:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.toast-popup-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: currentColor;
+  opacity: 0.65;
+  transform-origin: left center;
+  animation: toastProgressShrink 4s linear forwards;
+}
+
+.toast-popup-progress.paused {
+  animation-play-state: paused;
+}
+
+@keyframes toastPopupSlideIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -10px, 0) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes toastProgressShrink {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.site-main {
+  flex: 1;
+  padding: 28px 0 56px;
+}
+

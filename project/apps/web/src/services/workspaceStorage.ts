@@ -1,8 +1,4 @@
-import {
-  createInitialState,
-  type AppState,
-  type CredentialPackage,
-} from "./domain";
+import { createInitialState, type AppState } from "../domain";
 
 export const STORAGE_KEY = "certchain.product.state.v2";
 const LEGACY_STORAGE_KEYS = ["certchain.product.state.v1"];
@@ -61,32 +57,4 @@ export const saveWorkspaceState = (state: AppState): void => {
       return;
     }
   }
-};
-
-export const downloadCredentialPackageJson = (
-  code: string,
-  pkg: CredentialPackage,
-): void => {
-  if (typeof document === "undefined") return;
-  const content = JSON.stringify(pkg, null, 2);
-  const blob = new Blob([content], { type: "application/json;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${code.toLowerCase()}-package.json`;
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
-  URL.revokeObjectURL(url);
-};
-
-export const computeFileSha256Hex = async (file: File): Promise<string> => {
-  if (typeof window === "undefined" || !window.crypto?.subtle) {
-    throw new Error("Trình duyệt không hỗ trợ Web Crypto API để tính SHA-256 cho tệp tin.");
-  }
-  const buffer = await file.arrayBuffer();
-  const digest = await window.crypto.subtle.digest("SHA-256", buffer);
-  const bytes = Array.from(new Uint8Array(digest));
-  const hex = bytes.map((b) => b.toString(16).padStart(2, "0")).join("");
-  return `0x${hex}`;
 };
