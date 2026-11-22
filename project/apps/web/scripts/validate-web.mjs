@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const requiredFiles = [
   "DESIGN.md",
-  "public/logo.png",
+  "public/logo.svg",
   "index.html",
   "package.json",
   "tsconfig.json",
@@ -24,9 +24,26 @@ for (const file of requiredFiles) {
   }
 }
 
-const logoStat = fs.statSync(path.join(webRoot, "public/logo.png"));
-if (logoStat.size < 1024) {
-  throw new Error("public/logo.png appears empty or invalid");
+const logoPath = path.join(webRoot, "public/logo.svg");
+const logoStat = fs.statSync(logoPath);
+if (logoStat.size < 512) {
+  throw new Error("public/logo.svg appears empty or invalid");
+}
+
+if (fs.existsSync(path.join(webRoot, "public/logo.png"))) {
+  throw new Error("Legacy public/logo.png must be removed after upgrading to public/logo.svg");
+}
+
+const logoSvgSource = fs.readFileSync(logoPath, "utf8");
+for (const svgMarker of ['<svg', 'viewBox="0 0 128 128"', "#075985", "#0284C7", "#38BDF8"]) {
+  if (!logoSvgSource.includes(svgMarker)) {
+    throw new Error(`Missing Azure 3-Layer Isometric Monolith SVG marker in public/logo.svg: ${svgMarker}`);
+  }
+}
+
+const indexHtmlSource = fs.readFileSync(path.join(webRoot, "index.html"), "utf8");
+if (!indexHtmlSource.includes("/logo.svg") || indexHtmlSource.includes("/logo.png")) {
+  throw new Error("index.html must reference /logo.svg and not /logo.png");
 }
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(webRoot, "package.json"), "utf8"));
@@ -44,7 +61,7 @@ const source = ["src/App.tsx", "src/domain.ts", "src/storage.ts", "src/main.tsx"
 const cssSource = fs.readFileSync(path.join(webRoot, "src/styles.css"), "utf8");
 
 const requiredMarkers = [
-  "/logo.png",
+  "/logo.svg",
   "VoltAgent/awesome-design-md",
   "ACADEMIC AZURE DESIGN · CERTCHAIN",
   "site-header",
@@ -104,6 +121,10 @@ if (
   throw new Error("Dark mode markers must not exist in light-only web UI");
 }
 
+if (appSource.includes("system-bar") || cssSource.includes(".system-bar")) {
+  throw new Error("Top .system-bar must not exist in Public Website UI");
+}
+
 const forbiddenMockAndPrototypeMarkers = [
   "PROTOTYPE · MEMORY ONLY",
   "VERTICAL SLICE · KHÔNG DATABASE",
@@ -132,6 +153,10 @@ for (const forbidden of ["DATABASE_URL", "privateKey", "seed phrase", "PRIVATE_K
   }
 }
 
+if (appSource.includes("/logo.png")) {
+  throw new Error("Legacy /logo.png reference must not remain in src/App.tsx");
+}
+
 process.stdout.write(
-  `Web product structure valid: ${requiredFiles.length} files, DESIGN.md + logo.png verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n`,
+  `Web product structure valid: ${requiredFiles.length} files, DESIGN.md + logo.svg verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n`,
 );

@@ -2,7 +2,7 @@
 > Inspired by [`VoltAgent/awesome-design-md`](https://github.com/VoltAgent/awesome-design-md) (Academic Azure · Bright Marine 1D Light-Only Specification)
 
 ## 1. Brand Identity & Visual Direction
-- **Brand Mark**: Isometric Triple-Arch Monolith (`/logo.png`). Three nested isometric arches with crisp white top/left planes and solid black inner/right shadow planes, framed inside `.brand-logo-frame`.
+- **Brand Mark**: **Azure 3-Layer Isometric Monolith (`/logo.svg`)**. Vector `1:1` nền trong suốt gồm 3 vòm isometric đồng tâm theo chiều sâu bảng màu Academic Azure (`#075985` L3 EVM, `#0284C7` L2 Merkle, `#38BDF8` L1 Canonical Payload với mặt đỉnh trắng băng `#FFFFFF`/`#E0F2FE`), hiển thị trực tiếp không khung hộp qua `.brand-logo-frame`.
 - **Aesthetic Philosophy**: **Academic Azure & Cryptographic Precision (1D — Bright Marine Azure, Light Mode Only)**.
   - Educational trust and readability: cool ice-slate surfaces (`#F8FAFC` / `#FFFFFF`) paired with Bright Marine Azure (`#0284C7` / `#075985`).
   - **Soft Ice-Azure Internal Sidebar (`#F0F9FF`, border `#BAE6FD`, active pill `#0284C7`)**: airily separates console navigation from crisp white data workspaces without heavy dark panels.
@@ -20,7 +20,7 @@
 | `--bg-header-glass` | `rgba(255, 255, 255, 0.92)` | Frosted sticky header & console topbar |
 | `--bg-inverse` | `#0284C7` | Primary buttons, active nav pills |
 | `--bg-inverse-hover` | `#0369A1` | Primary button hover state |
-| `--brand-deep` | `#075985` | Top `.system-bar`, sidebar labels, KPI numerals, certificate recipient |
+| `--brand-deep` | `#075985` | Sidebar labels, KPI numerals, certificate recipient |
 | `--brand-tint` | `#E0F2FE` | Hero protocol badge, soft marine highlights |
 | `--brand-tint-border` | `#7DD3FC` | Hero border, certificate inner hairline |
 | `--brand-sidebar-bg` | `#F0F9FF` | Fixed Console Sidebar soft ice-azure background |
@@ -45,7 +45,7 @@
 | `--radius-btn` | `var(--radius-pill)` | Action buttons, nav pills, segmented tabs, paired search bars |
 
 ## 2.1. Shape & Interactive Control Geometry
-- **Pill Controls (`--radius-btn: 9999px`)**: Applied uniformly to all action buttons (`.btn-primary`, `.btn-secondary`, `.btn-danger`, `.btn-danger-outline`, `.btn-ghost` across default/`sm`/`xs` sizes), utility triggers (`.theme-toggle-btn`, `.file-upload-btn`, `.session-switch-btn`, `.notice-dismiss`, `.footer-inline-btn`, `.system-reset-btn`, `.sample-code-chip`), navigation/tabs (`.nav-item`, `.sidebar-link`, `.segmented-tabs`, `.seg-btn`), and paired lookup search bars (`.header-search-form`, `.hero-input-wrap`, `.search-bar input`).
+- **Pill Controls (`--radius-btn: 9999px`)**: Applied uniformly to all action buttons (`.btn-primary`, `.btn-secondary`, `.btn-danger`, `.btn-danger-outline`, `.btn-ghost` across default/`sm`/`xs` sizes), utility triggers (`.file-upload-btn`, `.session-switch-btn`, `.notice-dismiss`, `.sample-code-chip`), navigation/tabs (`.nav-item`, `.sidebar-link`, `.segmented-tabs`, `.seg-btn`), and paired lookup search bars (`.header-search-form`, `.hero-input-wrap`, `.search-bar input`).
 - **Balanced Pill Padding & Accessibility**: Horizontal padding scales proportionally with control height (`18px` default, `14px` `.btn-sm`, `11px` `.btn-xs`, `24px` `.hero-submit-btn`) while preserving a single-row `.site-header` at `1440px`. Keyboard focus renders a rounded Azure focus ring (`2px solid var(--border-strong)`, `outline-offset: 2px`) via `:focus-visible`.
 - **Card & Form Surface Hierarchy**: Multi-line selectable cards (`.role-select-card`, `.batch-item`, `.cred-chip`) remain at `8px`, structural cards/panels/modals at `10px`–`12px`, standard form inputs/selects/textareas at `6px`–`8px`, and static technical metadata badges at `4px`.
 
@@ -61,21 +61,19 @@
 ## 4. Dual-Mode Product Architecture (Public Website vs. Internal Console)
 
 ### Mode A: Public Website (`surfaceMode = "public"`)
-1. **Top System Status Bar (`.system-bar`)**:
-   - Displays live EVM Chain ID (`31337`), `CertificateRegistry` contract address, and protocol status.
-2. **Sticky Website Header & Navigation Bar (`<header class="site-header">`)**:
-   - **Brand Identity**: `/logo.png` inside `.brand-logo-frame` + title `CertChain` & subtitle `BLOCKCHAIN CREDENTIAL REGISTRY`.
+1. **Sticky Website Header & Navigation Bar (`<header class="site-header">`)**:
+   - **Brand Identity**: `/logo.svg` (borderless via `.brand-logo-frame`) + title `CertChain` & subtitle `BLOCKCHAIN CREDENTIAL REGISTRY`.
    - **Primary Public Navigation (`<nav class="site-nav">`)**:
      - `Trang chủ` (`home`)
      - `Xác thực Chứng chỉ` (`verifier`)
      - `Danh bạ Đơn vị Đào tạo` (`directory`)
      - `Chuẩn Kỹ thuật & Mật mã` (`standards`)
    - **Header Actions**: Quick certificate lookup input and primary CTA `"Cổng Quản lý / Đăng nhập →"`.
-3. **Standard 4-Column Website Footer (`<footer class="site-footer">`)**:
-   - Column 1: Brand mark (`/logo.png`), mission statement, and protocol version.
+2. **Standard 4-Column Website Footer (`<footer class="site-footer">`)**:
+   - Column 1: Brand mark (`/logo.svg`), mission statement, and protocol version.
    - Column 2: Public Website Sitemap links.
    - Column 3: Cryptographic & Technical Standards (`RFC 8785 JCS`, `SHA-256`, `Merkle Proof`, `EIP-155`).
-   - Column 4: Network & Smart Contract metadata + sample data reset utility.
+   - Column 4: Network & Smart Contract metadata (`Chain ID 31337`, `CertificateRegistry`).
 
 ### Mode B: Role Switcher / Portal Login Gate (`surfaceMode = "auth-gate"`)
 - Triggered when clicking **"Cổng Quản lý / Đăng nhập →"** from the Public Website or **"Đổi vai trò"** inside the Console.
@@ -88,7 +86,7 @@
 
 ### Mode C: Internal Management Console (`surfaceMode = "console"`)
 1. **Fixed Left Sidebar (`<aside class="app-sidebar">`)**:
-   - Soft Ice-Azure sidebar (`#F0F9FF`, border `#BAE6FD`) with top brand header (`/logo.png` + `CertChain Console`).
+   - Soft Ice-Azure sidebar (`#F0F9FF`, border `#BAE6FD`) with top brand header (`/logo.svg` + `CertChain Console`).
    - Active Session Card (current Role badge, active Organization switcher, `"Đổi vai trò"` action).
    - **Vận hành Đơn vị (Issuer Workspace)**:
      - `Tổng quan Đơn vị` (`overview`)

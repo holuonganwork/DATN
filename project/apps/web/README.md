@@ -3,13 +3,12 @@
 Ứng dụng web sản phẩm hoàn chỉnh cho đồ án: **Hệ thống phát hành và xác thực chứng chỉ đào tạo tích hợp Blockchain**.
 
 ## 1. Hệ thống thiết kế (`DESIGN.md`) & Nhận diện Thương hiệu
-- **Logo thương hiệu**: Đặt tại `public/logo.png` (khối hình học isometric 3 cổng vòm Đen-Trắng), được tích hợp làm favicon, thanh Header, Sidebar, màn hình Đăng nhập và con dấu trên phôi chứng chỉ.
-- **Chuẩn thiết kế**: Tuân thủ `DESIGN.md` theo phong cách **Vercel / Geist Architectural Monochrome** từ `VoltAgent/awesome-design-md`, hỗ trợ chuyển đổi **Light / Dark Mode**.
+- **Logo thương hiệu**: Đặt tại `public/logo.svg` (biểu tượng vector **Azure 3-Layer Isometric Monolith** nền trong suốt theo bảng màu Academic Azure), được tích hợp làm favicon, thanh Header, Sidebar, màn hình Đăng nhập, thẻ `Cryptographic Anchor` và con dấu trên phôi chứng chỉ.
+- **Chuẩn thiết kế**: Tuân thủ `DESIGN.md` theo phong cách **Academic Azure · Bright Marine 1D Light-Only** (từ `VoltAgent/awesome-design-md`).
 - **Trạng thái dữ liệu trung thực**: Khởi tạo hoàn toàn sạch (`0` tổ chức, `0` ví, `0` khóa học, `0` học viên, `0` lô phát hành, `0` chứng chỉ, `0` sự kiện kiểm toán) tại khóa lưu trữ `certchain.product.state.v2`, không chứa dữ liệu mẫu hay nút bấm giả lập làm sai lệch số liệu khi tích hợp Backend.
 
 ## 2. Kiến trúc Giao diện 3 Chế độ (Dual-Surface + Role Gate)
 1. **Website Công khai (`Public Website`)**:
-   - **Top System Bar**: Trạng thái cấu hình EVM Registry (`Chain ID 31337`), địa chỉ hợp đồng `CertificateRegistry`.
    - **Sticky Header & Navigation Bar tiêu chuẩn**:
      - `Trang chủ` (`PublicHomeView`): Hero tra cứu chứng chỉ tức thì, 4 thẻ chỉ số mạng lưới, quy trình xác thực 3 bước và bảng chứng chỉ mới phát hành.
      - `Xác thực Chứng chỉ` (`PublicVerifierView` — `UC-09`): Tra cứu theo mã, tải gói `.json`, kiểm định file `.pdf` bằng SHA-256 thực (`Web Crypto API`), `Payload & File Inspector` và báo cáo mật mã 7 bước.
