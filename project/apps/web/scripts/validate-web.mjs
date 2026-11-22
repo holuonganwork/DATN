@@ -3,6 +3,38 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const webRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+
+function collectFilesByExt(dirPath, extensions) {
+  const results = [];
+  if (!fs.existsSync(dirPath)) return results;
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name));
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry.name);
+    if (entry.isDirectory()) {
+      results.push(...collectFilesByExt(fullPath, extensions));
+    } else if (entry.isFile() && extensions.has(path.extname(entry.name).toLowerCase())) {
+      results.push(fullPath);
+    }
+  }
+  return results;
+}
+
+const requiredDirs = [
+  "src/domain",
+  "src/services",
+  "src/components",
+  "src/pages",
+  "src/features",
+  "src/styles",
+];
+
+for (const dir of requiredDirs) {
+  const dirPath = path.join(webRoot, dir);
+  if (!fs.existsSync(dirPath) || !fs.statSync(dirPath).isDirectory()) {
+    throw new Error(`Missing web directory: ${dir}`);
+  }
+}
+
 const requiredFiles = [
   "DESIGN.md",
   "public/logo.svg",
@@ -12,15 +44,21 @@ const requiredFiles = [
   "vite.config.ts",
   "src/main.tsx",
   "src/App.tsx",
-  "src/domain.ts",
-  "src/storage.ts",
-  "src/styles.css",
+  "src/domain/index.ts",
+  "src/services/index.ts",
+  "src/styles/index.css",
   "README.md",
 ];
 
 for (const file of requiredFiles) {
   if (!fs.existsSync(path.join(webRoot, file))) {
     throw new Error(`Missing web file: ${file}`);
+  }
+}
+
+for (const legacyFile of ["src/domain.ts", "src/storage.ts", "src/styles.css"]) {
+  if (fs.existsSync(path.join(webRoot, legacyFile))) {
+    throw new Error(`Legacy monolith file must be removed after modular refactor: ${legacyFile}`);
   }
 }
 
@@ -51,14 +89,20 @@ if (packageJson.scripts?.dev !== "vite" || !packageJson.scripts?.build?.includes
   throw new Error("Web package must expose Vite dev/build scripts");
 }
 
-const appSource = fs.readFileSync(path.join(webRoot, "src/App.tsx"), "utf8");
-const runtimeSource = ["src/App.tsx", "src/domain.ts", "src/storage.ts"]
-  .map((file) => fs.readFileSync(path.join(webRoot, file), "utf8"))
-  .join("\n");
-const source = ["src/App.tsx", "src/domain.ts", "src/storage.ts", "src/main.tsx", "DESIGN.md"]
-  .map((file) => fs.readFileSync(path.join(webRoot, file), "utf8"))
-  .join("\n");
-const cssSource = fs.readFileSync(path.join(webRoot, "src/styles.css"), "utf8");
+const runtimeFiles = collectFilesByExt(path.join(webRoot, "src"), new Set([".ts", ".tsx"]));
+const cssFiles = collectFilesByExt(path.join(webRoot, "src/styles"), new Set([".css"]));
+
+if (runtimeFiles.length < 15) {
+  throw new Error(`Expected modular TS/TSX files under src/, found only ${runtimeFiles.length}`);
+}
+if (cssFiles.length < 5) {
+  throw new Error(`Expected modular CSS files under src/styles/, found only ${cssFiles.length}`);
+}
+
+const runtimeSource = runtimeFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n");
+const cssSource = cssFiles.map((file) => fs.readFileSync(file, "utf8")).join("\n");
+const designDocSource = fs.readFileSync(path.join(webRoot, "DESIGN.md"), "utf8");
+const source = `${runtimeSource}\n${designDocSource}`;
 
 const requiredMarkers = [
   "/logo.svg",
@@ -109,19 +153,19 @@ const requiredThemeTokens = [
 
 for (const token of requiredThemeTokens) {
   if (!cssSource.includes(token)) {
-    throw new Error(`Missing Bright Marine Azure theme token in styles.css: ${token}`);
+    throw new Error(`Missing Bright Marine Azure theme token in src/styles: ${token}`);
   }
 }
 
 if (
   cssSource.includes('[data-theme="dark"]') ||
-  appSource.includes("toggleTheme") ||
-  appSource.includes("theme-toggle-btn")
+  runtimeSource.includes("toggleTheme") ||
+  runtimeSource.includes("theme-toggle-btn")
 ) {
   throw new Error("Dark mode markers must not exist in light-only web UI");
 }
 
-if (appSource.includes("system-bar") || cssSource.includes(".system-bar")) {
+if (runtimeSource.includes("system-bar") || cssSource.includes(".system-bar")) {
   throw new Error("Top .system-bar must not exist in Public Website UI");
 }
 
@@ -142,7 +186,7 @@ const forbiddenMockAndPrototypeMarkers = [
 ];
 
 for (const marker of forbiddenMockAndPrototypeMarkers) {
-  if (runtimeSource.includes(marker) || appSource.includes(marker)) {
+  if (runtimeSource.includes(marker)) {
     throw new Error(`Forbidden mock/seed/fallback marker found in frontend runtime: ${marker}`);
   }
 }
@@ -153,10 +197,10 @@ for (const forbidden of ["DATABASE_URL", "privateKey", "seed phrase", "PRIVATE_K
   }
 }
 
-if (appSource.includes("/logo.png")) {
-  throw new Error("Legacy /logo.png reference must not remain in src/App.tsx");
+if (runtimeSource.includes("/logo.png")) {
+  throw new Error("Legacy /logo.png reference must not remain in src/");
 }
 
 process.stdout.write(
-  `Web product structure valid: ${requiredFiles.length} files, DESIGN.md + logo.svg verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n`,
+  `Web product structure valid: ${requiredFiles.length} anchors, ${runtimeFiles.length} TS/TSX files, ${cssFiles.length} CSS files, DESIGN.md + logo.svg verified, zero mock/seed/fallback data confirmed, and 3-mode architecture present.\n`,
 );

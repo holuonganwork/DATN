@@ -21,10 +21,19 @@
    - **Sidebar cố định bên trái**: Logo thương hiệu, thông tin phiên đăng nhập, bộ chọn Đơn vị đào tạo, 2 nhóm điều hướng (`Vận hành Đơn vị` & `Quản trị & Kiểm toán`), trạng thái mạng EVM và nút quay về Website Công khai.
    - **Workspace bên phải**: `Tổng quan Đơn vị`, `Lô phát hành (Batches)` với đường ống 6 bước (`DRAFT` → `CONFIRMED`), `Sổ Chứng chỉ`, `Khóa học & Học viên`, `Tổ chức & Ví EVM (Admin)` và `Nhật ký Kiểm toán (Audit Trail)`.
 
-## 3. Lệnh chạy & Kiểm tra
+## 3. Cấu trúc mã nguồn (`src/`)
+- `src/main.tsx` & `src/App.tsx`: Entry point và root state orchestrator cho 3 chế độ giao diện.
+- `src/domain/`: Kiểu dữ liệu (`types.ts`), hằng số & nhãn (`constants.ts`), chuẩn hóa JCS & băm (`crypto.ts`), cây Merkle (`merkle.ts`), state & nghiệp vụ thuần UC-01..UC-09 (`organizations.ts`, `catalog.ts`, `batches.ts`, `credentials.ts`, `verifier.ts`).
+- `src/services/`: Lưu trữ `localStorage` (`workspaceStorage.ts`), tải gói JSON (`packageExport.ts`), SHA-256 tệp đính kèm (`fileCrypto.ts`) và hàm format (`formatters.ts`).
+- `src/components/`: UI dùng chung (`ui/`), khung điều hướng (`layout/`) và 4 hộp thoại nghiệp vụ (`modals/`).
+- `src/pages/`: Các trang top-level cho Website Công khai (`public/`), cổng chọn vai trò (`auth/`) và tổng quan Console (`console/`).
+- `src/features/`: Các phân hệ nghiệp vụ trong Console (`issuer/` tách riêng 3 tab `Batches`, `Credentials`, `Catalog`; `admin/`; `audit/`).
+- `src/styles/`: CSS thuần tách theo phân hệ và nạp đúng thứ tự cascade qua `src/styles/index.css`.
+
+## 4. Lệnh chạy & Kiểm tra
 
 ```bash
 npm.cmd run dev
 npm.cmd run build
-npm.cmd run validate
+node scripts/validate-web.mjs
 ```
