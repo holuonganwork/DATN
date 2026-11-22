@@ -1,6 +1,8 @@
 # Internal agent harness & workspace-root tooling
 /package.json
 /package-lock.json
+.agents/
+skills-lock.json
 
 # Dependencies & virtual environments
 node_modules/

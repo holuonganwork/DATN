@@ -1,10 +1,8 @@
 # Mẫu review task
 
-- Đọc `summary.json` và `events.jsonl` của run; kiểm tra lifecycle không bị thiếu phase.
+- Đọc `summary.json` và `events.jsonl` của run; kiểm tra lifecycle không thiếu pha và đúng thứ tự.
 - Đối chiếu file thay đổi với `target.allowed_paths`, `harness_write_paths` và `forbidden_paths`.
-- Kiểm tra lỗi chức năng, quyền truy cập, dữ liệu nhạy cảm, khả năng retry/idempotency và boundary giữa domain với I/O.
-- Chạy quality gates đã khai báo: format, lint, typecheck, test, build và `git diff --check` khi có.
-- Tìm duplication, magic value, hàm nhiều trách nhiệm, lỗi bị nuốt, debug statement, unsafe type escape và test chỉ kiểm tra implementation.
-- Kiểm tra `quality_reviewed` event có ghi finding, quyết định xử lý và command evidence.
-- Kiểm tra tài liệu, trạng thái JSON task và bằng chứng trong `harness/evidence/`.
-- Ghi rõ kết luận, phát hiện và điều kiện còn thiếu trước khi dùng `--mark-done`.
+- Review code/tài liệu thay đổi theo nguồn chuẩn `project/docs/quality-gates.md` (logic, quyền, dữ liệu nhạy cảm, retry/idempotency, boundary, duplication, pattern cấm và test coverage).
+- Xác nhận các `validation_commands` khai báo (kèm `git diff --check`) đều đạt và có output trong run log.
+- Kiểm tra event `quality_reviewed` có ghi finding, quyết định xử lý và command evidence.
+- Kiểm tra trạng thái JSON task và đủ 2 file evidence trong `harness/evidence/` trước khi dùng `--mark-done`.

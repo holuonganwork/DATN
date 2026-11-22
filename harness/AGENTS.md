@@ -1,14 +1,9 @@
 # Quy tắc harness
 
+- Quy trình bắt buộc (`GRILL → PLAN → GOAL → EXECUTE → VALIDATE → FINALIZE → GOAL COMPLETE`), `run_id`, `resume` và bảo mật tuân theo `AGENTS.md` ở gốc workspace.
 - `context/` là kiến thức nền và quyết định dùng chung; phải đọc trước khi thực hiện task.
-- 11 task sản phẩm nằm trong `tasks/inbox/` và bản JSON tương ứng nằm trong `tasks/ready/`.
-- `T-012` là task vận hành harness trong `tasks/done/`; task này không được sửa mã nguồn trong `project/`.
-- Mọi lần Agent chạy phải có `run_id` và log append-only trong `runtime/runs/<run-id>/events.jsonl`.
-- Lifecycle chuẩn là `start → execute → validate → finalize`; dùng `resume` khi run chưa kết thúc.
-- Mọi thay đổi trạng thái task phải đi kèm summary và evidence trong `evidence/`.
-- `runtime/` chỉ chứa dữ liệu tạm thời local và không được đưa vào sản phẩm.
+- Bố cục task: mô tả nháp ở `tasks/inbox/`, task JSON đang chờ ở `tasks/ready/` và task đã hoàn tất ở `tasks/done/`.
+- `runtime/` chỉ chứa log append-only (`events.jsonl`) và dữ liệu tạm local; không đưa vào sản phẩm và không ghi secret, private key, token hoặc dữ liệu cá nhân thật vào log.
 - Không đặt mã nguồn ứng dụng hoặc dữ liệu nghiệp vụ chứng chỉ trong `harness/`.
-- Không ghi secret, private key, token hoặc dữ liệu cá nhân thật vào log.
-- Khi task có `quality_profile`, đọc `context/quality-gates.md` trước khi sửa.
-- Task `code` hoặc `harness` phải có validation command; Agent phải ghi `quality_reviewed` trước validate.
-- Không dùng `--mark-done` nếu thiếu execution/validation đạt, task report hoặc validation evidence.
+- Mọi thay đổi trạng thái task phải đi kèm summary và bằng chứng trong `evidence/`.
+- Khi task có `quality_profile`, đọc `context/quality-gates.md` trước khi sửa, ghi event `quality_reviewed` trước `validate`, và không dùng `--mark-done` nếu thiếu execution/validation đạt, task report hoặc validation evidence.

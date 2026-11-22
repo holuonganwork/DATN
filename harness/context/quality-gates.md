@@ -1,25 +1,21 @@
-# Quality gates và clean code
+# Cơ chế vận hành quality gates trong harness
 
-Đây là reference dùng khi task có `quality_profile` là `code` hoặc `harness`. Task JSON là nguồn truth cho command; tài liệu này định nghĩa điều Agent phải quan sát trước khi chạy command.
+Tài liệu này quy định quy trình kiểm soát chất lượng cho task có `quality_profile` là `code` hoặc `harness`. Quy tắc clean code, boundary và test của mã nguồn sản phẩm tham chiếu nguồn chuẩn duy nhất tại `project/docs/quality-gates.md`; danh sách command cụ thể lấy từ task JSON.
 
 ## Quality loop
 
-Agent lập kế hoạch, sửa một lát cắt nhỏ, chạy các gate đã khai báo, đọc toàn bộ lỗi, sửa nguyên nhân và lặp lại tối đa hai vòng. Trước `validate`, Agent ghi event `quality_reviewed` với file đã xem, finding, quyết định xử lý và command đã chạy.
+1. Lập kế hoạch ngắn, sửa từng lát cắt nhỏ và chạy các gate khai báo trong task.
+2. Nếu gate thất bại, đọc toàn bộ lỗi, sửa nguyên nhân trong `allowed_paths` và lặp lại tối đa **2 vòng tự động** trước khi báo `FAILED` hoặc `BLOCKED`.
+3. Trước `validate`, ghi event `quality_reviewed` nêu rõ file đã xem, finding, quyết định xử lý và command đã chạy.
 
-## Clean code contract
+## Static scan tự động
 
-- Giữ một trách nhiệm cho mỗi module và hàm; tách domain logic khỏi database, RPC, filesystem và HTTP.
-- Đặt tên theo domain và hành vi; đưa giá trị nghiệp vụ vào constant hoặc type có tên.
-- Kiểm tra input ở boundary; dùng kiểu dữ liệu rõ ràng và schema validation.
-- Propagate hoặc chuyển lỗi thành lỗi domain có ngữ nghĩa; không nuốt lỗi.
-- Ưu tiên interface nhỏ, dependency rõ và hàm thuần cho logic hash, chuẩn hóa, Merkle và trạng thái.
-- Viết test cho hành vi đúng, quyền, lỗi, retry và idempotency; không chỉ kiểm tra implementation detail.
-- Giữ diff nhỏ; không thêm abstraction, comment hoặc dependency khi chưa có lý do trong acceptance criteria.
+`harness/validators/quality.mjs` quét các file code thay đổi thuộc `project/` và chặn các pattern rõ ràng: `debugger`, `console.log`, `@ts-ignore`/`@ts-nocheck`, `as any` và `catch` rỗng. Static scan chỉ là lớp bổ trợ, không thay thế lint, typecheck, test, build và review kiến trúc.
 
-## Finding chặn
+## Bằng chứng và điều kiện mark-done
 
-Static quality scan chặn các pattern rõ ràng trong code project: `debugger`, `console.log`, `@ts-ignore`/`@ts-nocheck`, `as any` và catch rỗng. Lint, typecheck, test, build và review kiến trúc vẫn là gate chính khi stack đã được chốt.
+Task chỉ được `finalize --mark-done` khi đã có đủ:
 
-## Bằng chứng
-
-Task report nằm tại `harness/evidence/task-reports/<task-id>-<run-id>.md`; validation machine-readable nằm tại `harness/evidence/validation/<task-id>-<run-id>.json`. Không dùng `--mark-done` khi thiếu một trong hai file hoặc còn manual review.
+- `harness/evidence/task-reports/<task-id>-<run-id>.md`
+- `harness/evidence/validation/<task-id>-<run-id>.json`
+- Không còn hạng mục `manual_validation_required` chưa xác nhận.
