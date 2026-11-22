@@ -179,7 +179,7 @@ export function BrandLogo({ size = 36 }: { size?: number }) {
   return (
     <span className="brand-logo-frame" style={{ width: size, height: size }}>
       <img
-        src="/logo.png"
+        src="/logo.svg"
         alt="CertChain Logo"
         width={size}
         height={size}
@@ -500,27 +500,6 @@ export function App() {
          ===================================================================== */}
       {surfaceMode === "public" && (
         <>
-          <div className="system-bar">
-            <div className="site-container system-bar-inner">
-              <div className="system-bar-left">
-                <span className="live-indicator">
-                  <span className="live-dot" />
-                  {state.rpcOnline ? "EVM REGISTRY CONFIGURED" : "RPC OFFLINE"}
-                </span>
-                <span className="system-divider" />
-                <span className="mono-meta">{primaryChain.name}</span>
-                <span className="system-divider" />
-                <span className="mono-meta">
-                  Registry: <code>{shortHash(primaryChain.registryAddress, 10, 6)}</code>
-                </span>
-              </div>
-
-              <div className="system-bar-right">
-                <span className="mono-meta">Chuẩn giao thức: JCS RFC 8785 · SHA-256 Merkle</span>
-              </div>
-            </div>
-          </div>
-
           <header className="site-header">
             <div className="site-container site-header-inner">
               <div className="header-brand-group">
