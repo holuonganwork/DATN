@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "id": "T-030",
+  "title": "Gọn hóa rule trùng lặp và dọn file dư (giữ nguyên GRILL → PLAN → GOAL)",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Gọn hóa các rule và prompt trùng lặp trên 7 file (AGENTS.md, project/AGENTS.md, harness/AGENTS.md, project/docs/quality-gates.md, harness/context/quality-gates.md, harness/prompts/{execution,review,repair}.md) mà giữ nguyên 100% quy trình bắt buộc GRILL -> PLAN -> GOAL -> EXECUTE -> VALIDATE -> FINALIZE -> GOAL COMPLETE, xóa clean-code-typescript.md và ignore .agents/ cùng skills-lock.json.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "harness/context/quality-gates.md",
+    "project/docs/quality-gates.md",
+    "AGENTS.md",
+    "project/AGENTS.md",
+    "harness/AGENTS.md"
+  ],
+  "target": {
+    "repository": "workspace",
+    "allowed_paths": [
+      "AGENTS.md",
+      "project/AGENTS.md",
+      "harness/AGENTS.md",
+      "project/docs/quality-gates.md",
+      "harness/context/quality-gates.md",
+      "harness/context/current-state.md",
+      "harness/prompts/execution.md",
+      "harness/prompts/review.md",
+      "harness/prompts/repair.md",
+      ".gitignore",
+      "clean-code-typescript.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-030-deduplicate-rules-and-cleanup.md",
+      "harness/tasks/ready/T-030-deduplicate-rules-and-cleanup.json",
+      "harness/tasks/done/T-030-deduplicate-rules-and-cleanup.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*",
+      "C:/Users/"
+    ]
+  },
+  "dependencies": [
+    "T-013",
+    "T-014"
+  ],
+  "preconditions": [
+    "T-013 và T-014 đã ở trạng thái done.",
+    "Người dùng đã chốt phạm vi gọn hóa toàn bộ 7 file rule/prompt, xóa clean-code-typescript.md và ignore .agents/ cùng skills-lock.json.",
+    "Node.js 20+ có sẵn trong môi trường local."
+  ],
+  "implementation_notes": [
+    "Giữ nguyên toàn bộ ràng buộc an toàn, allowed_paths, tối đa 2 vòng sửa tự động, và thứ tự GRILL -> PLAN -> GOAL -> EXECUTE -> VALIDATE -> FINALIZE -> GOAL COMPLETE.",
+    "Chốt project/docs/quality-gates.md làm Single Source of Truth cho quy tắc clean code của project/.",
+    "Giữ nguyên 6 skill ponytail* trong .agents/skills/."
+  ],
+  "checklist": [
+    "Xóa clean-code-typescript.md và thêm .agents/ + skills-lock.json vào .gitignore.",
+    "Hợp nhất quy trình trong AGENTS.md và thêm quy ước phối hợp skill bổ trợ.",
+    "Chốt project/docs/quality-gates.md làm Single Source of Truth và rút gọn project/AGENTS.md, harness/AGENTS.md, harness/context/quality-gates.md, harness/prompts/{execution,review,repair}.md.",
+    "Cập nhật harness/context/current-state.md và hoàn tất lifecycle harness cho T-030."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "AGENTS.md giữ nguyên workflow GRILL -> PLAN -> GOAL -> EXECUTE -> VALIDATE -> FINALIZE -> GOAL COMPLETE, hợp nhất các bước trùng lặp và bổ sung quy ước phối hợp skill.",
+      "verification": "Đọc trực tiếp AGENTS.md và đối chiếu đầy đủ các ràng buộc cũ."
+    },
+    {
+      "id": "AC-2",
+      "description": "project/docs/quality-gates.md là nguồn chuẩn duy nhất cho clean code của project/; project/AGENTS.md, harness/AGENTS.md, harness/context/quality-gates.md và harness/prompts/*.md được rút gọn không lặp.",
+      "verification": "Đọc trực tiếp các file đã chỉnh sửa và đối chiếu nội dung tham chiếu."
+    },
+    {
+      "id": "AC-3",
+      "description": "clean-code-typescript.md đã xóa; .gitignore loại trừ .agents/ và skills-lock.json.",
+      "verification": "Kiểm tra file tồn tại và git status --short."
+    },
+    {
+      "id": "AC-4",
+      "description": "harness/context/current-state.md ghi nhận hoàn thành T-030.",
+      "verification": "Đọc harness/context/current-state.md."
+    },
+    {
+      "id": "AC-5",
+      "description": "Doctor, harness tests, git diff --check, quality review và evidence của T-030 đều đạt.",
+      "verification": "Chạy toàn bộ validation_commands và finalize --mark-done."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "doctor",
+      "command": "node harness/runner/harness.mjs doctor"
+    },
+    {
+      "name": "harness-tests",
+      "command": "node --test harness/tests/*.test.mjs"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "doctor",
+      "command": "node harness/runner/harness.mjs doctor"
+    },
+    {
+      "name": "harness-tests",
+      "command": "node --test harness/tests/*.test.mjs"
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "7 file rule/prompt được gọn hóa không trùng lặp.",
+    "clean-code-typescript.md bị xóa và .gitignore cập nhật.",
+    "harness/context/current-state.md, task report và validation evidence cho T-030."
+  ],
+  "out_of_scope": [
+    "Thay đổi mã nguồn sản phẩm trong project/apps/, project/packages/, project/contracts/.",
+    "Xóa hoặc sửa 6 skill trong .agents/skills/.",
+    "Thay đổi quy trình bắt buộc GRILL -> PLAN -> GOAL.",
+    "Commit hoặc push Git."
+  ],
+  "risks": [
+    "Rút gọn quá tay làm sót một ràng buộc quan trọng từ phiên bản trước.",
+    "Đường dẫn tương đối hoặc link giữa các file rule/prompt bị sai."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "harness",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "source_document": "harness/tasks/inbox/T-030-deduplicate-rules-and-cleanup.md",
+  "manual_validation_required": false,
+  "completed_at": "2026-11-22T03:20:25.495Z"
+}

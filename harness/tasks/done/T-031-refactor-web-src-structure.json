@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "id": "T-031",
+  "title": "Refactor cấu trúc mã nguồn project/apps/web/src sang kiến trúc modular",
+  "status": "done",
+  "priority": "medium",
+  "objective": "Tái cấu trúc project/apps/web/src từ các file monolith sang cấu trúc modular gồm domain/, services/, components/, pages/, features/ và styles/, xóa 3 file monolith cũ và đồng bộ scripts/validate-web.mjs, README.md, current-state.md mà giữ nguyên 100% hành vi và giao diện.",
+  "context_files": [
+    "harness/context/project-brief.md",
+    "harness/context/scope.md",
+    "harness/context/current-state.md",
+    "project/docs/quality-gates.md"
+  ],
+  "target": {
+    "repository": "project",
+    "allowed_paths": [
+      "project/apps/web/",
+      "harness/context/current-state.md"
+    ],
+    "harness_write_paths": [
+      "harness/tasks/inbox/T-031-refactor-web-src-structure.md",
+      "harness/tasks/ready/T-031-refactor-web-src-structure.json",
+      "harness/tasks/done/T-031-refactor-web-src-structure.json",
+      "harness/state/",
+      "harness/evidence/",
+      "harness/runtime/"
+    ],
+    "forbidden_paths": [
+      "project/.env",
+      "project/.env.*",
+      "**/private-key*",
+      "**/*secret*"
+    ]
+  },
+  "dependencies": [
+    "T-001",
+    "T-002",
+    "T-018",
+    "T-019",
+    "T-029"
+  ],
+  "preconditions": [
+    "Người dùng đã chốt phạm vi Pure Refactor, chiến lược tách CSS thuần theo phân hệ và tách sâu vừa đủ cho domain/ và IssuerPortal.",
+    "Task T-029 đã hoàn tất và project/apps/web build sạch trước khi tách."
+  ],
+  "implementation_notes": [
+    "Tách src/domain.ts thành các module DAG một chiều trong src/domain/ kèm src/domain/index.ts.",
+    "Tách src/storage.ts và helper định dạng sang src/services/ kèm src/services/index.ts.",
+    "Tách src/styles.css thành 11 file CSS theo phân hệ trong src/styles/ và import đúng thứ tự tại src/styles/index.css.",
+    "Tách UI trong src/App.tsx sang src/components/ (ui, layout, modals), src/pages/ (public, auth, console) và src/features/ (issuer với 3 tab con, admin, audit).",
+    "Xóa src/domain.ts, src/storage.ts, src/styles.css và nâng cấp scripts/validate-web.mjs quét đệ quy toàn bộ src/."
+  ],
+  "checklist": [
+    "Tách domain/ và services/ giữ nguyên kiểu dữ liệu, logic và chữ ký hàm.",
+    "Tách styles/ giữ nguyên toàn bộ 2.734 dòng rule và thứ tự cascade.",
+    "Tách components/, pages/, features/ và thu gọn src/App.tsx, cập nhật src/main.tsx.",
+    "Xóa 3 file monolith cũ và cập nhật validate-web.mjs, README.md, current-state.md.",
+    "Chạy build-web, syntax-check, validate-web, git diff --check và harness doctor."
+  ],
+  "acceptance_criteria": [
+    {
+      "id": "AC-1",
+      "description": "Toàn bộ mã nguồn trong project/apps/web/src/ được tổ chức rõ ràng vào 6 thư mục (domain/, services/, components/, pages/, features/, styles/) kèm src/main.tsx và src/App.tsx gọn nhẹ; 3 file monolith cũ (src/domain.ts, src/storage.ts, src/styles.css) đã được xóa sạch.",
+      "verification": "Kiểm tra cây thư mục project/apps/web/src/ và chạy node scripts/validate-web.mjs."
+    },
+    {
+      "id": "AC-2",
+      "description": "Giữ nguyên 100% logic nghiệp vụ (UC-01..UC-09, JCS/Merkle/Verifier, STORAGE_KEY = \"certchain.product.state.v2\"), tên các View/Portal chính, thứ tự cascade CSS và không thêm dependency mới vào package.json.",
+      "verification": "Kiểm tra package.json, tổng số dòng CSS cascade và kết quả tsc --noEmit + vite build."
+    },
+    {
+      "id": "AC-3",
+      "description": "project/apps/web/scripts/validate-web.mjs được nâng cấp quét đệ quy toàn bộ src/ (TS/TSX và CSS), kiểm tra đầy đủ cấu trúc thư mục mới và mọi marker/forbidden rule; project/apps/web/README.md và harness/context/current-state.md được đồng bộ.",
+      "verification": "Chạy node --check scripts/validate-web.mjs, node scripts/validate-web.mjs và đọc README.md, current-state.md."
+    },
+    {
+      "id": "AC-4",
+      "description": "npm.cmd run build, node --check scripts/validate-web.mjs, node scripts/validate-web.mjs, git diff --check và node harness/runner/harness.mjs doctor đều PASS, không có static quality finding.",
+      "verification": "Chạy toàn bộ validation_commands trong harness và harness doctor."
+    }
+  ],
+  "execution_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    }
+  ],
+  "validation_commands": [
+    {
+      "name": "build-web",
+      "command": "npm.cmd run build",
+      "cwd": "project/apps/web",
+      "timeout_ms": 120000
+    },
+    {
+      "name": "syntax-check",
+      "command": "node --check scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "validate-web",
+      "command": "node scripts/validate-web.mjs",
+      "cwd": "project/apps/web",
+      "timeout_ms": 30000
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check"
+    }
+  ],
+  "deliverables": [
+    "Cấu trúc thư mục modular tại project/apps/web/src/ (domain/, services/, components/, pages/, features/, styles/).",
+    "Xóa bỏ src/domain.ts, src/storage.ts và src/styles.css cũ.",
+    "scripts/validate-web.mjs nâng cấp quét đệ quy src/ và README.md đồng bộ.",
+    "harness/context/current-state.md cập nhật tiến độ T-031."
+  ],
+  "out_of_scope": [
+    "Cài đặt dependency mới (react-router-dom, state library, UI kit).",
+    "Kết nối HTTP tới project/apps/api hoặc thay đổi nghiệp vụ/UI hiện hành.",
+    "Chỉnh sửa mã nguồn ngoài project/apps/web/."
+  ],
+  "risks": [
+    "Import vòng giữa các module trong domain/ hoặc sai thứ tự @import CSS làm thay đổi cascade.",
+    "Chuyển file có thể làm lọt pattern bị quality/secret scanner chặn hoặc mất marker kiểm tra trong validate-web.mjs."
+  ],
+  "retry_policy": {
+    "max_retries": 2,
+    "retry_failed_commands": true
+  },
+  "completion_report": {
+    "required": [
+      "files_changed",
+      "commands_run",
+      "validation_results",
+      "remaining_risks"
+    ]
+  },
+  "quality_profile": "code",
+  "quality_gates": {
+    "require_validation_commands": true,
+    "require_evidence": true,
+    "require_diff_check": true,
+    "require_quality_review_event": true
+  },
+  "manual_validation_required": false,
+  "completed_at": "2026-11-22T03:37:08.345Z"
+}

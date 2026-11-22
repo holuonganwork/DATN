@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "run_id": "20261122031755-7ebfbbe0",
+  "task_id": "T-030",
+  "task_file": "harness/tasks/ready/T-030-deduplicate-rules-and-cleanup.json",
+  "status": "passed",
+  "phase": "finalize",
+  "created_at": "2026-11-22T03:17:55.581Z",
+  "updated_at": "2026-11-22T03:20:25.499Z",
+  "cwd": "F:\\DATN",
+  "hostname": "meowmeow",
+  "node_version": "v22.12.0",
+  "repo_root": "f:\\DATN",
+  "event_log": "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+  "summary_file": "harness/runtime/runs/20261122031755-7ebfbbe0/summary.json",
+  "last_sequence": 28,
+  "git_before": {
+    "head": "7134728a25144e028f0338adbc6db9b7ef048585",
+    "changed_files": [
+      ".agents/skills/ponytail-audit/SKILL.md",
+      ".agents/skills/ponytail-debt/SKILL.md",
+      ".agents/skills/ponytail-gain/SKILL.md",
+      ".agents/skills/ponytail-help/SKILL.md",
+      ".agents/skills/ponytail-review/SKILL.md",
+      ".agents/skills/ponytail/SKILL.md",
+      "harness/tasks/inbox/T-030-deduplicate-rules-and-cleanup.md",
+      "harness/tasks/ready/T-030-deduplicate-rules-and-cleanup.json",
+      "skills-lock.json"
+    ]
+  },
+  "workspace_before": {
+    "AGENTS.md": "7955:1794420596656.8435",
+    "project/AGENTS.md": "1284:1794362147969.9348",
+    "harness/AGENTS.md": "1311:1795263347258.5815",
+    "project/docs/quality-gates.md": "1521:1794362146483.6733",
+    "harness/context/quality-gates.md": "1953:1795263347266.6113",
+    "harness/context/current-state.md": "9564:1795316879499.381",
+    "harness/prompts/execution.md": "1341:1795263347290.196",
+    "harness/prompts/review.md": "957:1795263347290.196",
+    "harness/prompts/repair.md": "818:1795263347290.196",
+    ".gitignore": "603:1795263347256.5708",
+    "harness/tasks/inbox/T-030-deduplicate-rules-and-cleanup.md": "2960:1795317468925.767",
+    "harness/tasks/ready/T-030-deduplicate-rules-and-cleanup.json": "6398:1795317469881.7637",
+    "harness/state/active-task.json": "83:1795316947502.8154",
+    "harness/state/project-state.json": "242:1795316947504.3975",
+    "harness/evidence/README.md": "641:1795263347268.619",
+    "harness/evidence/task-reports/T-001-20261111182426-ccc7d681.md": "1201:1795263347268.619",
+    "harness/evidence/task-reports/T-002-20261111183357-4d44c482.md": "1316:1795263347270.3708",
+    "harness/evidence/task-reports/T-012-20261109191200-c1bb195f.md": "1502:1795263347270.3708",
+    "harness/evidence/task-reports/T-012-20261109191403-78e81f20.md": "1553:1795263347270.3708",
+    "harness/evidence/task-reports/T-012-20261109191604-a7aed15d.md": "1550:1795263347272.381",
+    "harness/evidence/task-reports/T-012-20261109191813-2e67429f.md": "1577:1795263347272.381",
+    "harness/evidence/task-reports/T-012-20261109192052-78f6f9bd.md": "1598:1795263347274.3894",
+    "harness/evidence/task-reports/T-013-20261111015739-c5a33bd7.md": "1422:1795263347274.3894",
+    "harness/evidence/task-reports/T-013-20261111022414-87924690.md": "643:1795263347274.3894",
+    "harness/evidence/task-reports/T-014-20261111171146-3d6868c2.md": "995:1795263347274.3894",
+    "harness/evidence/task-reports/T-015-20261111190107-c9f60c3f.md": "1358:1795263347276.3936",
+    "harness/evidence/task-reports/T-016-20261114022033-ca1aa18a.md": "2301:1795263347276.3936",
+    "harness/evidence/task-reports/T-017-20261114023638-6beb3be6.md": "2654:1795263347276.3936",
+    "harness/evidence/task-reports/T-018-20261114030618-ff3063d4.md": "4085:1795263347276.3936",
+    "harness/evidence/task-reports/T-019-20261114033012-ce00b4e2.md": "3700:1795263347276.3936",
+    "harness/evidence/task-reports/T-020-20261114081513-9be40b56.md": "2233:1795263347278.4019",
+    "harness/evidence/task-reports/T-021-20261114091801-5ba7430b.md": "4117:1795263347278.4019",
+    "harness/evidence/task-reports/T-023-20261114101458-2d01c942.md": "4532:1795263347280.4119",
+    "harness/evidence/task-reports/T-024-20261114130759-e4ccc858.md": "3350:1795263347280.4119",
+    "harness/evidence/task-reports/T-025-20261121131021-b33f3bff.md": "3718:1795266930680.1824",
+    "harness/evidence/task-reports/T-026-20261121135331-3249bc46.md": "4545:1795269661670.5134",
+    "harness/evidence/task-reports/T-027-20261121140812-ef95cc74.md": "3228:1795270457674.595",
+    "harness/evidence/task-reports/T-028-20261122025854-f7845282.md": "3170:1795316476959.514",
+    "harness/evidence/task-reports/T-029-20261122030729-1e6ee844.md": "2641:1795316939758.5552",
+    "harness/evidence/validation/T-001-20261111182426-ccc7d681.json": "663:1795263347280.4119",
+    "harness/evidence/validation/T-002-20261111183357-4d44c482.json": "543:1795263347280.4119",
+    "harness/evidence/validation/T-012-20261109191200-c1bb195f.json": "866:1795263347282.4185",
+    "harness/evidence/validation/T-012-20261109191403-78e81f20.json": "582:1795263347282.4185",
+    "harness/evidence/validation/T-012-20261109191604-a7aed15d.json": "582:1795263347282.4185",
+    "harness/evidence/validation/T-012-20261109191813-2e67429f.json": "582:1795263347284.4275",
+    "harness/evidence/validation/T-012-20261109192052-78f6f9bd.json": "582:1795263347284.4275",
+    "harness/evidence/validation/T-013-20261111015739-c5a33bd7.json": "541:1795263347284.4275",
+    "harness/evidence/validation/T-013-20261111022414-87924690.json": "412:1795263347284.4275",
+    "harness/evidence/validation/T-014-20261111171146-3d6868c2.json": "449:1795263347284.4275",
+    "harness/evidence/validation/T-015-20261111190107-c9f60c3f.json": "743:1795263347284.4275",
+    "harness/evidence/validation/T-016-20261114022033-ca1aa18a.json": "5275:1795263347286.1775",
+    "harness/evidence/validation/T-017-20261114023638-6beb3be6.json": "4158:1795263347286.1775",
+    "harness/evidence/validation/T-018-20261114030618-ff3063d4.json": "2606:1795263347286.1775",
+    "harness/evidence/validation/T-019-20261114033012-ce00b4e2.json": "2651:1795263347286.1775",
+    "harness/evidence/validation/T-020-20261114081513-9be40b56.json": "1669:1795263347286.1775",
+    "harness/evidence/validation/T-021-20261114091801-5ba7430b.json": "1377:1795263347286.1775",
+    "harness/evidence/validation/T-023-20261114101458-2d01c942.json": "7381:1795263347288.187",
+    "harness/evidence/validation/T-024-20261114130759-e4ccc858.json": "1051:1795263347288.187",
+    "harness/evidence/validation/T-025-20261121131021-b33f3bff.json": "1578:1795266933132.7554",
+    "harness/evidence/validation/T-026-20261121135331-3249bc46.json": "1502:1795269663323.5122",
+    "harness/evidence/validation/T-027-20261121140812-ef95cc74.json": "1652:1795270460030.8972",
+    "harness/evidence/validation/T-028-20261122025854-f7845282.json": "1892:1795316475658.1685",
+    "harness/evidence/validation/T-029-20261122030729-1e6ee844.json": "1230:1795316938728.2463"
+  },
+  "execution": {
+    "ok": true,
+    "manual_required": false,
+    "commands": [
+      {
+        "kind": "execution",
+        "index": 0,
+        "attempt": 0,
+        "name": "doctor",
+        "command": "node harness/runner/harness.mjs doctor",
+        "started_at": "2026-11-22T03:19:36.506Z",
+        "finished_at": "2026-11-22T03:19:36.738Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "{\n  \"ok\": true,\n  \"checked_at\": \"2026-11-22T03:19:36.712Z\",\n  \"root\": \"f:\\\\DATN\\\\harness\",\n  \"checks\": [\n    {\n      \"name\": \"directory:harness/runtime\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/runtime/runs\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/state\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/tasks\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/schemas\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"node_version\",\n      \"ok\": true,\n      \"value\": \"v22.12.0\"\n    },\n    {\n      \"name\": \"tasks:inbox\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:ready\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 14\n    },\n    {\n      \"name\": \"tasks:active\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:blocked\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:done\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 16\n    },\n    {\n      \"name\": \"task_count\",\n      \"ok\": true,\n      \"count\": 30,\n      \"expected_minimum\": 12\n    }\n  ]\n}\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/001-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/001-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 1,
+        "attempt": 0,
+        "name": "harness-tests",
+        "command": "node --test harness/tests/*.test.mjs",
+        "started_at": "2026-11-22T03:19:36.745Z",
+        "finished_at": "2026-11-22T03:19:42.417Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "TAP version 13\n# Subtest: task validator accepts the machine-readable task contract\nok 1 - task validator accepts the machine-readable task contract\n  ---\n  duration_ms: 2.2792\n  ...\n# Subtest: quality profile requires validation commands for code and harness tasks\nok 2 - quality profile requires validation commands for code and harness tasks\n  ---\n  duration_ms: 0.6559\n  ...\n# Subtest: clean-code scan reports blocking patterns with line numbers\nok 3 - clean-code scan reports blocking patterns with line numbers\n  ---\n  duration_ms: 1.8478\n  ...\n# Subtest: quality validator blocks a code task without validation commands\nok 4 - quality validator blocks a code task without validation commands\n  ---\n  duration_ms: 0.4795\n  ...\n# Subtest: scope and secret validators reject unsafe changes\nok 5 - scope and secret validators reject unsafe changes\n  ---\n  duration_ms: 1.6627\n  ...\n# Subtest: lifecycle writes ordered append-only events and summary\nok 6 - lifecycle writes ordered append-only events and summary\n  ---\n  duration_ms: 1118.4021\n  ...\n# Subtest: resume continues a failed command from the persisted run log\nok 7 - resume continues a failed command from the persisted run log\n  ---\n  duration_ms: 1773.9941\n  ...\n# Subtest: createRun records start before execute is invoked\nok 8 - createRun records start before execute is invoked\n  ---\n  duration_ms: 454.2234\n  ...\n# Subtest: finalize refuses passed when execution or validation is missing\nok 9 - finalize refuses passed when execution or validation is missing\n  ---\n  duration_ms: 355.4363\n  ...\n# Subtest: mark-done refuses a passed run when evidence files are missing\nok 10 - mark-done refuses a passed run when evidence files are missing\n  ---\n  duration_ms: 1197.8139\n  ...\n# Subtest: finalize reports ignored harness files from the workspace snapshot\nok 11 - finalize reports ignored harness files from the workspace snapshot\n  ---\n  duration_ms: 424.1304\n  ...\n# Subtest: runner blocks a task whose dependency is not done\nok 12 - runner blocks a task whose dependency is not done\n  ---\n  duration_ms: 20.4328\n  ...\n1..12\n# tests 12\n# suites 0\n# pass 12\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 5520.9411\n",
+        "stderr": "",
+        "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/002-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/002-execution-0.stderr.log"
+      },
+      {
+        "kind": "execution",
+        "index": 2,
+        "attempt": 0,
+        "name": "diff-check",
+        "command": "git diff --check",
+        "started_at": "2026-11-22T03:19:42.423Z",
+        "finished_at": "2026-11-22T03:19:42.612Z",
+        "exit_code": 0,
+        "signal": null,
+        "timed_out": false,
+        "stdout": "",
+        "stderr": "warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/context/quality-gates.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/execution.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/repair.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/review.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/state/active-task.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/state/project-state.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/docs/quality-gates.md', LF will be replaced by CRLF the next time Git touches it\n",
+        "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/003-execution-0.stdout.log",
+        "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/003-execution-0.stderr.log"
+      }
+    ]
+  },
+  "validation": {
+    "ok": true,
+    "manual_required": false,
+    "changed_files": [
+      ".gitignore",
+      "AGENTS.md",
+      "harness/AGENTS.md",
+      "harness/context/current-state.md",
+      "harness/context/quality-gates.md",
+      "harness/prompts/execution.md",
+      "harness/prompts/repair.md",
+      "harness/prompts/review.md",
+      "harness/state/active-task.json",
+      "harness/state/project-state.json",
+      "project/AGENTS.md",
+      "project/docs/quality-gates.md",
+      "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+      "harness/runtime/runs/20261122031755-7ebfbbe0/run.json"
+    ],
+    "checks": [
+      {
+        "name": "task_schema",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "scope",
+        "ok": true,
+        "errors": [],
+        "files": [
+          ".gitignore",
+          "AGENTS.md",
+          "harness/AGENTS.md",
+          "harness/context/current-state.md",
+          "harness/context/quality-gates.md",
+          "harness/prompts/execution.md",
+          "harness/prompts/repair.md",
+          "harness/prompts/review.md",
+          "harness/state/active-task.json",
+          "harness/state/project-state.json",
+          "project/AGENTS.md",
+          "project/docs/quality-gates.md",
+          "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+          "harness/runtime/runs/20261122031755-7ebfbbe0/run.json"
+        ]
+      },
+      {
+        "name": "secrets",
+        "ok": true,
+        "findings": []
+      },
+      {
+        "name": "quality",
+        "ok": true,
+        "errors": [],
+        "warnings": [],
+        "findings": []
+      },
+      {
+        "name": "commands",
+        "ok": true,
+        "errors": [],
+        "warnings": []
+      },
+      {
+        "name": "event_log",
+        "ok": true,
+        "errors": [],
+        "count": 18
+      }
+    ]
+  },
+  "completed_at": "2026-11-22T03:20:25.495Z",
+  "files_changed": [
+    ".gitignore",
+    "AGENTS.md",
+    "harness/AGENTS.md",
+    "harness/context/current-state.md",
+    "harness/context/quality-gates.md",
+    "harness/evidence/task-reports/T-030-20261122031755-7ebfbbe0.md",
+    "harness/evidence/validation/T-030-20261122031755-7ebfbbe0.json",
+    "harness/prompts/execution.md",
+    "harness/prompts/repair.md",
+    "harness/prompts/review.md",
+    "project/AGENTS.md",
+    "project/docs/quality-gates.md"
+  ],
+  "internal_files_changed": [
+    "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+    "harness/runtime/runs/20261122031755-7ebfbbe0/run.json",
+    "harness/state/active-task.json",
+    "harness/state/project-state.json"
+  ],
+  "summary": {
+    "run_id": "20261122031755-7ebfbbe0",
+    "task_id": "T-030",
+    "status": "passed",
+    "started_at": "2026-11-22T03:17:55.581Z",
+    "completed_at": "2026-11-22T03:20:25.495Z",
+    "phase": "finalize",
+    "files_changed": [
+      ".gitignore",
+      "AGENTS.md",
+      "harness/AGENTS.md",
+      "harness/context/current-state.md",
+      "harness/context/quality-gates.md",
+      "harness/evidence/task-reports/T-030-20261122031755-7ebfbbe0.md",
+      "harness/evidence/validation/T-030-20261122031755-7ebfbbe0.json",
+      "harness/prompts/execution.md",
+      "harness/prompts/repair.md",
+      "harness/prompts/review.md",
+      "project/AGENTS.md",
+      "project/docs/quality-gates.md"
+    ],
+    "internal_files_changed": [
+      "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+      "harness/runtime/runs/20261122031755-7ebfbbe0/run.json",
+      "harness/state/active-task.json",
+      "harness/state/project-state.json"
+    ],
+    "execution": {
+      "ok": true,
+      "manual_required": false,
+      "commands": [
+        {
+          "kind": "execution",
+          "index": 0,
+          "attempt": 0,
+          "name": "doctor",
+          "command": "node harness/runner/harness.mjs doctor",
+          "started_at": "2026-11-22T03:19:36.506Z",
+          "finished_at": "2026-11-22T03:19:36.738Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "{\n  \"ok\": true,\n  \"checked_at\": \"2026-11-22T03:19:36.712Z\",\n  \"root\": \"f:\\\\DATN\\\\harness\",\n  \"checks\": [\n    {\n      \"name\": \"directory:harness/runtime\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/runtime/runs\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/state\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/tasks\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"directory:harness/schemas\",\n      \"ok\": true\n    },\n    {\n      \"name\": \"node_version\",\n      \"ok\": true,\n      \"value\": \"v22.12.0\"\n    },\n    {\n      \"name\": \"tasks:inbox\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:ready\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 14\n    },\n    {\n      \"name\": \"tasks:active\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:blocked\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 0\n    },\n    {\n      \"name\": \"tasks:done\",\n      \"ok\": true,\n      \"errors\": [],\n      \"warnings\": [],\n      \"count\": 16\n    },\n    {\n      \"name\": \"task_count\",\n      \"ok\": true,\n      \"count\": 30,\n      \"expected_minimum\": 12\n    }\n  ]\n}\n",
+          "stderr": "",
+          "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/001-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/001-execution-0.stderr.log"
+        },
+        {
+          "kind": "execution",
+          "index": 1,
+          "attempt": 0,
+          "name": "harness-tests",
+          "command": "node --test harness/tests/*.test.mjs",
+          "started_at": "2026-11-22T03:19:36.745Z",
+          "finished_at": "2026-11-22T03:19:42.417Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "TAP version 13\n# Subtest: task validator accepts the machine-readable task contract\nok 1 - task validator accepts the machine-readable task contract\n  ---\n  duration_ms: 2.2792\n  ...\n# Subtest: quality profile requires validation commands for code and harness tasks\nok 2 - quality profile requires validation commands for code and harness tasks\n  ---\n  duration_ms: 0.6559\n  ...\n# Subtest: clean-code scan reports blocking patterns with line numbers\nok 3 - clean-code scan reports blocking patterns with line numbers\n  ---\n  duration_ms: 1.8478\n  ...\n# Subtest: quality validator blocks a code task without validation commands\nok 4 - quality validator blocks a code task without validation commands\n  ---\n  duration_ms: 0.4795\n  ...\n# Subtest: scope and secret validators reject unsafe changes\nok 5 - scope and secret validators reject unsafe changes\n  ---\n  duration_ms: 1.6627\n  ...\n# Subtest: lifecycle writes ordered append-only events and summary\nok 6 - lifecycle writes ordered append-only events and summary\n  ---\n  duration_ms: 1118.4021\n  ...\n# Subtest: resume continues a failed command from the persisted run log\nok 7 - resume continues a failed command from the persisted run log\n  ---\n  duration_ms: 1773.9941\n  ...\n# Subtest: createRun records start before execute is invoked\nok 8 - createRun records start before execute is invoked\n  ---\n  duration_ms: 454.2234\n  ...\n# Subtest: finalize refuses passed when execution or validation is missing\nok 9 - finalize refuses passed when execution or validation is missing\n  ---\n  duration_ms: 355.4363\n  ...\n# Subtest: mark-done refuses a passed run when evidence files are missing\nok 10 - mark-done refuses a passed run when evidence files are missing\n  ---\n  duration_ms: 1197.8139\n  ...\n# Subtest: finalize reports ignored harness files from the workspace snapshot\nok 11 - finalize reports ignored harness files from the workspace snapshot\n  ---\n  duration_ms: 424.1304\n  ...\n# Subtest: runner blocks a task whose dependency is not done\nok 12 - runner blocks a task whose dependency is not done\n  ---\n  duration_ms: 20.4328\n  ...\n1..12\n# tests 12\n# suites 0\n# pass 12\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 5520.9411\n",
+          "stderr": "",
+          "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/002-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/002-execution-0.stderr.log"
+        },
+        {
+          "kind": "execution",
+          "index": 2,
+          "attempt": 0,
+          "name": "diff-check",
+          "command": "git diff --check",
+          "started_at": "2026-11-22T03:19:42.423Z",
+          "finished_at": "2026-11-22T03:19:42.612Z",
+          "exit_code": 0,
+          "signal": null,
+          "timed_out": false,
+          "stdout": "",
+          "stderr": "warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/context/quality-gates.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/execution.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/repair.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/prompts/review.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/state/active-task.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'harness/state/project-state.json', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/AGENTS.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'project/docs/quality-gates.md', LF will be replaced by CRLF the next time Git touches it\n",
+          "stdout_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/003-execution-0.stdout.log",
+          "stderr_file": "harness/runtime/runs/20261122031755-7ebfbbe0/commands/003-execution-0.stderr.log"
+        }
+      ]
+    },
+    "validation": {
+      "ok": true,
+      "manual_required": false,
+      "changed_files": [
+        ".gitignore",
+        "AGENTS.md",
+        "harness/AGENTS.md",
+        "harness/context/current-state.md",
+        "harness/context/quality-gates.md",
+        "harness/prompts/execution.md",
+        "harness/prompts/repair.md",
+        "harness/prompts/review.md",
+        "harness/state/active-task.json",
+        "harness/state/project-state.json",
+        "project/AGENTS.md",
+        "project/docs/quality-gates.md",
+        "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+        "harness/runtime/runs/20261122031755-7ebfbbe0/run.json"
+      ],
+      "checks": [
+        {
+          "name": "task_schema",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "scope",
+          "ok": true,
+          "errors": [],
+          "files": [
+            ".gitignore",
+            "AGENTS.md",
+            "harness/AGENTS.md",
+            "harness/context/current-state.md",
+            "harness/context/quality-gates.md",
+            "harness/prompts/execution.md",
+            "harness/prompts/repair.md",
+            "harness/prompts/review.md",
+            "harness/state/active-task.json",
+            "harness/state/project-state.json",
+            "project/AGENTS.md",
+            "project/docs/quality-gates.md",
+            "harness/runtime/runs/20261122031755-7ebfbbe0/events.jsonl",
+            "harness/runtime/runs/20261122031755-7ebfbbe0/run.json"
+          ]
+        },
+        {
+          "name": "secrets",
+          "ok": true,
+          "findings": []
+        },
+        {
+          "name": "quality",
+          "ok": true,
+          "errors": [],
+          "warnings": [],
+          "findings": []
+        },
+        {
+          "name": "commands",
+          "ok": true,
+          "errors": [],
+          "warnings": []
+        },
+        {
+          "name": "event_log",
+          "ok": true,
+          "errors": [],
+          "count": 18
+        }
+      ]
+    },
+    "remaining_risks": [],
+    "evidence": {
+      "required": true,
+      "report": "harness/evidence/task-reports/T-030-20261122031755-7ebfbbe0.md",
+      "validation": "harness/evidence/validation/T-030-20261122031755-7ebfbbe0.json",
+      "missing": []
+    }
+  },
+  "task_marked_done": true
+}
